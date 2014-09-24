@@ -1,0 +1,45 @@
+﻿<vigenere-common></vigenere-common>
+
+<div ng-controller="VigenereCtrl2 as store">
+	<div ng-show="store.isInitilized()">
+		<div class="well">
+			<label>Clave</label>
+			<p>{{store.vigenere.key}}</p>
+
+			<label>Texto a encriptar</label>
+			<p>{{store.vigenere.textToEncript}}</p>
+		</div>
+
+		<h3>Encriptación</h3>
+		
+		<div ng-show="!store.isEncodeFinished()">
+			<p>Letra: {{store.vigenere.textToEncript[store.vigenere.currentStep]}}</p>
+			<p>Letra encriptadora de la clave: {{store.vigenere.keyMask[store.vigenere.currentStep]}}</p>
+			<p>Posicion: {{store.vigenere.currentStep}}</p>
+			
+			<div id="vigenereStepForm" ng-show="store.isAutoEvaluation()">
+			  <div class="form-group" class="has-error" ng-class="{ 'has-error' : vigenre.stepAttemp.length > 0 && !store.isValid(vigenre.stepAttemp), 'has-success' : vigenre.stepAttemp.length > 0 && store.isValid(vigenre.stepAttemp) }">
+				<label for="stepAttemp">Letra resultado del paso {{store.vigenere.currentStep}}</label>
+				<div class="input-group">
+					<input type="text" ng-model="vigenre.stepAttemp" class="form-control" id="stepAttemp">
+					<span class="input-group-btn">
+						<button ng-click="store.nextStep()" class="btn btn-default">Avanzar</button>
+					</span>
+				</div><!-- /input-group -->
+				<div class="help-block" ng-show="vigenre.stepAttemp.length > 0 && !store.isValid(vigenre.stepAttemp)">
+					<p>El resultado de la encriptacion ingresada no es correcta</p>
+					<p>El resultado de la encriptación debe ser una letra sola</p>
+				</div>
+				<p class="help-block" ng-show="vigenre.stepAttemp.length > 0 && store.isValid(vigenre.stepAttemp)">El resultado es correcto</p>
+			</div>
+		</div>
+		<div ng-show="!store.isAutoEvaluation()">
+			<button ng-click="store.nextStep()" class="btn btn-default">Avanzar</button>
+		</div>
+	</div>
+	<div class="alert alert-info">
+		<label ng-show="store.isEncodeFinished()">Resultado Final</label>
+		<label ng-show="!store.isEncodeFinished()">Resultado Parcial</label>
+		<p>{{store.vigenere.result}}</p>
+	</div>
+</div>

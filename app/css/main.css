@@ -1,0 +1,27 @@
+.container-margin {
+    margin-top: 20px;
+	margin-bottom: 40px;
+}
+
+input.ng-dirty.ng-invalid {
+	border-color: red;
+	background-color: rgb(255, 226, 226);
+}
+
+textarea.ng-dirty.ng-invalid {
+	border-color: red;
+	background-color: rgb(255, 226, 226);
+}
+
+textarea.ng-dirty.ng-valid{
+	
+}
+
+input.ng-dirty.ng-valid{
+	
+}
+
+#radioBtn .notActive{
+    color: #3276b1;
+    background-color: #fff;
+}
