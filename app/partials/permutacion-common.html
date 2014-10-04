@@ -1,0 +1,32 @@
+﻿<h1>Cifrado de Permutación</h1>
+<p>Para el cifrado se utiliza el abecedario inglés, el cual solo incluye letras de la 'a' a la 'z' sin incluir la 'ñ'. Los espacios, vocales tildadas, mayúsculas, dígitos, símbolos y retornos de linea no están permitidos. De esta manera tenemos un alfabeto de 26 caracteres.</p>
+<p>Para cifrar el mensaje escrito en el alfabeto antes mencionado, se necesita una clave de cifrado que puede ser definida de 2 maneras:<br>
+<ul>
+	<li>Una clave alfabética en el abecedario mencionado, con la restricción adicional de <b>no repetir</b> caracteres en la clave</li>
+	<li>Una clave numérica, <b>únicamente de dígitos</b> (0 a 9), <b>sin repetir</b> ningún dígito. Estas condiciones llevan a que la longitud de la clave sea <b>como máximo</b> de 10 dígitos</li>
+</ul>
+</p>
+<h4>Variables</h4>
+<ul>
+	<li><em>L</em>: longitud de la clave</li>
+	<li><em>M</em>: longitud del mensaje</li>
+	<li><em>C</em>: longitud del criptograma</li>
+	<li><em>K</em>: cantidad de filas de la matriz de cifrado. K=techo(M/L) + 1</li>
+	<li><em>K'</em>: cantidad de filas de la matriz de descifrado. K'=techo(C/L) + 1</li>
+</ul>
+<h3>Algoritmo de Cifrado</h3>
+<ol>
+	<li>Crear una matriz de KxL</li>
+	<li>Disponer la clave y el mensaje en la matriz, colocando la clave en la primer fila y el mensaje en las siguientes filas (de izquierda a derecha y de arriba hacia abajo) rellenando con caracteres aleatorios en caso de quedar celdas vacías en la última fila</li>
+	<li>Reordenar las columnas según el orden alfabético (caso clave alfabética) o numérico (caso clave numérica) de la clave, de izquierda a derecha</li>
+	<li>Escribir el criptograma tomando los caracteres en el siguiente orden: tomar la primer columna y escribir los caracteres desde arriba hacia abajo (sin tomar los caracteres de la clave), y repetir lo anterior con las siguientes columnas (en forma ordenada), concatenando los resultados</li>
+</ol>
+<h3>Algoritmo de Descifrado</h3>
+<ol>
+	<li>Crear una matriz de K'xL</li>
+	<li>Reordenar la clave según el órden alfabético (clave alfabética) o numérico (clave numérica) y colocarla en la primer fila de la matriz</li>
+	<li>Completar las columnas desde arriba hacia abajo con el criptograma, comenzando por la primer columna y avanzando hasta la última</li>
+	<li>Reordenar las columnas de la matriz para formar la clave original</li>
+	<li>Escribir el mensaje tomando los caracteres en el siguiente orden: comenzar por la segunda fila de la matriz y escribir los caracteres desde izquierda hacia derecha, y repetir los anterior con las siguientes filas (en forma ordenada), concatenando los resultados</li>
+</ol>
+<p><b>ACLARACIÓN:</b> El mensaje obtenido contendrá los caracteres de relleno, si fue necesario colocarlos durante el cifrado.</p>
