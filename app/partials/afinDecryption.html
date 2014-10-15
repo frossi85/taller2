@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Ejecución de algoritmo Afin - Desencriptación</p>
+
+<form action="demo_form.asp">
+Mensaje Encriptado: <input type="text" name="Mensaje" value="paze" id="mensaje"><br>
+Clave A: <input type="text" name="ClaveA" value="9" id="A"><br>
+Clave B: <input type="text" name="ClaveB" value="4" id="B"><br>
+</form>
+
+<p></p>
+
+<button onclick="ejecutar()">Ejecutar</button>
+
+<script>
+
+var z26 = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+
+
+function findGCD( l1, l2) {
+
+    if(l2 == 0){
+        return l1;
+    }
+    return findGCD(l2, l1%l2);
+}
+
+
+function verificar(A,B){
+
+	//Se verifican que A y B sean numeros
+	if(isNaN(A) == true){
+		document.write("La clave A ingresada no es un número"+"<br>");
+		return 1;
+	}
+
+	if(isNaN(B) == true){
+		document.write("La clave B ingresada no es un número"+"<br>");
+		return 1;
+	}
+
+	//Se verifica que A sea != 1
+	if( A == 1 || A > 26){
+		document.write("La clave A debe ser un número distinto a 1"+"<br>");
+		return 1;
+		
+	}
+
+	//Se verifica que 1<=B<=26
+	if( B > 26 || B < 1){
+		document.write("La clave B debe ser un número entre 1 y 26"+"<br>");
+		return 1;
+		
+	}		
+
+	// Se verifican que los numeros sean coprimos
+	if(findGCD(A,B) != 1){
+		document.write("La clave no esta formada por numeros coprimos. Los coprimos validos son 1, 2, 3, 5, 7, 11, 13, 17, 19, 23"+"<br>");
+		return 1;
+	}
+	
+	return 0;
+}
+
+function getPos(caracter){
+
+	var i;
+	for	(i = 0; i < z26.length; i++) {
+		if(z26[i] == caracter){
+			return i;
+		}
+	}
+}
+
+function inversaMulti(A){
+
+	var flag;
+	for (i= 0; i < 26; i++){
+		flag = ( A*i)%26;
+		if(flag == 1){
+			//A_INV = i;
+			return i;
+		}
+	}
+}
+
+
+
+function paso1(mensaje,index,B){
+	
+	var resultado;
+	console.log("Paso 1" +"<br>");
+
+	resultado = getPos(mensaje[index])-B;
+
+	console.log("Resultado " + resultado +"<br>");	
+	return resultado;	
+}
+
+function paso2(resultado1,A_INV){
+
+	var resultado;
+	console.log("Paso 2" +"<br>");
+
+	resultado = resultado1*A_INV;
+
+	console.log("Resultado " + resultado +"<br>");	
+	return resultado;	
+}
+
+
+function paso3(resultado2){
+
+	var resultado;
+	console.log("Paso 3" +"<br>");
+
+	resultado = (resultado2 % 26 + 26) % 26;;
+
+	console.log("Resultado " + resultado +"<br>");	
+	return resultado;
+}
+
+
+
+function ejecutar(){
+
+	var mensaje = document.getElementById('mensaje').value;
+	var A = parseInt(document.getElementById('A').value);
+	var B = parseInt(document.getElementById('B').value);
+
+	var cifrado = "";
+	var index;
+	
+	A_INV = inversaMulti(A);
+
+	if (verificar(A,B) == 0){	
+
+		document.write("El mensaje encriptado es: " + mensaje +"<br>");
+
+		for	(index = 0; index < mensaje.length; index++) {
+
+			if(mensaje.charAt(index) != " "){
+
+				resultado1 = paso1(mensaje,index,B);
+				resultado2 = paso2(resultado1,A_INV);
+				resultado3 = paso3(resultado2);
+				resultado4 = z26[resultado3];
+			}
+			else{
+				resultado4 = " ";
+			}
+			cifrado+= resultado4;
+
+			console.log(mensaje.charAt(index));
+		}
+
+		document.write("<br>"+"El mensaje original es: " + cifrado);
+	}
+	else{
+		document.write("<br>"+"Error de datos ingresados. Por favor, ingrese valores correctos para la clave");
+	}
+}
+
+
+</script> 
+
+</body>
+</html>

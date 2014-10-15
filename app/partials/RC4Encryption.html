@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Ejecución de algoritmo RC4</p>
+
+<form action="demo_form.asp">
+Mensaje: <input type="text" name="Mensaje" value="PlainText" id="mensaje"><br>
+Clave  : <input type="text" name="Clave" value="Key" id="clave"><br>
+</form>
+
+<p></p>
+
+<button onclick="ejecutar()">Ejecutar</button>
+
+<script>
+
+function swap(s,i,j){
+
+	x = s[i];
+	s[i] = s[j];
+	s[j] = x;
+	
+	return s;
+}
+
+function paso1(s,i,j,key){
+	console.log("Paso 1" + "<br>");
+	
+	resultado1 =  (j + s[i] + key.charCodeAt(i % key.length)) % 256;
+
+	console.log("Resultado = " + resultado1 +"<br>");
+	return resultado1;
+}
+
+function paso2(s,i,j){
+
+	console.log("Paso 1" + "<br>");
+
+	resultado2 = swap(s,i,j);
+
+	console.log("Resultado = " + resultado2 +"<br>");
+	return resultado2;
+}
+
+function paso3(i){
+	
+	console.log("Paso 3" + "<br>");
+
+	resultado3 = (i + 1) % 256;
+
+	console.log("Resultado = " + resultado3 +"<br>");
+	return resultado3;
+}
+
+function paso4(s,i,j){
+
+	console.log("Paso 4" + "<br>");
+
+	resultado4 = (j + s[i]) % 256;
+	
+	console.log("Resultado = " + resultado4 +"<br>");
+	return resultado4;
+}
+
+function paso5(s,i,j){
+
+	console.log("Paso 5" + "<br>");
+
+	resultado5 = swap(s,i,j);
+	
+	console.log("Resultado = " + resultado5 +"<br>");
+	return resultado5;
+}
+
+function paso6(str,s,i,j,y){
+
+	console.log("Paso 6" + "<br>");
+
+	resultado6 = (str.charCodeAt(y) ^ s[(s[i] + s[j]) % 256]).toString(16);
+
+	console.log("Resultado = " + resultado6 +"<br>");
+	return resultado6;
+}
+
+
+function ejecutar(){
+
+	var str = document.getElementById('mensaje').value;
+	var key = document.getElementById('clave').value;
+
+	var s = [], j = 0, x, resultado = '';
+
+	for (var i = 0; i < 256; i++) {
+		s[i] = i;
+	}
+
+	//Se realiza la inicialización de la clave
+	for (i = 0; i < 256; i++) {
+		
+		j = paso1(s,i,j,key);
+		s = paso2(s,i,j);
+	}
+
+	i = 0;
+	j = 0;
+
+	//Se encripta el mensaje
+	for (var y = 0; y < str.length; y++) {
+
+		i = paso3(i);
+		j = paso4(s,i,j);
+		s = paso5(s,i,j);
+
+		resultado+= paso6(str,s,i,j,y);
+	}
+
+	document.write("<br>"+"El mensaje crifrado es: " + resultado);	
+
+	return res;
+}
+
+
+</script> 
+
+</body>
+</html>
