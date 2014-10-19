@@ -43,6 +43,7 @@
   
 	this.initializeProblem = function() {
 		Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.text);
+		Vigenere.withAutoEvaluation = $scope.vigenere.withAutoEvaluation;
 		$location.url('/vigenere/step-by-step');
 		
 		//this.vigenere = {}; //Esto borra el formulario, lo resetea. Deberia hacerse al cambiar de algoritmo o reiniciar la ejecucion
@@ -50,6 +51,7 @@
 	
 	this.initializeDecryptProblem = function() {
 		Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.text).setDecrypt(); 
+		Vigenere.withAutoEvaluation = $scope.vigenere.withAutoEvaluation;
 		$location.url('/vigenere/decrypt/step-by-step');
 	};
   });
@@ -91,7 +93,7 @@
 			}
 			this.vigenere.stepAttemp = "";
 			$('#stepAttemp').val("");
-			if(this.vigenere.isEncrypt == true)
+			if(this.vigenere._isEncrypt == true)
 				$location.url('/vigenere/step-by-step');
 			else
 				$location.url('/vigenere/decrypt/step-by-step');
@@ -150,7 +152,7 @@ function VigenereLibrary(key, textToProcess) {
 			if(this._isEncrypt == true)
 				return String.fromCharCode(((charToProcess + keyChar) % 26) + 95);				
 			else
-				return String.fromCharCode(((charToProcess - keyChar) % 26) + 95);				
+				return String.fromCharCode(((charToProcess - keyChar) % 26) + 97);				
 		},
 		goForward: function() { 
 			this.result += this.nextStepResult();
