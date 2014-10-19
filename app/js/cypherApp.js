@@ -34,33 +34,7 @@
 	}
   
 	this.initializeProblem = function() {
-		$scope.vigenere.keyMask = $scope.vigenere.key;
-		$scope.vigenere.result = "";
-		$scope.vigenere.currentStep = 0;
-		$scope.vigenere.withAutoEvaluation = this.vigenere.withAutoEvaluation;
-		$scope.vigenere.isFinished = function() { 
-			return this.currentStep >= this.text.length; 
-		}
-		$scope.vigenere.nextStepResult = function() { 
-			var charToEncode = this.text.toLowerCase().charCodeAt(this.currentStep) - 96;
-			var keyChar = this.keyMask.toLowerCase().charCodeAt(this.currentStep) - 96;
-			
-			return String.fromCharCode(((charToEncode + keyChar) % 26) + 95);	
-		};
-		
-		$scope.vigenere.goForward = function() { 
-			this.result += this.nextStepResult();
-			this.currentStep++;
-		};
-		
-		//Initialize key mask used to encript char by char
-		while($scope.vigenere.keyMask.length < $scope.vigenere.text.length) {
-			$scope.vigenere.keyMask += $scope.vigenere.key;
-		}
-		
-		this.vigenere = $scope.vigenere;
-		Vigenere = $scope.vigenere;
-		
+		Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.text); //$scope.vigenere;
 		$location.url('/vigenere/step-by-step');
 		
 		//this.vigenere = {}; //Esto borra el formulario, lo resetea. Deberia hacerse al cambiar de algoritmo o reiniciar la ejecucion
@@ -135,10 +109,10 @@
   });
 });
 
-function VigenereLibrary(key, text) {
+function VigenereLibrary(key, textToProcess) {
 
 	var keyMask = "";
-	while(keyMask.length < text.length) {
+	while(keyMask.length < textToProcess.length) {
 		keyMask += key;
 	}
 	
@@ -146,12 +120,12 @@ function VigenereLibrary(key, text) {
 		_isEncrypt: true,
 		key: key,
 		keyMask: keyMask,
-		text: text,
+		text: textToProcess,
 		result: "",
 		currentStep: 0,
 		withAutoEvaluation: true,
 		isFinished: function() { 
-			return currentStep >= text.length; 
+			return this.currentStep  >= this.text.length; 
 		},
 		nextStepResult: function() { 
 			/*var charToProcess = this.text.toLowerCase().charCodeAt(this.currentStep) - 96;
@@ -159,22 +133,22 @@ function VigenereLibrary(key, text) {
 			var innerResult = (this._isEncode) ? charToProcess + keyChar : charToProcess - keyChar;
 
 			return String.fromCharCode((innerResult % 26) + 95);*/
-			var charToProcess = text.toLowerCase().charCodeAt(currentStep) - 96;
-			var keyChar = keyMask.toLowerCase().charCodeAt(currentStep) - 96;
+			var charToProcess = this.text.toLowerCase().charCodeAt(this.currentStep) - 96;
+			var keyChar = this.keyMask.toLowerCase().charCodeAt(this.currentStep ) - 96;
 			
 			return String.fromCharCode(((charToProcess + keyChar) % 26) + 95);				
 		},
 		goForward: function() { 
-			result += nextStepResult();
-			currentStep++;
+			this.result += this.nextStepResult();
+			this.currentStep++;
 			return this;
 		},
 		setEncrypt: function () { 
-			_isEncrypt = true ;
+			this._isEncrypt = true ;
 			return this;
 		},
 		setDecrypt: function () { 
-			_isEncrypt = false ;
+			this._isEncrypt = false ;
 			return this;
 		}
 	};
