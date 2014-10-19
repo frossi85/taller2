@@ -38,11 +38,11 @@
 		$scope.vigenere.result = "";
 		$scope.vigenere.currentStep = 0;
 		$scope.vigenere.withAutoEvaluation = this.vigenere.withAutoEvaluation;
-		$scope.vigenere.isEncodeFinished = function() { 
-			return this.currentStep >= this.textToEncript.length; 
+		$scope.vigenere.isFinished = function() { 
+			return this.currentStep >= this.text.length; 
 		}
 		$scope.vigenere.nextStepResult = function() { 
-			var charToEncode = this.textToEncript.toLowerCase().charCodeAt(this.currentStep) - 96;
+			var charToEncode = this.text.toLowerCase().charCodeAt(this.currentStep) - 96;
 			var keyChar = this.keyMask.toLowerCase().charCodeAt(this.currentStep) - 96;
 			
 			return String.fromCharCode(((charToEncode + keyChar) % 26) + 95);	
@@ -54,7 +54,7 @@
 		};
 		
 		//Initialize key mask used to encript char by char
-		while($scope.vigenere.keyMask.length < $scope.vigenere.textToEncript.length) {
+		while($scope.vigenere.keyMask.length < $scope.vigenere.text.length) {
 			$scope.vigenere.keyMask += $scope.vigenere.key;
 		}
 		
@@ -108,8 +108,8 @@
 		}
 	};
 	
-	this.isEncodeFinished = function () {
-		return typeof this.vigenere != undefined && this.vigenere.isEncodeFinished();
+	this.isFinished = function () {
+		return typeof this.vigenere != undefined && this.vigenere.isFinished();
 	};
   });
   
@@ -135,10 +135,55 @@
   });
 });
 
+function VigenereLibrary(key, text) {
+
+	var keyMask = "";
+	while(keyMask.length < text.length) {
+		keyMask += key;
+	}
+	
+	return {
+		_isEncrypt: true,
+		key: key,
+		keyMask: keyMask,
+		text: text,
+		result: "",
+		currentStep: 0,
+		withAutoEvaluation: true,
+		isFinished: function() { 
+			return currentStep >= text.length; 
+		},
+		nextStepResult: function() { 
+			/*var charToProcess = this.text.toLowerCase().charCodeAt(this.currentStep) - 96;
+			var keyChar = this.keyMask.toLowerCase().charCodeAt(this.currentStep) - 96;
+			var innerResult = (this._isEncode) ? charToProcess + keyChar : charToProcess - keyChar;
+
+			return String.fromCharCode((innerResult % 26) + 95);*/
+			var charToProcess = text.toLowerCase().charCodeAt(currentStep) - 96;
+			var keyChar = keyMask.toLowerCase().charCodeAt(currentStep) - 96;
+			
+			return String.fromCharCode(((charToProcess + keyChar) % 26) + 95);				
+		},
+		goForward: function() { 
+			result += nextStepResult();
+			currentStep++;
+			return this;
+		},
+		setEncrypt: function () { 
+			_isEncrypt = true ;
+			return this;
+		},
+		setDecrypt: function () { 
+			_isEncrypt = false ;
+			return this;
+		}
+	};
+}
+
 /*
 vigenere = {
 	key: String
-	textToEncript: String
+	text: String
 	nextStepResult: function() {}
 	streamResult: String
 }

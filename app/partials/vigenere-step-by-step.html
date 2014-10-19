@@ -7,13 +7,13 @@
 			<p>{{store.vigenere.key}}</p>
 
 			<label>Texto a encriptar</label>
-			<p>{{store.vigenere.textToEncript}}</p>
+			<p>{{store.vigenere.text}}</p>
 		</div>
 
 		<h3>Encriptación</h3>
 		
-		<div ng-show="!store.isEncodeFinished()">
-			<p>Letra: {{store.vigenere.textToEncript[store.vigenere.currentStep]}}</p>
+		<div ng-show="!store.isFinished()">
+			<p>Letra: {{store.vigenere.text[store.vigenere.currentStep]}}</p>
 			<p>Letra encriptadora de la clave: {{store.vigenere.keyMask[store.vigenere.currentStep]}}</p>
 			<p>Posicion: {{store.vigenere.currentStep}}</p>
 			
@@ -38,8 +38,8 @@
 		</div>
 	</div>
 	<div class="alert alert-info">
-		<label ng-show="store.isEncodeFinished()">Resultado Final</label>
-		<label ng-show="!store.isEncodeFinished()">Resultado Parcial</label>
+		<label ng-show="store.isFinished()">Resultado Final</label>
+		<label ng-show="!store.isFinished()">Resultado Parcial</label>
 		<p>{{store.vigenere.result}}</p>
 	</div>
 </div>
