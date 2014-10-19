@@ -13,6 +13,14 @@
 		templateUrl: 'partials/vigenere-step-by-step.html',
 		controller: 'VigenereCtrl2'
 	}).
+	when('/vigenere/decrypt', {
+		templateUrl: 'partials/vigenere-decrypt-init.html',
+		controller: 'VigenereCtrl'
+	}).
+	when('/vigenere/decrypt/step-by-step', {
+		templateUrl: 'partials/vigenere-decrypt-step-by-step.html',
+		controller: 'VigenereCtrl2'
+	}).
 	otherwise({
 		redirecTo: '/'
 	});
@@ -34,10 +42,15 @@
 	}
   
 	this.initializeProblem = function() {
-		Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.text); //$scope.vigenere;
+		Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.text);
 		$location.url('/vigenere/step-by-step');
 		
 		//this.vigenere = {}; //Esto borra el formulario, lo resetea. Deberia hacerse al cambiar de algoritmo o reiniciar la ejecucion
+	};
+	
+	this.initializeDecryptProblem = function() {
+		Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.text).setDecrypt(); 
+		$location.url('/vigenere/decrypt/step-by-step');
 	};
   });
   
@@ -78,7 +91,10 @@
 			}
 			this.vigenere.stepAttemp = "";
 			$('#stepAttemp').val("");
-			$location.url('/vigenere/step-by-step');
+			if(this.vigenere.isEncrypt == true)
+				$location.url('/vigenere/step-by-step');
+			else
+				$location.url('/vigenere/decrypt/step-by-step');
 		}
 	};
 	
@@ -128,15 +144,13 @@ function VigenereLibrary(key, textToProcess) {
 			return this.currentStep  >= this.text.length; 
 		},
 		nextStepResult: function() { 
-			/*var charToProcess = this.text.toLowerCase().charCodeAt(this.currentStep) - 96;
-			var keyChar = this.keyMask.toLowerCase().charCodeAt(this.currentStep) - 96;
-			var innerResult = (this._isEncode) ? charToProcess + keyChar : charToProcess - keyChar;
-
-			return String.fromCharCode((innerResult % 26) + 95);*/
 			var charToProcess = this.text.toLowerCase().charCodeAt(this.currentStep) - 96;
 			var keyChar = this.keyMask.toLowerCase().charCodeAt(this.currentStep ) - 96;
 			
-			return String.fromCharCode(((charToProcess + keyChar) % 26) + 95);				
+			if(this._isEncrypt == true)
+				return String.fromCharCode(((charToProcess + keyChar) % 26) + 95);				
+			else
+				return String.fromCharCode(((charToProcess - keyChar) % 26) + 95);				
 		},
 		goForward: function() { 
 			this.result += this.nextStepResult();

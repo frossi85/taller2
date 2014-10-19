@@ -1,0 +1,25 @@
+﻿<vigenere-common></vigenere-common>
+
+<form name="initializeVigenereForm" ng-controller="VigenereCtrl as vigenereCtrl" ng-submit="initializeVigenereForm.$valid && vigenereCtrl.initializeDecryptProblem()" novalidate>
+	<div class="form-group">
+		<label>Autoevaluación</label>
+		<div class="input-group">
+			<div id="radioBtn" class="btn-group">
+				<a class="btn btn-primary btn-sm" ng-class="{ 'active' : vigenereCtrl.vigenere.withAutoEvaluation, 'notActive' : !vigenereCtrl.vigenere.withAutoEvaluation }" ng-click="vigenereCtrl.enableAutoEvaluation()">Si</a>
+				<a class="btn btn-primary btn-sm" ng-class="{ 'active' : !vigenereCtrl.vigenere.withAutoEvaluation, 'notActive' : vigenereCtrl.withAutoEvaluation }" ng-click="vigenereCtrl.disableAutoEvaluation()">No</a>
+			</div>
+		</div>
+		<input type="hidden" id="withAutoEvaluation" ng-model="vigenereCtrl.vigenere.withAutoEvaluation"/>
+	</div>
+	<div class="form-group">
+		<label for="key">Clave</label>
+		<input type="text" class="form-control" ng-model="vigenere.key" id="key" placeholder="Ingresar clave" ng-pattern="/^[a-zA-Z]*$/" required>
+		<p class="help">Escriba una clave que contenga caracteres del alfabeto ingles. Es decir de la A a las Z sin incluir caracteres como * o ñ<p>
+	</div>
+	<div class="form-group">
+		<label for="text">Texto a encriptar</label>
+		<textarea class="form-control" id="text" rows="5" ng-model="vigenere.text" ng-pattern="/^[a-zA-Z]*$/" required></textarea>
+	</div>
+	<button type="submit" class="btn btn-default">Empezar</button>
+</form>
+
