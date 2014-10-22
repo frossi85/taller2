@@ -77,18 +77,14 @@ function paso6(str,s,i,j,y){
 
 	console.log("Paso 6" + "<br>");
 
-	resultado6 = (str.charCodeAt(y) ^ s[(s[i] + s[j]) % 256]).toString(16);
+	resultado6 = String.fromCharCode(str.charCodeAt(y) ^ s[(s[i] + s[j]) % 256]);  //String.fromCharCode(str.charCodeAt(y) ^ s[(s[i] + s[j]) % 256]);//.toString(16);
 
 	console.log("Resultado = " + resultado6 +"<br>");
 	return resultado6;
 }
 
-
-function ejecutar(){
-
-	var str = document.getElementById('mensaje').value;
-	var key = document.getElementById('clave').value;
-
+function encriptar(key, str){
+	
 	var s = [], j = 0, x, resultado = '';
 
 	for (var i = 0; i < 256; i++) {
@@ -104,6 +100,7 @@ function ejecutar(){
 
 	i = 0;
 	j = 0;
+	
 
 	//Se encripta el mensaje
 	for (var y = 0; y < str.length; y++) {
@@ -115,9 +112,29 @@ function ejecutar(){
 		resultado+= paso6(str,s,i,j,y);
 	}
 
-	document.write("<br>"+"El mensaje crifrado es: " + resultado);	
+	return resultado;
+}
 
-	return res;
+function desencriptar(key,str){
+
+	return encriptar(key,str);
+}
+
+
+function ejecutar(){
+
+	var str = document.getElementById('mensaje').value;
+	var key = document.getElementById('clave').value;
+
+	document.write("<br>"+"El mensaje ingresado es: " + str);
+
+	var resultado =	encriptar(key,str);
+
+	var resultadoOriginal =desencriptar( key, resultado );
+
+	document.write("<br>"+"El mensaje crifrado es: " + resultado);
+	document.write("<br>"+"El mensaje descifrado es: " + resultadoOriginal);
+
 }
 
 
