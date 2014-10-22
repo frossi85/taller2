@@ -1,0 +1,225 @@
+<html>
+
+<head>
+</head>
+
+<body>
+	<script type="text/javascript">
+	var plaintext;	// mensaje
+	var key;	// clave
+	var ciphertext	// criptograma
+	var L;		// longitud de la clave
+	var M;		// longitud del mensaje sin padding
+	var C;		// longitud del criptograma
+	var Kc;		// nro de filas de la matriz de cifrado
+	var Kd;		// nro de filas de la matriz de descifrado
+	var matrix;	// matriz
+	var step = 1;
+	
+	function createMatrixTable(rows, cols) {
+		// ver como borro el contenido anterior
+		var table = document.getElementById("matriz");
+		var row = document.createElement("tr");
+		for (var r = 0; r < rows; r++) {
+			var row = document.createElement("tr");
+			for (var c = 0; c < cols; c++) {
+				var col = document.createElement("td");
+				var textrow = document.createTextNode("*");
+				col.appendChild(textrow);
+				row.appendChild(col);
+			}
+			table.appendChild(row);
+		}
+	}
+
+	function fillMatrixTable(rows, cols) {
+		var table = document.getElementById("matriz");
+		// Clave
+		for (var c = 0; c < cols; c++) {
+			table.rows[0].cells[c].innerHTML = matrix[0][c];
+		}
+		// Mensaje
+		for (var r = 1; r < rows; r++) {
+			for (var c = 0; c < cols; c++) {
+				table.rows[r].cells[c].innerHTML = matrix[r][c];
+			}
+		}
+	}
+
+	function colSwap(indexOne, indexTwo, rows){
+		var tmpVal;
+		for (var r = 0; r < rows; r++) {
+			tmpVal = matrix[r][indexOne];
+			matrix[r][indexOne] = matrix[r][indexTwo];
+			matrix[r][indexTwo] = tmpVal;
+		}
+	}
+
+	function matrixBubbleSort(rows, cols) {
+		for (var pass = 1; pass < cols; pass++) {
+			for (var left = 0; left < (cols - pass); left++){
+				var right = left + 1;
+				if (matrix[0][left] > matrix[0][right]) {
+					colSwap(left, right, rows);
+				}
+			}
+		}
+	}
+
+	function reorderMatrixByKey() {
+		for (var i = 0; i < L; i++) {
+			var char = key.charAt(i);
+			var c = 0;
+			while (char != matrix[0][c]) {
+				c++;
+			}
+			if (i != c) {
+				colSwap(i, c, Kd);
+			}
+		}
+	}
+
+	function validateCph() {
+		ciphertext = document.getElementById("crip").value.toLowerCase().replace(/[^a-z]/g, "");
+		if (ciphertext.length < 1) {
+			alert("Por favor inserte un criptograma");
+			return false;
+		}
+		C = ciphertext.length;
+		document.getElementById("varC").value = C;
+		document.getElementById("crip").value = ciphertext;
+		return true;
+	}
+
+	function validateKey() {
+		// ver validaciones a poner
+		key = document.getElementById("key").value.toLowerCase().replace(/[^a-z]/g, "");
+		L = key.length;
+		document.getElementById("varL").value = L;
+		return true;
+	}
+
+	function removePadding() {
+		var padChar = plaintext.charAt(plaintext.length - 1);
+		while (plaintext.charAt(plaintext.length - 2) == padChar) {
+			plaintext = plaintext.substr(0, plaintext.length - 1);
+		}
+	}
+
+	function step1Dec() {
+		Kd = Math.ceil(C/L) + 1;
+		document.getElementById("varKd").value = Kd;
+		matrix = new Array(Kd);
+		for (var i = 0; i < Kd; i++) {
+			matrix[i] = new Array(L);
+		}
+		createMatrixTable(Kd, L);
+	}
+
+	function step2Dec() {
+		// Clave
+		for (var c = 0; c < L; c++) {
+			matrix[0][c] = key.charAt(c);
+		}
+		matrixBubbleSort(1, L);
+		fillMatrixTable(1, L);
+	}
+
+	function step3Dec() {
+		// Criptograma
+		for (var c = 0; c < L; c++) {
+			for (var r = 1; r < Kd; r++) {
+				matrix[r][c] = ciphertext.charAt((Kd-1) * c + (r-1));
+			}
+		}
+		fillMatrixTable(Kd, L);
+	}
+
+	function step4Dec() {
+		reorderMatrixByKey();
+		fillMatrixTable(Kd, L);
+	}
+
+	function step5Dec() {
+		plaintext = "";
+		for (var r = 1; r < Kd; r++) {
+			for (var c = 0; c < L; c++) {
+				plaintext += matrix[r][c];
+			}
+		}
+		removePadding();
+		document.getElementById("msg").value = plaintext;
+	}
+
+	function decrypt() {
+		if (validateCph() && validateKey()) {
+			step1Dec();
+			step2Dec();
+			step3Dec();
+			step4Dec();
+			step5Dec();
+		}
+	}
+
+	function nextStep() {
+		switch(step) {
+		case 1: {
+			if (validateCph() && validateKey()) {
+				step1Dec();
+				step++;
+			}
+			break;
+		}
+		case 2: {
+			step2Dec();
+			step++;
+			break;
+		}
+		case 3: {
+			step3Dec();
+			step++;
+			break;
+		}
+		case 4: {
+			step4Dec();
+			step++;
+			break;
+		}
+		case 5: {
+			step5Dec();
+			step++;
+			break;
+		}
+		case 6: {
+			alert("El algoritmo de descifrado ya finalizó");
+			break;
+		}
+		default: {
+			alert("Error inesperado");
+		}
+		}
+	}
+
+	</script>
+
+Plaintext<br>
+<textarea id="msg" name="msg" rows="4" cols="50"></textarea>
+<p> keyword = <input id="key" name="key" size="10" value="cat" type="text"></p>
+<p><input name="btnDe" value="^ Decrypt ^" onclick="decrypt()" type="button">
+<input name="btnStep" value="Next Step" onclick="nextStep()" type="button"></p>
+<p>Ciphertext<br><textarea id="crip" name="crip" rows="4" cols="50">emansmoluacosis</textarea> </p>
+
+<h3>Variables</h3>
+<p> L = <input id="varL" name="varL" size="2" type="text"></p>
+<p> M = <input id="varM" name="varM" size="3" type="text"></p>
+<p> C = <input id="varC" name="varC" size="3" type="text"></p>
+<p> Kc = <input id="varKc" name="varKc" size="2" type="text"></p>
+<p> Kd = <input id="varKd" name="varKd" size="2" type="text"></p>
+
+<h3>Matriz</h3>
+<table border="1" id="matriz" name="matriz">
+	
+</table>
+
+</body>
+</html>
