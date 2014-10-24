@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Toolkit de prueba</p>
+
+<p>Operaciones Suma,Resta,División,Multiplicación (+,-,*,/) </p>
+
+<form action="demo_form.asp">
+nro1: <input type="text" name="Nro1" value="2" id="nro1">
+nro2: <input type="text" name="Nro2" value="1" id="nro2">
+Operador  : <input type="text" name="Operador" value="+" id="operador"><br>
+</form>
+
+<p></p>
+
+<button onclick="ejecutar1()">Ejecutar</button>
+
+<p>Operación Obtener posición en diccionario Z26 </p>
+
+<form action="demo_form.asp">
+Letra: <input type="text" name="letra" value="B" id="letra">
+</form>
+
+<p></p>
+
+<button onclick="ejecutar2()">Ejecutar</button>
+
+
+
+<p>Operación Obtener inverso multiplicativo </p>
+
+<form action="demo_form.asp">
+nro: <input type="int" name="nro" value="9" id="nro">
+</form>
+
+<p></p>
+
+<button onclick="ejecutar3()">Ejecutar</button>
+
+
+<p>Operación Obtener modulo del nro ingresado </p>
+
+<form action="demo_form.asp">
+nro: <input type="int" name="nro" value="9" id="nro4">
+Base: <input type="int" name="base" value="9" id="nro5">
+</form>
+
+<p></p>
+
+<button onclick="ejecutar4()">Ejecutar</button>
+
+
+<script>
+
+var z26 = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+
+
+
+function ejecutar1(){
+
+	var A = parseInt(document.getElementById('nro1').value);
+	var B = parseInt(document.getElementById('nro2').value);
+	var oper = document.getElementById('operador').value;
+
+	switch(oper){
+		case "+":	
+			resultado = A + B;
+			break;
+		case "-":
+			resultado = A - B;
+			break;
+		case "*":
+			resultado = A * B;
+			break;
+		case "/":
+			resultado = A / B;
+			break;
+	}	
+	document.write(resultado);
+}
+
+
+function ejecutar2(){
+
+	var caracter = document.getElementById('letra').value;
+	var posicion = "";
+	var indice;
+
+	for	(indice = 0; indice < z26.length; indice++) {
+		if(z26[indice] == caracter.toLowerCase()){
+			posicion = indice;
+			break;
+		}
+	}
+
+	document.write("La posición de " + caracter + " el diccionario de 26 caracteres es: " + posicion);	
+}
+
+
+function ejecutar3(){
+
+	var A = parseInt(document.getElementById('nro').value);
+	var resultado = "";
+
+	var flag;
+	for (i= 0; i < 26; i++){
+		flag = ( A*i)%26;
+		if(flag == 1){
+			resultado = i;
+			break;
+		}
+	}
+
+	if(resultado == ""){
+		resultado = 0;
+	}
+
+	document.write( "El inverso multiplicativo en modulo 26 de " + A + " es: " + resultado );
+}
+
+function ejecutar4(){
+
+	var A = parseInt(document.getElementById('nro4').value);
+	var B = parseInt(document.getElementById('nro5').value);
+	
+	var resultado = "";
+
+	resultado = (A % B + B) % B;
+
+	document.write( "El modulo en base " + B + " del valor " + A + " es de: " + resultado);
+	
+
+
+}
+
+</script> 
+
+</body>
+</html>
