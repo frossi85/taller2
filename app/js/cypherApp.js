@@ -146,13 +146,26 @@ function VigenereLibrary(key, textToProcess) {
 			return this.currentStep  >= this.text.length; 
 		},
 		nextStepResult: function() { 
-			var charToProcess = this.text.toLowerCase().charCodeAt(this.currentStep) - 96;
-			var keyChar = this.keyMask.toLowerCase().charCodeAt(this.currentStep ) - 96;
+			var charToProcess = this.text.toLowerCase().charCodeAt(this.currentStep) - 97;
+			var keyChar = this.keyMask.toLowerCase().charCodeAt(this.currentStep ) - 97;
 			
-			if(this._isEncrypt == true)
-				return String.fromCharCode(((charToProcess + keyChar) % 26) + 95);				
-			else
-				return String.fromCharCode(((charToProcess - keyChar) % 26) + 97);				
+			console.log("charToProcess: " + charToProcess);
+			console.log("keyChar: " + keyChar);
+			
+			var previousResult;
+			
+			if(this._isEncrypt == true) {
+				console.log("encrypt");
+				previousResult = charToProcess + keyChar;			
+			}
+			else {
+				console.log("decrypt: " + (charToProcess - keyChar));	
+				previousResult = charToProcess - keyChar;			
+			}
+			if(previousResult < 0)
+				previousResult += 26;
+				
+			return String.fromCharCode((previousResult % 26) + 97);	
 		},
 		goForward: function() { 
 			this.result += this.nextStepResult();

@@ -1,4 +1,14 @@
-﻿<vigenere-common></vigenere-common>
+﻿<h1>Vigenere - Desencriptación</h1>
+<p>Para el decifrado se utiliza el abecedario ingles, el cual solo incluye letras de la A a la Z sin incluir la Ñ. De esta manera tenemos un alfabeto de encriptación de 26 letras.</p>
+<p>Para encriptar el texto ingresado se necesita una clave de encriptación en el alfabeto antes mecionado, esta clave se repite hasta que tenga el mismi largo que el texto a encriptar y luego se procede a utilizar la siguiente formula para encriptar caracter a caracter.</p>
+<p>Xi = (Yi - Zi) mod n </p>
+<p>Donde:</p>
+<ul>
+	<li>Yi = posicion en alfabeto de caracter encriptado</li>
+	<li>Xi = posicion en alfabeto de caracter desencriptado</li>
+	<li>Zi = posicion en alfabeto de caracter de la clave utilizado para encriptar</li>
+	<li>n = cantidad de letras del alfabeto usado (en este caso 26)</li>
+</ul>
 
 <form name="initializeVigenereForm" ng-controller="VigenereCtrl as vigenereCtrl" ng-submit="initializeVigenereForm.$valid && vigenereCtrl.initializeDecryptProblem()" novalidate>
 	<div class="form-group">
