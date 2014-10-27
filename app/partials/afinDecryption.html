@@ -80,7 +80,6 @@ function inversaMulti(A){
 	for (i= 0; i < 26; i++){
 		flag = ( A*i)%26;
 		if(flag == 1){
-			//A_INV = i;
 			return i;
 		}
 	}
@@ -88,40 +87,31 @@ function inversaMulti(A){
 
 
 
-function paso1(mensaje,index,B){
+function paso1(input){
 	
 	var resultado;
 	console.log("Paso 1" +"<br>");
 
-	resultado = getPos(mensaje[index])-B;
+	resultado = getPos(input);
 
-	console.log("Resultado " + resultado +"<br>");	
+	console.log("Valor de Ci = " + resultado +"<br>")	
 	return resultado;	
 }
 
-function paso2(resultado1,A_INV){
+function paso2(C,A_INV,B){
 
 	var resultado;
-	console.log("Paso 2" +"<br>");
+	console.log("Paso 2 Aplicación de formula -> Mi= A_INV * ( Ci - B) % 26" + "<br>");
+	console.log("Valor de A inversa = "  + A_INV + "<br>");
+	console.log("Valor de B = "  + B + "<br>");
+	console.log("Valor de N = 26 " + "<br>");
+	console.log("Valor de Ci = " + C + "<br>");
 
-	resultado = resultado1*A_INV;
+	resultado = z26[((( C - B ) * A_INV ) % 26 + 26) % 26];
 
-	console.log("Resultado " + resultado +"<br>");	
+	console.log("Valor de Mi = " + resultado +"<br>");
 	return resultado;	
 }
-
-
-function paso3(resultado2){
-
-	var resultado;
-	console.log("Paso 3" +"<br>");
-
-	resultado = (resultado2 % 26 + 26) % 26;
-
-	console.log("Resultado " + resultado +"<br>");	
-	return resultado;
-}
-
 
 
 function ejecutar(){
@@ -143,17 +133,19 @@ function ejecutar(){
 
 			if(mensaje.charAt(index) != " "){
 
-				resultado1 = paso1(mensaje,index,B);
-				resultado2 = paso2(resultado1,A_INV);
-				resultado3 = paso3(resultado2);
-				resultado4 = z26[resultado3];
+				iter = index + 1;	
+
+				console.log("Iteración Nro: " + iter +"<br>"+"<br>");
+				console.log("Caracter a ser decifrado "+ mensaje.charAt(index) +"<br>");
+
+				resultado1 = paso1(mensaje.charAt(index));
+				resultado2 = paso2(resultado1,A_INV,B);
+
 			}
 			else{
-				resultado4 = " ";
+				resultado2 = " ";
 			}
-			cifrado+= resultado4;
-
-			console.log(mensaje.charAt(index));
+			cifrado+= resultado2;
 		}
 
 		document.write("<br>"+"El mensaje original es: " + cifrado);

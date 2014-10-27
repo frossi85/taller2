@@ -19,63 +19,43 @@ Clave B: <input type="text" name="ClaveB" value="4" id="B"><br>
 var z26 = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 
 
+function getPos(caracter){
+
+	var i;
+	for	(i = 0; i < z26.length; i++) {
+		if(z26[i] == caracter){
+			return i;
+		}
+	}
+}
+
+
 function paso1(input){
 	
 	var indice
-	console.log("Paso 1" +"<br>");	
-	for	(indice = 0; indice < z26.length; indice++) {
-		if(z26[indice] == input){
-			console.log("Resultado " + indice +"<br>");	
-			return indice;
-		}
-	}
+	console.log("Paso 1: Obtener posición del caracter Mi a cifrar" +"<br>");
 
+	resultado = getPos(input);
+
+	console.log("Valor de Mi = " + resultado +"<br>");	
+	return resultado;
 }
 
-function paso2(input,A){
+function paso2(M,A,B){
 	
-	console.log("Paso 2" + "<br>");
-	
-	var resultado2 = input*A;
+	console.log("Paso 2: Aplicación de formula -> Ci = (a * Mi + b) mod n" + "<br>");
+	console.log("Valor de A = "  + A + "<br>");
+	console.log("Valor de B = "  + B + "<br>");
+	console.log("Valor de N = 26 " + "<br>");
+	console.log("Valor de Mi = " + M + "<br>");
 
-	console.log("Resultado = " + resultado2 +"<br>");
+	
+	var resultado2 = z26[(( M * A ) + B) % 26];
+
+	console.log("Valor de Ci = " + resultado2 +"<br>");
 	return resultado2;
 
 }
-
-function paso3(input,B){
-
-	console.log("Paso 3" + "<br>");
-	
-	var resultado3 = input+B;
-
-	console.log("Resultado = " + resultado3 +"<br>");
-	return resultado3;
-
-}
-
-function paso4(input){
-
-	console.log("Paso 4" + "<br>");
-	
-	var resultado4 = input%26;
-
-	console.log("Resultado = " + resultado4 +"<br>");
-	return resultado4;
-
-}
-
-function paso5(input){
-
-	console.log("Paso 5" + "<br>");
-	
-	resultado5 = z26[input];
-
-	console.log("Resultado = " + resultado5 +"<br>");
-	return resultado5;
-
-}
-
 
 function findGCD( l1, l2) {
 
@@ -142,21 +122,18 @@ function ejecutar(){
 			if(mensaje.charAt(index) != " "){
 
 				iter = index + 1;	
-				console.log("Iteración Nro: " + iter +"<br>"+"<br>");
 
-				var resultado1 = paso1(mensaje.charAt(index));
-				var resultado2 = paso2(resultado1,A);
-				var resultado3 = paso3(resultado2,B);
-				var resultado4 = paso4(resultado3);
-				var resultado5 = paso5(resultado4);
+				console.log("Iteración Nro: " + iter +"<br>"+"<br>");
+				console.log("Caracter a ser cifrado "+ mensaje.charAt(index) +"<br>");
+
+				var resultado1 = paso1(mensaje.charAt(index));	
+				var resultado2 = paso2(resultado1,A,B);
 
 			}
 			else{
-				resultado5 = " ";
+				resultado2 = " ";
 			}
-			cifrado+= resultado5;
-
-			console.log(mensaje.charAt(index));
+			cifrado+= resultado2;
 		}
 
 		document.write("<br>"+"El mensaje crifrado es: " + cifrado);
