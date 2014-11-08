@@ -1,0 +1,22 @@
+<html>
+
+<head>
+</head>
+
+<body>
+﻿	<h1>Cifrado de Permutación</h1>
+	<p>Para el cifrado se utiliza el abecedario inglés, el cual solo incluye letras de la 'a' a la 'z' sin incluir la 'ñ'. Los espacios, vocales tildadas, mayúsculas, dígitos, símbolos y retornos de linea no están permitidos. De esta manera tenemos un alfabeto de 26 caracteres.</p>
+	<p>Para cifrar el mensaje escrito en el alfabeto antes mencionado, se necesita una clave de cifrado que puede ser definida de 2 maneras:<br>
+		<ul>
+			<li>Una clave alfabética en el abecedario mencionado, con la restricción adicional de <b>no repetir</b> caracteres en la clave</li>
+			<li>Una clave numérica, <b>únicamente de dígitos</b> (0 a 9), <b>sin repetir</b> ningún dígito. Estas condiciones llevan a que la longitud de la clave sea <b>como máximo</b> de 10 dígitos</li>
+		</ul>
+	</p>
+
+	<div ng-controller="PermutationHomeCtrl as homeCtrl">
+		<button ng-click="homeCtrl.toEncrypt()">Ir a cifrado</button>
+		<button ng-click="homeCtrl.toDecrypt()">Ir a descifrado</button>
+	</div>
+</body>
+
+</html>
