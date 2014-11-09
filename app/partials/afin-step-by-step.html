@@ -50,7 +50,7 @@ function paso2(M,A,B){
 	console.log("Valor de Mi = " + M + "<br>");
 
 	
-	var resultado2 = z26[(( M * A ) + B) % 26];
+	var resultado2 = z26[((( M * A ) + B) % 26 + 26)%26];
 
 	console.log("Valor de Ci = " + resultado2 +"<br>");
 	return resultado2;
