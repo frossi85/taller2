@@ -325,7 +325,7 @@ function PermutationLibrary(key, message, ciphertext) {
 		_message: message,
 		_ciphertext: ciphertext,
 		_padChar: '#',
-		_currentStep: 0,
+		_currentStep: 1,
 		_matrix: [],
 
 		L: {},
@@ -422,131 +422,128 @@ function PermutationLibrary(key, message, ciphertext) {
 		},
 
 		step1Enc: function() {
-			this.Kc = Math.ceil(this.M/L) + 1;
+			this.Kc = Math.ceil(this._message.length/this._key.length) + 1;
 			//document.getElementById("varKc").value = Kc;
-			matrix = new Array(Kc);
-			for (var i = 0; i < Kc; i++) {
-				matrix[i] = new Array(L);
+			this._matrix = new Array(this.Kc);
+			for (var r = 0; r < Kc; r++) {
+				this._matrix[r] = new Array(this._key.length);
 			}
-			createMatrixTable(Kc, L);
+			this.emptyMatrix();
 		},
 
 		step2Enc: function() {
-			addPadding();
+			this.addPadding();
 			// Clave
-			for (var c = 0; c < L; c++) {
-				matrix[0][c] = key.charAt(c);
+			for (var c = 0; c < this._key.length; c++) {
+				this._matrix[0][c] = this._key.charAt(c);
 			}
 			// Mensaje
-			for (var r = 1; r < Kc; r++) {
-				for (var c = 0; c < L; c++) {
-					matrix[r][c] = plaintext.charAt(L * (r-1) + c);
+			for (var r = 1; r < this.Kc; r++) {
+				for (var c = 0; c < this._key.length; c++) {
+					this._matrix[r][c] = this._message.charAt(this._key.length * (r-1) + c);
 				}
 			}
-			fillMatrixTable(Kc, L);
+			//fillMatrixTable(Kc, L);
 		},
 
 		step3Enc: function() {
-			matrixBubbleSort(Kc, L);
-			fillMatrixTable(Kc, L);
+			this.matrixBubbleSort();
+			//fillMatrixTable(Kc, L);
 		},
 	
 		step4Enc: function() {
-			ciphertext = "";
-			for (var c = 0; c < L; c++) {
-					for (var r = 1; r < Kc; r++) {
-					ciphertext += matrix[r][c];
+			this._ciphertext = "";
+			for (var c = 0; c < this._key.length; c++) {
+					for (var r = 1; r < this.Kc; r++) {
+					this._ciphertext += this._matrix[r][c];
 				}
 			}
-			document.getElementById("crip").value = ciphertext;
+			//document.getElementById("crip").value = ciphertext;
 		},
 
 		step1Dec: function() {
-			Kd = Math.ceil(C/L) + 1;
-			document.getElementById("varKd").value = Kd;
-			matrix = new Array(Kd);
-			for (var i = 0; i < Kd; i++) {
-				matrix[i] = new Array(L);
+			this.Kd = Math.ceil(this._ciphertext.length/this._key.length) + 1;
+			//document.getElementById("varKd").value = Kd;
+			this._matrix = new Array(this.Kd);
+			for (var r = 0; r < Kd; r++) {
+				this._matrix[r] = new Array(this._key.length);
 			}
-			createMatrixTable(Kd, L);
+			this.emptyMatrix();
 		},
 
 		step2Dec: function() {
 			// Clave
-			for (var c = 0; c < L; c++) {
-				matrix[0][c] = key.charAt(c);
+			for (var c = 0; c < this._key.length; c++) {
+				this._matrix[0][c] = this._key.charAt(c);
 			}
-			matrixBubbleSort(1, L);
-			fillMatrixTable(1, L);
+			this.matrixBubbleSort();
+			//fillMatrixTable(1, L);
 		},
 
 		step3Dec: function() {
 			// Criptograma
-			for (var c = 0; c < L; c++) {
-				for (var r = 1; r < Kd; r++) {
-					matrix[r][c] = ciphertext.charAt((Kd-1) * c + (r-1));
+			for (var c = 0; c < this._key.length; c++) {
+				for (var r = 1; r < this.Kd; r++) {
+					this._matrix[r][c] = this._ciphertext.charAt((Kd-1) * c + (r-1));
 				}
 			}
-			fillMatrixTable(Kd, L);
+			//fillMatrixTable(Kd, L);
 		},
 
 		step4Dec: function() {
-			reorderMatrixByKey();
-			fillMatrixTable(Kd, L);
+			this.reorderMatrixByKey();
+			//fillMatrixTable(Kd, L);
 		},
 
 		step5Dec: function() {
-			plaintext = "";
+			this._message = "";
 			for (var r = 1; r < Kd; r++) {
-				for (var c = 0; c < L; c++) {
-					plaintext += matrix[r][c];
+				for (var c = 0; c < this._key.length; c++) {
+					this._message += this._matrix[r][c];
 				}
 			}
-			removePadding();
-			document.getElementById("msg").value = plaintext;
+			this.removePadding();
+			//document.getElementById("msg").value = plaintext;
 		},
 
-		encrypt: function() {
-			if (validateMsg() && validateKey()) {
-				step1Enc();
-				step2Enc();
-				step3Enc();
-				step4Enc();
+		resetCurrentStep: function() {
+			this._currentStep = 1;
+		}
+
+		fullEnc: function() {
+			while(this._currentStep < 5) {
+				this.nextEncStep;
 			}
 		},
 
-		decrypt: function() {
-			if (validateCph() && validateKey()) {
-				step1Dec();
-				step2Dec();
-				step3Dec();
-				step4Dec();
-				step5Dec();
+		fullDec: function() {
+			while(this._currentStep < 6) {
+				this.nextDecStep;
 			}
 		},
 
 		nextEncStep: function() {
-			switch(step) {
+			switch(this._currentStep) {
 			case 1: {
-				if (validateMsg() && validateKey()) {
-					step1Enc();
-					step++;
+				if (this.validateMsg() && this.validateKey()) {
+					this.step1Enc();
+					this._currentStep++;
 				}
 				break;
 			}
 			case 2: {
-				step2Enc();
-				step++;
+				this.step2Enc();
+				this._currentStep++;
 				break;
 			}
 			case 3: {
-				step3Enc();
-				step++;
+				this.step3Enc();
+				this._currentStep;
 				break;
 			}
 			case 4: {
-				step4Enc();
-				step++;
+				this.step4Enc();
+				this._currentStep;
 				break;
 			}
 			case 5: {
@@ -560,32 +557,32 @@ function PermutationLibrary(key, message, ciphertext) {
 		},
 
 		nextDecStep: function() {
-			switch(step) {
+			switch(this._currentStep) {
 			case 1: {
-				if (validateCph() && validateKey()) {
-					step1Dec();
-					step++;
+				if (this.validateCph() && this.validateKey()) {
+					this.step1Dec();
+					this._currentStep++;
 				}
 				break;
 			}
 			case 2: {
-				step2Dec();
-				step++;
+				this.step2Dec();
+				this._currentStep++;
 				break;
 			}
 			case 3: {
-				step3Dec();
-				step++;
+				this.step3Dec();
+				this._currentStep++;
 				break;
 			}
 			case 4: {
-				step4Dec();
-				step++;
+				this.step4Dec();
+				this._currentStep++;
 				break;
 			}
 			case 5: {
-				step5Dec();
-				step++;
+				this.step5Dec();
+				this._currentStep++;
 				break;
 			}
 			case 6: {
@@ -597,45 +594,5 @@ function PermutationLibrary(key, message, ciphertext) {
 			}
 			}
 		}
-
-/*		isFinished: function() { 
-			return this.currentStep  >= this.text.length; 
-		},
-
-		nextStepResult: function() { 
-			var charToProcess = this.text.toLowerCase().charCodeAt(this.currentStep) - 97;
-			var keyChar = this.keyMask.toLowerCase().charCodeAt(this.currentStep ) - 97;
-			
-			console.log("charToProcess: " + charToProcess);
-			console.log("keyChar: " + keyChar);
-			
-			var previousResult;
-			
-			if(this._isEncrypt == true) {
-				console.log("encrypt");
-				previousResult = charToProcess + keyChar;			
-			}
-			else {
-				console.log("decrypt: " + (charToProcess - keyChar));	
-				previousResult = charToProcess - keyChar;			
-			}
-			if(previousResult < 0)
-				previousResult += 26;
-				
-			return String.fromCharCode((previousResult % 26) + 97);	
-		},
-		goForward: function() { 
-			this.result += this.nextStepResult();
-			this.currentStep++;
-			return this;
-		},
-		setEncrypt: function () { 
-			this._isEncrypt = true ;
-			return this;
-		},
-		setDecrypt: function () { 
-			this._isEncrypt = false ;
-			return this;
-		}*/
 	};
 }

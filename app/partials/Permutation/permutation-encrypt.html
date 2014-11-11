@@ -1,70 +1,61 @@
-<html>
+<h1>Cifrado de Permutación - Método de Cifrado</h1>
 
-<head>
-</head>
+<!-- Significado variables -->
+<h3>Identificación de Variables</h3>
+<ul>
+	<li><em>L</em>: longitud de la clave</li>
+	<li><em>M</em>: longitud del mensaje</li>
+	<li><em>C</em>: longitud del criptograma</li>
+	<li><em>Kc</em>: cantidad de filas de la matriz de cifrado. Kc = techo(M/L) + 1</li>
+</ul>
 
-<body>
-	<h1>Cifrado de Permutación</h1>
-	<h2>Método de Cifrado</h2>
+<!-- Pseudocodigo de cifrado -->
+<h3>Algoritmo de Cifrado</h3>
+<ol>
+	<li>Crear una matriz de Kc x L</li>
+	<li>Disponer la clave y el mensaje en la matriz, colocando la clave en la primer fila y el mensaje en las siguientes filas (de izquierda a derecha y de arriba hacia abajo) rellenando con caracteres aleatorios en caso de quedar celdas vacías en la última fila</li>
+	<li>Reordenar las columnas según el orden alfabético (caso clave alfabética) o numérico (caso clave numérica) de la clave, de izquierda a derecha</li>
+	<li>Escribir el criptograma tomando los caracteres en el siguiente orden: tomar la primer columna y escribir los caracteres desde arriba hacia abajo (sin tomar los caracteres de la clave), y repetir lo anterior con las siguientes columnas (en forma ordenada), concatenando los resultados</li>
+</ol>
 
-	<!-- Significado variables -->
-	<h4>Variables</h4>
-	<ul>
-		<li><em>L</em>: longitud de la clave</li>
-		<li><em>M</em>: longitud del mensaje</li>
-		<li><em>C</em>: longitud del criptograma</li>
-		<li><em>Kc</em>: cantidad de filas de la matriz de cifrado. Kc = techo(M/L) + 1</li>
-	</ul>
+<!-- Formulario clave -->
+<div class="form-group">
+	<label for="key">Clave</label>
+	<input type="text" class="form-control" ng-model="permutation.key" id="key" placeholder="Ingresar clave" ng-pattern="/^[a-z]*$/" required>
+	<p class="help">Escriba una clave que contenga caracteres del alfabeto inglés, sin repetir caracteres, o una clave numérica, sin repetir dígitos<p>
+</div>
 
-	<!-- Pseudocodigo de cifrado -->
-	<h3>Algoritmo de Cifrado</h3>
-	<ol>
-		<li>Crear una matriz de Kc x L</li>
-		<li>Disponer la clave y el mensaje en la matriz, colocando la clave en la primer fila y el mensaje en las siguientes filas (de izquierda a derecha y de arriba hacia abajo) rellenando con caracteres aleatorios en caso de quedar celdas vacías en la última fila</li>
-		<li>Reordenar las columnas según el orden alfabético (caso clave alfabética) o numérico (caso clave numérica) de la clave, de izquierda a derecha</li>
-		<li>Escribir el criptograma tomando los caracteres en el siguiente orden: tomar la primer columna y escribir los caracteres desde arriba hacia abajo (sin tomar los caracteres de la clave), y repetir lo anterior con las siguientes columnas (en forma ordenada), concatenando los resultados</li>
-	</ol>
+<!-- Formulario texto a cifrar -->
+<div class="form-group">
+	<label for="message">Texto a cifrar</label>
+	<textarea class="form-control" id="message" rows="3" ng-model="permutation.message" ng-pattern="/^[a-z]*$/" required></textarea>
+	<p class="help">Escriba un texto que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin espacios, saltos de linea o caracteres especiales<p>
+</div>
 
-	<!-- Formulario clave -->
-	<div class="form-group">
-		<label for="key">Clave</label>
-		<input type="text" class="form-control" ng-model="permutation.key" id="key" placeholder="Ingresar clave" ng-pattern="/^[a-z]*$/" required>
-		<p class="help">Escriba una clave que contenga caracteres del alfabeto inglés, sin repetir caracteres, o una clave numérica, sin repetir dígitos<p>
-	</div>
+<!-- Valores de variables -->
+<div>
+<h3>Variables</h3>
+	<p> L = <input id="varL" name="varL" size="2" type="text"></p>
+	<p> M = <input id="varM" name="varM" size="3" type="text"></p>
+	<p> C = <input id="varC" name="varC" size="3" type="text"></p>
+	<p> Kc = <input id="varKc" name="varKc" size="2" type="text"></p>
+</div>
 
-	<!-- Formulario texto a cifrar -->
-	<div class="form-group">
-		<label for="message">Texto a cifrar</label>
-		<textarea class="form-control" id="message" rows="3" ng-model="permutation.message" ng-pattern="/^[a-z]*$/" required></textarea>
-		<p class="help">Escriba un texto que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin espacios, saltos de linea o caracteres especiales<p>
-	</div>
+<!-- Valores matriz -->
+<div>
+	<h3>Matriz</h3>
+	<table border="1" id="matrix" name="matrix">
+	</table>
+</div>
 
-	<!-- Valores de variables -->
-	<div>
-	<h3>Variables</h3>
-		<p> L = <input id="varL" name="varL" size="2" type="text"></p>
-		<p> M = <input id="varM" name="varM" size="3" type="text"></p>
-		<p> C = <input id="varC" name="varC" size="3" type="text"></p>
-		<p> Kc = <input id="varKc" name="varKc" size="2" type="text"></p>
-	</div>
+<!-- Formulario criptograma -->
+<div class="form-group">
+	<label for="ciphertext">Criptograma</label>
+	<textarea class="form-control" id="" rows="3" ng-model="permutation.ciphertext"></textarea>
+</div>
 
-	<!-- Valores matriz -->
-	<div>
-		<h3>Matriz</h3>
-		<table border="1" id="matrix" name="matrix">
-		</table>
-	</div>
-
-	<!-- Formulario criptograma -->
-	<div class="form-group">
-		<label for="ciphertext">Criptograma</label>
-		<textarea class="form-control" id="" rows="3" ng-model="permutation.ciphertext"></textarea>
-	</div>
-
-	<!-- Botones -->
-	<div>
-		<button ng-click="encCtrl.nextEncStep()">Siguiente Paso</button>
-		<button ng-click="encCtrl.fullEnc()">Ejecutar</button>
-	</div>
-</body>
-</html>
+<!-- Botones -->
+<div>
+	<button ng-click="encCtrl.nextEncStep()">Siguiente Paso</button>
+	<button ng-click="encCtrl.fullEnc()">Ejecutar</button>
+</div>
