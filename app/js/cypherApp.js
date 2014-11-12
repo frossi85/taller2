@@ -146,10 +146,6 @@
 			PERMUTACION
 *****************************************************************/
 
-  app.factory("Permutacion",function(){
-        return {};
-  });
-
   app.controller('PermutationHomeCtrl', function($scope, $location) {
 	this.toEncrypt = function () {
 	}
@@ -159,29 +155,15 @@
   });
 
   app.controller('PermutationEncryptCtrl', function($scope, $location) {
-/*	this.permutacion = { withAutoEvaluation: true };
-	
-	this.enableAutoEvaluation = function () {
-		this.permutacion.withAutoEvaluation = true;
-	}
-  
-	this.disableAutoEvaluation = function () {
-		this.permutacion.withAutoEvaluation = false;
-	}
-  
+	this.permutationEnc;
+
 	this.initializeProblem = function() {
-		Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.text);
-		Vigenere.withAutoEvaluation = $scope.vigenere.withAutoEvaluation;
-		$location.url('/vigenere/step-by-step');
-		
-		//this.vigenere = {}; //Esto borra el formulario, lo resetea. Deberia hacerse al cambiar de algoritmo o reiniciar la ejecucion
+		this.permutationEnc = PermutationLibrary($scope.permutation.key, $scope.permutation.plaintext, "");
+		console.log(this.permutationEnc._key);
+		console.log(this.permutationEnc._plaintext);
+		//this.permutationEnc.validateKey();
+		//this.permutationEnc.validateMsg();
 	};
-	
-	this.initializeDecryptProblem = function() {
-		Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.text).setDecrypt(); 
-		Vigenere.withAutoEvaluation = $scope.vigenere.withAutoEvaluation;
-		$location.url('/permutacion/decrypt/step-by-step');
-	};*/
   });
   
   app.controller('PermutationDecryptCtrl', function($scope, $location) {
@@ -232,12 +214,11 @@
 		return typeof this.vigenere != undefined && this.vigenere.isFinished();
 	};*/
   });
+});
 
 /*****************************************************************
 				otro
 *****************************************************************/
-
-});
 
 function VigenereLibrary(key, textToProcess) {
 
@@ -295,44 +276,22 @@ function VigenereLibrary(key, textToProcess) {
 	};
 }
 
-/*
-	app.controller('TestCtrl', function ($scope) { 
-		this.permutation = { matrix: [
-        ["*", "*", "*"],
-        ["*", "*", "*"],
-        ["*", "*", "*"]
-    	]};
-
-
-	    this.update = function() {
-			this.permutation.matrix = [
-		        ["A", "*", "*"],
-		        ["*", "A", "*"],
-		        ["*", "*", "A"]
-		    	];
-
-		    console.log('entre');
-		};
-
-	});
-*/
-
-function PermutationLibrary(key, message, ciphertext) {
+function PermutationLibrary(key, plaintext, ciphertext) {
 	return {
 		_isEncrypt: true,
 		_withAutoEvaluation: false,
 		_key: key,
-		_message: message,
+		_plaintext: plaintext,
 		_ciphertext: ciphertext,
 		_padChar: '#',
 		_currentStep: 1,
 		_matrix: [],
 
-		L: {},
-		M: {},
-		C: {},
-		Kc: {},
-		Kd: {},
+		L: key.length,
+		M: plaintext.length,
+		C: ciphertext.length,
+		Kc: "",
+		Kd: "",
 
 		colSwap: function(indexOne, indexTwo) {
 			var tmpVal;
@@ -350,7 +309,7 @@ function PermutationLibrary(key, message, ciphertext) {
 				for (var left = 0; left < (cols - pass); left++){
 					var right = left + 1;
 					if (this._matrix[0][left] > this._matrix[0][right]) {
-						colSwap(left, right);
+						this.colSwap(left, right);
 					}
 				}
 			}
@@ -378,22 +337,17 @@ function PermutationLibrary(key, message, ciphertext) {
 		},
 
 		validateMsg: function() {
-			this._message = this._message.value.toLowerCase().replace(/[^a-z]/g, "");
-			if (this._message.length < 1) {
+			this._plaintext = this._plaintext.value.toLowerCase().replace(/[^a-z]/g, "");
+			if (this._plaintext.length < 1) {
 				alert("Por favor inserte un mensaje");
 				return false;
-			}
-		/*	M = plaintext.length;
-			document.getElementById("varM").value = M;
-			document.getElementById("msg").value = plaintext;*/
+			}	
 			return true;
 		},
 
 		validateKey: function() {
 			// ver validaciones a poner
 			this._key = this._key.value.toLowerCase().replace(/[^a-z]/g, "");
-			/*L = key.length;
-			document.getElementById("varL").value = L;*/
 			return true;
 		},
 
@@ -403,29 +357,25 @@ function PermutationLibrary(key, message, ciphertext) {
 				alert("Por favor inserte un criptograma");
 				return false;
 			}
-			/*C = ciphertext.length;
-			document.getElementById("varC").value = C;
-			document.getElementById("crip").value = ciphertext;*/
 			return true;
 		},
 
 		addPadding: function() {
-			while (this._message.length % this._key.length != 0) {
-				this._message += this._padChar;
+			while (this._plaintext.length % this._key.length != 0) {
+				this._plaintext += this._padChar;
 			}
 		 },
 
 		removePadding: function() {
-			while (this._message.charAt(this._message.length - 1) == this._padChar) {
-				this._message = this._message.substr(0, this._message.length - 1);
+			while (this._plaintext.charAt(this._plaintext.length - 1) == this._padChar) {
+				this._plaintext = this._plaintext.substr(0, this._plaintext.length - 1);
 			}
 		},
 
 		step1Enc: function() {
-			this.Kc = Math.ceil(this._message.length/this._key.length) + 1;
-			//document.getElementById("varKc").value = Kc;
+			this.Kc = Math.ceil(this._plaintext.length/this._key.length) + 1;
 			this._matrix = new Array(this.Kc);
-			for (var r = 0; r < Kc; r++) {
+			for (var r = 0; r < this.Kc; r++) {
 				this._matrix[r] = new Array(this._key.length);
 			}
 			this.emptyMatrix();
@@ -440,15 +390,13 @@ function PermutationLibrary(key, message, ciphertext) {
 			// Mensaje
 			for (var r = 1; r < this.Kc; r++) {
 				for (var c = 0; c < this._key.length; c++) {
-					this._matrix[r][c] = this._message.charAt(this._key.length * (r-1) + c);
+					this._matrix[r][c] = this._plaintext.charAt(this._key.length * (r-1) + c);
 				}
 			}
-			//fillMatrixTable(Kc, L);
 		},
 
 		step3Enc: function() {
 			this.matrixBubbleSort();
-			//fillMatrixTable(Kc, L);
 		},
 	
 		step4Enc: function() {
@@ -458,14 +406,12 @@ function PermutationLibrary(key, message, ciphertext) {
 					this._ciphertext += this._matrix[r][c];
 				}
 			}
-			//document.getElementById("crip").value = ciphertext;
 		},
 
 		step1Dec: function() {
 			this.Kd = Math.ceil(this._ciphertext.length/this._key.length) + 1;
-			//document.getElementById("varKd").value = Kd;
 			this._matrix = new Array(this.Kd);
-			for (var r = 0; r < Kd; r++) {
+			for (var r = 0; r < this.Kd; r++) {
 				this._matrix[r] = new Array(this._key.length);
 			}
 			this.emptyMatrix();
@@ -477,7 +423,6 @@ function PermutationLibrary(key, message, ciphertext) {
 				this._matrix[0][c] = this._key.charAt(c);
 			}
 			this.matrixBubbleSort();
-			//fillMatrixTable(1, L);
 		},
 
 		step3Dec: function() {
@@ -487,48 +432,44 @@ function PermutationLibrary(key, message, ciphertext) {
 					this._matrix[r][c] = this._ciphertext.charAt((Kd-1) * c + (r-1));
 				}
 			}
-			//fillMatrixTable(Kd, L);
 		},
 
 		step4Dec: function() {
 			this.reorderMatrixByKey();
-			//fillMatrixTable(Kd, L);
 		},
 
 		step5Dec: function() {
-			this._message = "";
-			for (var r = 1; r < Kd; r++) {
+			this._plaintext = "";
+			for (var r = 1; r < this.Kd; r++) {
 				for (var c = 0; c < this._key.length; c++) {
-					this._message += this._matrix[r][c];
+					this._plaintext += this._matrix[r][c];
 				}
 			}
 			this.removePadding();
-			//document.getElementById("msg").value = plaintext;
 		},
 
 		resetCurrentStep: function() {
 			this._currentStep = 1;
-		}
+		},
 
 		fullEnc: function() {
 			while(this._currentStep < 5) {
-				this.nextEncStep;
+				this.nextEncStep();
 			}
 		},
 
 		fullDec: function() {
 			while(this._currentStep < 6) {
-				this.nextDecStep;
+				this.nextDecStep();
 			}
 		},
 
 		nextEncStep: function() {
+			console.log(this._currentStep);
 			switch(this._currentStep) {
 			case 1: {
-				if (this.validateMsg() && this.validateKey()) {
-					this.step1Enc();
-					this._currentStep++;
-				}
+				this.step1Enc();
+				this._currentStep++;
 				break;
 			}
 			case 2: {
@@ -538,12 +479,12 @@ function PermutationLibrary(key, message, ciphertext) {
 			}
 			case 3: {
 				this.step3Enc();
-				this._currentStep;
+				this._currentStep++;
 				break;
 			}
 			case 4: {
 				this.step4Enc();
-				this._currentStep;
+				this._currentStep++;
 				break;
 			}
 			case 5: {
