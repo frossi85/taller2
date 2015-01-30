@@ -1,0 +1,14 @@
+<form name="textKeyForm" ng-submit="textKeyForm.$valid && encCtrl.initializeProblem()" novalidate>
+	<div class="form-group">
+		<label for="key">Clave</label>
+		<input name="key" type="text" class="form-control" ng-model="permutation.encKey" id="key" placeholder="Ingresar clave" ng-pattern="/^[a-z]*$/" required>
+		<p class="help">Escriba una clave que contenga caracteres del alfabeto inglés, sin repetir caracteres, o una clave numérica, sin repetir dígitos<p>
+	</div>
+
+	<div class="form-group">
+		<label for="plaintext">Texto a cifrar</label>
+		<textarea class="form-control" id="plaintext" rows="3" ng-model="permutation.plaintext" ng-pattern="/^[a-z]*$/" required></textarea>
+		<p class="help">Escriba un texto que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin espacios, saltos de linea o caracteres especiales<p>
+	</div>
+	<input class="btn btn-default" type="submit" value="Inicializar"/>
+</form>

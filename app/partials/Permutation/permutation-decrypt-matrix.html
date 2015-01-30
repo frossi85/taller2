@@ -1,0 +1,10 @@
+<div>
+	<h3>Matriz</h3>
+	<table border="1" id="matrix" name="matrix">
+		<tr ng-repeat="row in decCtrl.permutationDec._matrix">             
+			<td ng-repeat="val in row track by $index">                    
+			{{val}}
+			</td>
+		</tr>
+	</table>
+</div>

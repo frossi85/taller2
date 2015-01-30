@@ -16,7 +16,7 @@
 		<div class="input-group">
 			<div id="radioBtn" class="btn-group">
 				<a class="btn btn-primary btn-sm" ng-class="{ 'active' : vigenereCtrl.vigenere.withAutoEvaluation, 'notActive' : !vigenereCtrl.vigenere.withAutoEvaluation }" ng-click="vigenereCtrl.enableAutoEvaluation()">Si</a>
-				<a class="btn btn-primary btn-sm" ng-class="{ 'active' : !vigenereCtrl.vigenere.withAutoEvaluation, 'notActive' : vigenereCtrl.vigenere.withAutoEvaluation }" ng-click="vigenereCtrl.disableAutoEvaluation()">No</a>
+				<a class="btn btn-primary btn-sm" ng-class="{ 'active' : !vigenereCtrl.vigenere.withAutoEvaluation, 'notActive' : vigenereCtrl.withAutoEvaluation }" ng-click="vigenereCtrl.disableAutoEvaluation()">No</a>
 			</div>
 		</div>
 		<input type="hidden" id="withAutoEvaluation" ng-model="vigenereCtrl.vigenere.withAutoEvaluation"/>

@@ -1,67 +1,32 @@
 <h1>Cifrado de Permutación - Método de Cifrado</h1>
 
-<!-- Significado variables -->
-<h3>Identificación de Variables</h3>
-<ul>
-	<li><em>L</em>: longitud de la clave</li>
-	<li><em>M</em>: longitud del mensaje</li>
-	<li><em>Kc</em>: cantidad de filas de la matriz de cifrado. Kc = techo(M/L) + 1</li>
-</ul>
-
-<!-- Pseudocodigo de cifrado -->
-<h3>Algoritmo de Cifrado</h3>
-<ol>
-	<li>Crear una matriz de Kc x L</li>
-	<li>Disponer la clave y el mensaje en la matriz, colocando la clave en la primer fila y el mensaje en las siguientes filas (de izquierda a derecha y de arriba hacia abajo) rellenando con caracteres aleatorios en caso de quedar celdas vacías en la última fila</li>
-	<li>Reordenar las columnas según el orden alfabético (caso clave alfabética) o numérico (caso clave numérica) de la clave, de izquierda a derecha</li>
-	<li>Escribir el criptograma tomando los caracteres en el siguiente orden: tomar la primer columna y escribir los caracteres desde arriba hacia abajo (sin tomar los caracteres de la clave), y repetir lo anterior con las siguientes columnas (en forma ordenada), concatenando los resultados</li>
-</ol>
-
 <div ng-controller="PermutationEncryptCtrl as encCtrl">
-	<!-- Formulario clave -->
-	<div class="form-group">
-		<label for="key">Clave</label>
-		<input type="text" class="form-control" ng-model="permutation.key" id="key" placeholder="Ingresar clave" ng-pattern="/^[a-z]*$/" required>
-		<p class="help">Escriba una clave que contenga caracteres del alfabeto inglés, sin repetir caracteres, o una clave numérica, sin repetir dígitos<p>
-	</div>
 
-	<!-- Formulario texto a cifrar -->
-	<div class="form-group">
-		<label for="plaintext">Texto a cifrar</label>
-		<textarea class="form-control" id="plaintext" rows="3" ng-model="permutation.plaintext" ng-pattern="/^[a-z]*$/" required></textarea>
-		<p class="help">Escriba un texto que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin espacios, saltos de linea o caracteres especiales<p>
-	</div>
+	<!-- Significado variables -->
+	<encrypt-dictionary-variables></encrypt-dictionary-variables>
 
+	<!-- Pseudocodigo de cifrado -->
+	<encrypt-algorithm ng-hide="encCtrl._withAutoEvaluation"></encrypt-algorithm>
+
+	<!-- Formulario texto-clave -->
+	<encrypt-text-key-form ng-hide="encCtrl.isInitialized()"></encrypt-text-key-form>
+	
 	<!-- Valores de variables -->
-	<div>
-	<h3>Variables</h3>
-		<p> L = {{encCtrl.permutationEnc.L}}</p>
-		<p> M = {{encCtrl.permutationEnc.M}}</p>
-		<p> Kc = {{encCtrl.permutationEnc.Kc}}</p>
-	</div>
+	<encrypt-variables ng-show="encCtrl.isInitialized()"></encrypt-variables>
 
 	<!-- Valores matriz -->
-	<div>
-		<h3>Matriz</h3>
-		<table border="1" id="matrix" name="matrix">
-			<tr ng-repeat="row in encCtrl.permutationEnc._matrix">             
-				<td ng-repeat="val in row track by $index">                    
-				{{val}}
-				</td>
-			</tr>
-		</table>
-	</div>
+	<encrypt-matrix ng-show="encCtrl.isInitialized()"></encrypt-matrix>
 
 	<!-- Resultado criptograma -->
-	<div>
+	<div ng-show="encCtrl.hasFinished()">
 		<h3>Criptograma</h3>
 		<p>{{encCtrl.permutationEnc._ciphertext}}</p>
 	</div>
 
 	<!-- Botones -->
 	<div>
-		<button ng-click="encCtrl.initializeProblem()">Inicializar</button>
-		<button ng-click="encCtrl.permutationEnc.nextEncStep()">Siguiente Paso</button>
-		<button ng-click="encCtrl.permutationEnc.fullEnc()">Ejecutar</button>
+		<button class="btn btn-default" ng-show="encCtrl.isInitialized() && !encCtrl.hasFinished()" ng-click="encCtrl.permutationEnc.nextEncStep()">Siguiente Paso</button>
+		<button class="btn btn-default" ng-show="encCtrl.isInitialized() && !encCtrl.hasFinished()" ng-click="encCtrl.permutationEnc.fullEnc()">Ejecutar</button>
+		<button class="btn btn-default" ng-show="encCtrl.hasFinished()" ng-click="encCtrl.returnHome()">Salir</button>
 	</div>
 </div>

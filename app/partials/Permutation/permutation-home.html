@@ -8,11 +8,7 @@
 </ul>
 </p>
 
-<div ng-controller="PermutationHomeCtrl as homeCtrl">
-	<a href="#/permutacion/encrypt">Ir a cifrado</a>
-	<a href="#/permutacion/decrypt">Ir a descifrado</a>
-<!--	
-	<button ng-click="homeCtrl.toEncrypt()">Ir a cifrado</button>
-	<button ng-click="homeCtrl.toDecrypt()">Ir a descifrado</button>
--->
+<div ng-controller="PermutationHomeCtrl as homeCtrl">	
+	<button class="btn btn-default" ng-click="homeCtrl.toEncrypt()">Ir a cifrado</button>
+	<button class="btn btn-default" ng-click="homeCtrl.toDecrypt()">Ir a descifrado</button>
 </div>
