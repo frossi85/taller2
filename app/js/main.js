@@ -28,7 +28,7 @@ requirejs.config({
 
 });
 
-require(['cypherApp'], function(app) {
+require(['cypherApp', 'vigenere', 'permutation', 'nlfsr', 'afin', 'hill', 'rc4'], function(app) {
 
   /*
     Start your app here
