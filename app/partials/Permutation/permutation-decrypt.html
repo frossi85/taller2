@@ -13,14 +13,13 @@
 
 	<!-- Valores de variables -->
 	<decrypt-variables ng-show="decCtrl.isInitialized()"></decrypt-variables>
-
+	
 	<!-- Valores matriz -->
 	<decrypt-matrix ng-show="decCtrl.isInitialized()"></decrypt-matrix>
 
 	<!-- Resultado criptograma -->
 	<div ng-show="decCtrl.hasFinished()">
-		<h3>Texto plano</h3>
-		<p>{{decCtrl.permutationDec._plaintext}}</p>
+		<h3>Texto plano: {{decCtrl.permutationDec._plaintext}}</h3><br>
 	</div>
 
 	<!-- Botones -->
@@ -29,4 +28,5 @@
 		<button class="btn btn-default" ng-show="decCtrl.isInitialized() && !decCtrl.hasFinished()" ng-click="decCtrl.permutationDec.fullDec()">Ejecutar</button>
 		<button class="btn btn-default" ng-show="decCtrl.hasFinished()" ng-click="decCtrl.returnHome()">Salir</button>
 	</div>
+	
 </div>

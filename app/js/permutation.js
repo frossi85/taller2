@@ -71,6 +71,18 @@ define(['angular', 'angular-route'], function(angular) {
 		};
 	});
 	
+	app.directive('keyValidation', function() {
+		return {
+			require: 'ngModel',
+			link: function(scope, elm, attrs, ctrl) {
+				ctrl.$parsers.unshift(function (viewValue) {
+					ctrl.$setValidity('key-validation', PermutationLibrary("", "", "").validateKey(viewValue));
+					return viewValue;
+				});
+			}
+		};
+	});
+	
 	app.controller('PermutationHomeCtrl', function($scope, $location) {
 		this.toEncrypt = function () {
 			$location.url('/permutacion/encrypt');
@@ -87,6 +99,7 @@ define(['angular', 'angular-route'], function(angular) {
 		
 		this.isInitialized = function() {
 			return !(typeof this.permutationEnc == undefined || this.permutationEnc == null);
+			return false;
 		};
 		
 		this.hasFinished = function() {
@@ -97,18 +110,21 @@ define(['angular', 'angular-route'], function(angular) {
 			$location.url('/permutacion');
 		};
 		
+		this.goToDecrypt = function() {
+			$location.url('/permutacion/decrypt');
+// 			$scope.permutation.decKey = this.permutationEnc._key;
+// 			$scope.permutation.ciphertext = this.permutationEnc._ciphertext;
+		};
+		
 		this.initializeProblem = function() {
 			this.permutationEnc = PermutationLibrary($scope.permutation.encKey, $scope.permutation.plaintext, "");
-			console.log(this.permutationEnc._key);
-			console.log(this.permutationEnc._plaintext);
-			//this.permutationEnc.validateKey();
 		};
 	});
 	
 	app.controller('PermutationDecryptCtrl', function($scope, $location) {
 		this.permutationDec;
 		this._withAutoEvaluation = false;
-
+		
 		this.isInitialized = function() {
 			return !(typeof this.permutationDec == undefined || this.permutationDec == null);
 		};
@@ -123,9 +139,6 @@ define(['angular', 'angular-route'], function(angular) {
 		
 		this.initializeProblem = function() {
 			this.permutationDec = PermutationLibrary($scope.permutation.decKey, "", $scope.permutation.ciphertext);
-			console.log(this.permutationDec._key);
-			console.log(this.permutationDec._ciphertext);
-			//this.permutationDec.validateKey();
 		};
 	});
 });
@@ -188,10 +201,13 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 			}
 		},
 		
-		validateKey: function() {
-			// ver validaciones a poner
-			this._key = this._key.value.toLowerCase().replace(/[^a-z]/g, "");
-			return true;
+		validateKey: function(key) {
+			var INTEGER_REGEXP = /^(?:([0-9])(?!.*\1))*$/;
+			var STRING_REGEXP = /^(?:([a-z])(?!.*\1))*$/;
+			if(INTEGER_REGEXP.test(key) || STRING_REGEXP.test(key)) {
+				return true;
+			}
+			return false;
 		},
 		
 		addPadding: function() {
@@ -299,7 +315,6 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 		},
 		
 		nextEncStep: function() {
-			console.log(this._currentStep);
 			switch(this._currentStep) {
 				case 1: {
 					this.step1Enc();

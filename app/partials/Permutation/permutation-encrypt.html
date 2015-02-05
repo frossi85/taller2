@@ -19,14 +19,14 @@
 
 	<!-- Resultado criptograma -->
 	<div ng-show="encCtrl.hasFinished()">
-		<h3>Criptograma</h3>
-		<p>{{encCtrl.permutationEnc._ciphertext}}</p>
+		<h3>Criptograma: {{encCtrl.permutationEnc._ciphertext}}</h3><br>
 	</div>
-
+	
 	<!-- Botones -->
 	<div>
 		<button class="btn btn-default" ng-show="encCtrl.isInitialized() && !encCtrl.hasFinished()" ng-click="encCtrl.permutationEnc.nextEncStep()">Siguiente Paso</button>
 		<button class="btn btn-default" ng-show="encCtrl.isInitialized() && !encCtrl.hasFinished()" ng-click="encCtrl.permutationEnc.fullEnc()">Ejecutar</button>
+		<button class="btn btn-default" ng-show="encCtrl.hasFinished()" ng-click="encCtrl.goToDecrypt()">Descifrar Resultado</button>
 		<button class="btn btn-default" ng-show="encCtrl.hasFinished()" ng-click="encCtrl.returnHome()">Salir</button>
 	</div>
 </div>

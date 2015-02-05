@@ -1,7 +1,7 @@
 <form name="cipherKeyForm" ng-submit="cipherKeyForm.$valid && decCtrl.initializeProblem()" novalidate>
 	<div class="form-group">
 		<label for="key">Clave</label>
-		<input name="key" type="text" class="form-control" ng-model="permutation.decKey" id="key" placeholder="Ingresar clave" ng-pattern="/^[a-z]*$/" required>
+		<input name="key" type="text" class="form-control" ng-model="permutation.decKey" id="key" placeholder="Ingresar clave" key-validation required>
 		<p class="help">Escriba una clave que contenga caracteres del alfabeto inglés, sin repetir caracteres, o una clave numérica, sin repetir dígitos<p>
 	</div>
 
