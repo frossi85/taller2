@@ -196,7 +196,7 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 		emptyMatrix: function() {
 			for(var r = 0; r < this._matrix.length; r++) {
 				for(var c = 0; c < this._matrix[0].length; c++) {
-					this._matrix[r][c] = '*';
+					this._matrix[r][c] = '';
 				}
 			}
 		},

@@ -1,8 +1,8 @@
 <div>
 	<h3>Matriz</h3>
-	<table border="1" id="matrix" name="matrix">
+	<table class="table table-bordered table-hover" style="width:20%" id="matrix" name="matrix">
 		<tr ng-repeat="row in encCtrl.permutationEnc._matrix">             
-			<td ng-repeat="val in row track by $index">                    
+			<td class="text-center" ng-repeat="val in row track by $index">                    
 			{{val}}
 			</td>
 		</tr>

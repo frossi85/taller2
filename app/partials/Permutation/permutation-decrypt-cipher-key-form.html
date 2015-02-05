@@ -1,5 +1,14 @@
 <form name="cipherKeyForm" ng-submit="cipherKeyForm.$valid && decCtrl.initializeProblem()" novalidate>
 	<div class="form-group">
+		<label>Modo Autoevaluación</label>
+		<div class="input-group">
+			<div id="radioBtn" class="btn-group">
+				<a class="btn btn-primary btn-sm" ng-class="{ 'active' : decCtrl._withAutoEvaluation, 'notActive' : !decCtrl._withAutoEvaluation }" ng-click="decCtrl._withAutoEvaluation = true">Si</a>
+				<a class="btn btn-primary btn-sm" ng-class="{ 'active' : !decCtrl._withAutoEvaluation, 'notActive' : decCtrl._withAutoEvaluation }" ng-click="decCtrl._withAutoEvaluation = false">No</a>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
 		<label for="key">Clave</label>
 		<input name="key" type="text" class="form-control" ng-model="permutation.decKey" id="key" placeholder="Ingresar clave" key-validation required>
 		<p class="help">Escriba una clave que contenga caracteres del alfabeto inglés, sin repetir caracteres, o una clave numérica, sin repetir dígitos<p>
