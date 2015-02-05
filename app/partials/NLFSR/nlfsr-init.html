@@ -18,52 +18,60 @@ NOT.</p>
 
 <div ng-controller="NlfsrCtrl as nlfsrCtrl">
 
-	<div class="form-group">
-		<label for="key">Clave</label>
-		<input type="text" class="form-control" ng-model="nlfsr.key" id="key" placeholder="Ingresar clave binaria" ng-pattern="/^[0,1]*$/" required>
-		<p class="help">Escriba una secuencia binaria como clave<p>
-	</div>
-	<div class="form-group">
-		<label for="funcion">Función de retroalimentación</label>
-		<input type="text" class="form-control" ng-model="nlfsr.function" id="funcion" placeholder="Ingresar función de retroalimentación">
-		<p class="help">Escriba la funcion de retroalimentación con las entradas A1, A2... An y los operadores NOT, AND y OR.<p>
-	</div>
-	<div class="form-group">
-		<label for="text">Texto a encriptar</label>
-		<textarea class="form-control" id="text" rows="5" ng-model="nlfsr.text" ng-pattern="/^[a-zA-Z]*$/" required></textarea>
-		<p class="help">Escriba el texto a ser encriptado.<p>
-	</div>
+	<form name="parametros" ng-submit="parametros.$valid && nlfsrCtrl.initializeProblem()" novalidate>
 
-	<div class="form-group">
-		<label>Autoevaluación</label>
+		<div class="form-group">
+				<label for="key">Clave</label>
+				<input type="text" class="form-control" ng-model="nlfsr.key" id="key" placeholder="Ingresar clave binaria" ng-pattern="/^[0,1]*$/" required>
+				<p class="help">Escriba una secuencia binaria como clave</p>
+		</div>
+
+		<div class="form-group">
+			<label for="funcion">Función de retroalimentación</label>
+			<input type="text" class="form-control" ng-model="nlfsr.function" id="funcion" placeholder="Ingresar función de retroalimentación">
+			<p class="help">Escriba la funcion de retroalimentación con las entradas A1, A2... An y los operadores NOT, AND y OR.</p>
+		</div>
+	
+		<div class="form-group">
+			<label for="text">Texto a encriptar</label>
+			<textarea class="form-control" id="text" rows="5" ng-model="nlfsr.text" ng-pattern="/^[a-zA-Z]*$/" required></textarea>
+			<p class="help">Escriba el texto a ser encriptado.</p>
+		</div>
+	
+		<!--<label>Autoevaluación</label>
 		<div class="input-group">
 			<div id="radioBtn" class="btn-group">
 				<a class="btn btn-primary btn-sm" ng-class="{ 'active' : nlfsrCtrl.nlfsr.withAutoEvaluation, 'notActive' : !nlfsrCtrl.nlfsr.withAutoEvaluation }" ng-click="nlfsrCtrl.enableAutoEvaluation()">Si</a>
 				<a class="btn btn-primary btn-sm" ng-class="{ 'active' : !nlfsrCtrl.nlfsr.withAutoEvaluation, 'notActive' : nlfsrCtrl.withAutoEvaluation }" ng-click="nlfsrCtrl.disableAutoEvaluation()">No</a>
 			</div>
 		</div>
-		<input type="hidden" id="withAutoEvaluation" ng-model="nlfsrCtrl.nlfsr.withAutoEvaluation"/>
-	</div>
 
-	<button ng-click="nlfsrCtrl.initializeProblem()">Empezar</button>
+		<input type="hidden" id="withAutoEvaluation" ng-model="nlfsrCtrl.nlfsr.withAutoEvaluation"/> -->
+	
+		<button type="submit" class="btn btn-default">Inicializar</button>
 
-	<div>
+	</form>
 
-	<p> Funcion: {{nlfsrCtrl.nlfsr._function}}</p>
+	<div class="form-group" ng-show="nlfsrCtrl.isInitialized()">
 
-	<label>Registro Actual</label>
-	<div class="well">
-		<p>{{nlfsrCtrl.nlfsr._register}}</p>
-	</div>
+		<p> Funcion: {{nlfsrCtrl.nlfsr._function}}</p>
 
-	<label>Secuencia encriptadora</label>
-	<div class="well">
-		<p>{{nlfsrCtrl.nlfsr._bstream}}</p>
-	</div>
-	<div>
-		<button ng-click="nlfsrCtrl.nlfsr.stepBack()">Atras</button>
+		<label>Registro Actual</label>
+		<div class="well">
+			<p>{{nlfsrCtrl.nlfsr._register}}</p>
+		</div>
+
+		<label>Secuencia encriptadora</label>
+		<div class="well">
+			<p>{{nlfsrCtrl.nlfsr._bstream}}</p>
+		</div>
+		
+		<button ng-click="nlfsrCtrl.nlfsr.stepBack()" ng-disabled="nlfsrCtrl.isFirstStep()">Atras</button>
 		<button ng-click="nlfsrCtrl.nlfsr.stepForward()">Adelante</button>
-		<button ng-click="nlfsrCtrl.nlfsr.stepForward()">Ver mensaje y su encriptación</button>
-		<button ng-click="nlfsrCtrl.nlfsr.stepForward()">Calculadora binaria</button>
+		<button ng-click="nlfsrCtrl.nlfsr.stepForward()" ng-disabled="nlfsrCtrl.hasFinished()">Ver mensaje y su encriptación</button>
+		<button ng-click="nlfsrCtrl.toggleCalc()">Calculadora binaria</button>
 	</div>
+
+	<boolean-Calc ng-show="nlfsrCtrl.isEnableCalc"></boolean-Calc>
+
 </div>

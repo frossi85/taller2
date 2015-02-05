@@ -1,10 +1,76 @@
 define(['angular', 'angular-route'], function(angular) {
 	var app = angular.module('nlfsr', []);
-  
-	app.controller('NlfsrCtrl', function($scope, $location) {
-	this.initializeProblem = function() {
-		this.nlfsr = NLFSRLibrary($scope.nlfsr.key, $scope.nlfsr.function, $scope.nlfsr.text);
+
+	app.directive('booleanCalc', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'partials/NLFSR/nlfsr-boolean-calc.html',
 		};
+	});
+
+ 
+	app.controller('NlfsrCtrl', function($scope, $location) {
+
+		this.nlfsr;
+		this.isEnableCalc = false;
+		this.boolExpr = "";
+
+		this.initializeProblem = function() {
+			this.nlfsr = NLFSRLibrary($scope.nlfsr.key, $scope.nlfsr.function, $scope.nlfsr.text);
+		};
+
+		this.isInitialized = function() {
+			return !(this.nlfsr == undefined || this.nlfsr == null);
+		};
+
+		this.isFirstStep = function() {
+			if (this.isInitialized() == false) 
+				return true;
+			return (this.nlfsr._bstream.length == this.nlfsr._register.length);
+		};
+
+		this.hasFinished = function() {
+			if (this.isInitialized() == false) 
+				return true;
+			return (this.nlfsr._bstream.length != (this.nlfsr._text.length * 8));			
+		};
+
+		this.toggleCalc = function() {
+			this.isEnableCalc = !this.isEnableCalc;
+		};
+
+		this.addZero = function() {
+			this.boolExpr = this.boolExpr + "0";
+		}
+
+		this.addOne = function() {
+			this.boolExpr = this.boolExpr + "1";
+		}
+
+		this.addAND = function() {
+			this.boolExpr = this.boolExpr + "AND";
+		}
+		this.addOR = function() {
+			this.boolExpr = this.boolExpr + "OR";
+		}
+		this.addXOR = function() {
+			this.boolExpr = this.boolExpr + "XOR";
+		}
+		this.addNOT = function() {
+			this.boolExpr = this.boolExpr + "NOT";
+		}
+		this.addBrac = function() {
+			this.boolExpr = this.boolExpr + "(";
+		}
+		this.addBrac2 = function() {
+			this.boolExpr = this.boolExpr + ")";
+		}
+		this.erase = function() {
+			this.boolExpr = this.boolExpr.slice(0, this.boolExpr.length - 1);
+		}
+		this.calculate = function() {
+			this.boolExpr = this.boolExpr + " = " + this.nlfsr.bc("", this.boolExpr);
+		}
 	});
 });
 
