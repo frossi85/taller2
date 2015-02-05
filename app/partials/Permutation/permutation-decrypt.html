@@ -3,30 +3,76 @@
 <div ng-controller="PermutationDecryptCtrl as decCtrl">
 
 	<!-- Significado variables -->
-	<decrypt-dictionary-variables></decrypt-dictionary-variables>
+	<h3>Diccionario de Variables</h3>
+	<ul>
+		<li><em>L</em>: longitud de la clave</li>
+		<li><em>C</em>: longitud del criptograma</li>
+		<li><em>Kd</em>: cantidad de filas de la matriz de descifrado. Kd = &#x2308(C/L)&#x2309 + 1</li>
+	</ul>
 
 	<!-- Pseudocodigo de descifrado -->
-	<decrypt-algorithm ng-hide="decCtrl._withAutoEvaluation"></decrypt-algorithm>
+	<div ng-hide="decCtrl._withAutoEvaluation">
+		<h3>Algoritmo de Descifrado</h3>
+		<ol>
+			<li ng-class="{ step: decCtrl.isCurrentStep(1) }">Crear una matriz de Kd x L</li>
+			<li ng-class="{ step: decCtrl.isCurrentStep(2) }">Reordenar la clave según el órden alfabético (clave alfabética) o numérico (clave numérica) y colocarla en la primer fila de la matriz</li>
+			<li ng-class="{ step: decCtrl.isCurrentStep(3) }">Completar las columnas desde arriba hacia abajo con el criptograma, comenzando por la primer columna y avanzando hasta la última</li>
+			<li ng-class="{ step: decCtrl.isCurrentStep(4) }">Reordenar las columnas de la matriz para formar la clave original</li>
+			<li ng-class="{ step: decCtrl.isCurrentStep(5) }">Escribir el mensaje tomando los caracteres en el siguiente orden: comenzar por la segunda fila de la matriz y escribir los caracteres desde izquierda hacia derecha, y repetir los anterior con las siguientes filas (en forma ordenada), concatenando los resultados y quitando los caracteres de padding al final del mensaje (si los hubiese)</li>
+		</ol>
+		<style>
+		.step {
+			background-color:yellow;
+			font-weight:bold;
+		}
+		</style>
+	</div>
 
 	<!-- Formulario criptograma-clave -->
 	<decrypt-cipher-key-form ng-hide="decCtrl.isInitialized()"></decrypt-cipher-key-form>
 
+	<!-- Texto y clave ingresadas -->
+	<div class="well" ng-show="decCtrl.isInitialized()">
+		<label>Clave</label>
+		<p>{{decCtrl.permutationDec._key}}</p>
+		<label>Criptograma</label>
+		<p>{{decCtrl.permutationDec._ciphertext}}</p>
+		<label>Paso actual</label>
+		<p>{{decCtrl.permutationDec._currentStep}}</p>
+	</div>
+	
 	<!-- Valores de variables -->
-	<decrypt-variables ng-show="decCtrl.isInitialized()"></decrypt-variables>
+	<div ng-show="decCtrl.isInitialized()">
+		<h3>Variables</h3>
+		<p> L = {{decCtrl.permutationDec.L}}</p>
+		<p> C = {{decCtrl.permutationDec.C}}</p>
+		<p> Kd = {{decCtrl.permutationDec.Kd}}</p>
+	</div>
 	
 	<!-- Valores matriz -->
-	<decrypt-matrix ng-show="decCtrl.isInitialized()"></decrypt-matrix>
-
-	<!-- Resultado criptograma -->
-	<div ng-show="decCtrl.hasFinished()">
-		<h3>Texto plano: {{decCtrl.permutationDec._plaintext}}</h3><br>
+	<div ng-show="decCtrl.permutationDec._currentStep > 0">
+		<h3>Matriz</h3>
+		<table class="table table-bordered table-hover" style="width:20%" id="matrix" name="matrix">
+			<tr ng-repeat="row in decCtrl.permutationDec._matrix" ng-class="{ info: $index==0 }">             
+				<td class="text-center" ng-repeat="val in row track by $index">                    
+				{{val}}
+				</td>
+			</tr>
+		</table>
 	</div>
+
+	<!-- Resultado mensaje -->
+	<div class="alert alert-success" ng-show="decCtrl.hasFinished()">
+		<label class="lead">Texto plano: {{decCtrl.permutationDec._plaintext}}</label>
+	</div>
+	
+	<br>
 
 	<!-- Botones -->
 	<div>
-		<button class="btn btn-default" ng-show="decCtrl.isInitialized() && !decCtrl.hasFinished()" ng-click="decCtrl.permutationDec.nextDecStep()">Siguiente Paso</button>
-		<button class="btn btn-default" ng-show="decCtrl.isInitialized() && !decCtrl.hasFinished()" ng-click="decCtrl.permutationDec.fullDec()">Ejecutar</button>
-		<button class="btn btn-default" ng-show="decCtrl.hasFinished()" ng-click="decCtrl.returnHome()">Salir</button>
+		<button class="btn btn-primary" ng-show="decCtrl.isInitialized() && !decCtrl.hasFinished()" ng-click="decCtrl.permutationDec.nextDecStep()">Siguiente Paso</button>
+		<button class="btn btn-success" ng-show="decCtrl.isInitialized() && !decCtrl.hasFinished()" ng-click="decCtrl.permutationDec.fullDec()">Ejecutar Todo</button>
+		<button class="btn btn-primary" ng-show="decCtrl.hasFinished()" ng-click="decCtrl.returnHome()">Salir</button>
 	</div>
 	
 </div>

@@ -1,66 +1,10 @@
 define(['angular', 'angular-route'], function(angular) {
 	var app = angular.module('permutation', []);
 	
-	app.directive('encryptDictionaryVariables', function() {
-		return {
-			restrict: 'E',
-			templateUrl: 'partials/Permutation/permutation-encrypt-dictionary-variables.html'
-		};
-	});
-	
-	app.directive('encryptAlgorithm', function() {
-		return {
-			restrict: 'E',
-			templateUrl: 'partials/Permutation/permutation-encrypt-algorithm.html'
-		};
-	});
-	
-	app.directive('encryptVariables', function() {
-		return {
-			restrict: 'E',
-			templateUrl: 'partials/Permutation/permutation-encrypt-variables.html'
-		};
-	});
-	
-	app.directive('encryptMatrix', function() {
-		return {
-			restrict: 'E',
-			templateUrl: 'partials/Permutation/permutation-encrypt-matrix.html'
-		};
-	});
-	
 	app.directive('encryptTextKeyForm', function() {
 		return {
 			restrict: 'E',
 			templateUrl: 'partials/Permutation/permutation-encrypt-text-key-form.html',
-		};
-	});
-	
-	app.directive('decryptDictionaryVariables', function() {
-		return {
-			restrict: 'E',
-			templateUrl: 'partials/Permutation/permutation-decrypt-dictionary-variables.html'
-		};
-	});
-	
-	app.directive('decryptAlgorithm', function() {
-		return {
-			restrict: 'E',
-			templateUrl: 'partials/Permutation/permutation-decrypt-algorithm.html'
-		};
-	});
-	
-	app.directive('decryptVariables', function() {
-		return {
-			restrict: 'E',
-			templateUrl: 'partials/Permutation/permutation-decrypt-variables.html'
-		};
-	});
-	
-	app.directive('decryptMatrix', function() {
-		return {
-			restrict: 'E',
-			templateUrl: 'partials/Permutation/permutation-decrypt-matrix.html'
 		};
 	});
 	
@@ -103,7 +47,11 @@ define(['angular', 'angular-route'], function(angular) {
 		};
 		
 		this.hasFinished = function() {
-			return this.isInitialized() && (this.permutationEnc._currentStep === 5);
+			return this.isInitialized() && (this.permutationEnc._currentStep === 4);
+		};
+		
+		this.isCurrentStep = function(step) {
+			return this.isInitialized() && (this.permutationEnc._currentStep === step);
 		};
 		
 		this.returnHome = function() {
@@ -129,8 +77,12 @@ define(['angular', 'angular-route'], function(angular) {
 			return !(typeof this.permutationDec == undefined || this.permutationDec == null);
 		};
 		
+		this.isCurrentStep = function(step) {
+			return this.isInitialized() && (this.permutationDec._currentStep === step);
+		};
+		
 		this.hasFinished = function() {
-			return this.isInitialized() && (this.permutationDec._currentStep === 6);
+			return this.isInitialized() && (this.permutationDec._currentStep === 5);
 		};
 		
 		this.returnHome = function() {
@@ -149,7 +101,7 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 		_plaintext: plaintext,
 		_ciphertext: ciphertext,
 		_padChar: '#',
-		_currentStep: 1,
+		_currentStep: 0,
 		_matrix: [],
 		
 		L: key.length,
@@ -298,45 +250,41 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 			this.removePadding();
 		},
 		
-		resetCurrentStep: function() {
-			this._currentStep = 1;
-		},
-		
 		fullEnc: function() {
-			while(this._currentStep < 5) {
+			while(this._currentStep < 4) {
 				this.nextEncStep();
 			}
 		},
 		
 		fullDec: function() {
-			while(this._currentStep < 6) {
+			while(this._currentStep < 5) {
 				this.nextDecStep();
 			}
 		},
 		
 		nextEncStep: function() {
 			switch(this._currentStep) {
-				case 1: {
+				case 0: {
 					this.step1Enc();
 					this._currentStep++;
 					break;
 				}
-				case 2: {
+				case 1: {
 					this.step2Enc();
 					this._currentStep++;
 					break;
 				}
-				case 3: {
+				case 2: {
 					this.step3Enc();
 					this._currentStep++;
 					break;
 				}
-				case 4: {
+				case 3: {
 					this.step4Enc();
 					this._currentStep++;
 					break;
 				}
-				case 5: {
+				case 4: {
 					alert("El algoritmo de cifrado ya finalizó");
 					break;
 				}
@@ -348,32 +296,32 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 		
 		nextDecStep: function() {
 			switch(this._currentStep) {
-				case 1: {
+				case 0: {
 					this.step1Dec();
 					this._currentStep++;
 					break;
 				}
-				case 2: {
+				case 1: {
 					this.step2Dec();
 					this._currentStep++;
 					break;
 				}
-				case 3: {
+				case 2: {
 					this.step3Dec();
 					this._currentStep++;
 					break;
 				}
-				case 4: {
+				case 3: {
 					this.step4Dec();
 					this._currentStep++;
 					break;
 				}
-				case 5: {
+				case 4: {
 					this.step5Dec();
 					this._currentStep++;
 					break;
 				}
-				case 6: {
+				case 5: {
 					alert("El algoritmo de descifrado ya finalizó");
 					break;
 				}

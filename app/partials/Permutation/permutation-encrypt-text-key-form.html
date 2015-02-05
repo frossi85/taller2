@@ -19,5 +19,5 @@
 		<textarea class="form-control" id="plaintext" rows="3" ng-model="permutation.plaintext" ng-pattern="/^[a-z]*$/" required></textarea>
 		<p class="help">Escriba un texto que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin espacios, saltos de linea o caracteres especiales<p>
 	</div>
-	<input class="btn btn-default" type="submit" value="Inicializar"/>
+	<button ng-class="{ 'btn btn-success' : textKeyForm.$valid, 'btn btn-danger' : !textKeyForm.$valid }" type="submit">Inicializar</button>
 </form>
