@@ -39,6 +39,9 @@ define(['angular', 'angular-route'], function(angular) {
 		$scope.plaintext = '';
 
 		this.init = function() {
+			this.start = true;
+			this.step = 0;
+			this.end = false;
 		}
 
 		this.auto = function(auto) {
@@ -51,6 +54,14 @@ define(['angular', 'angular-route'], function(angular) {
 			$scope.plaintext = '';
 		}
 
+		this.next = function() {
+			this.step++;
+		}
+
+		this.finish = function() {
+			this.start = false;
+			this.end = true;
+		}
 
 	});
 

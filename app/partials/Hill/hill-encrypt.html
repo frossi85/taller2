@@ -48,12 +48,12 @@
 	</div>
 
 	<form name="hillForm" novalidate ng-submit="hillForm.$valid && encCtrl.init()">
-		<div class="form-group" ng-show="!encCtrl.start">
+		<div class="form-group">
 			<label>Modo Autoevaluación</label>
 			<div class="input-group">
 				<div id="radioBtn" class="btn-group">
-					<a class="btn btn-primary btn-sm" ng-class="{ 'active' : encCtrl._withAutoEvaluation, 'notActive' : !encCtrl._withAutoEvaluation }" ng-click="encCtrl.auto(true)" ng-confirm-click="Al cambiar el modo, será necesario inresar los valores nuevamente. ¿Desea continuar?">Si</a>
-					<a class="btn btn-primary btn-sm" ng-class="{ 'active' : !encCtrl._withAutoEvaluation, 'notActive' : encCtrl._withAutoEvaluation }" ng-click="encCtrl.auto(false)" ng-confirm-click="Al cambiar el modo, será necesario inresar los valores nuevamente. ¿Desea continuar?">No</a>
+					<a class="btn btn-primary btn-sm" ng-disabled="encCtrl.start" ng-class="{ 'active' : encCtrl._withAutoEvaluation, 'notActive' : !encCtrl._withAutoEvaluation }" ng-click="encCtrl.auto(true)" ng-confirm-click="Al cambiar el modo, será necesario inresar los valores nuevamente. ¿Desea continuar?">Si</a>
+					<a class="btn btn-primary btn-sm" ng-disabled="encCtrl.start" ng-class="{ 'active' : !encCtrl._withAutoEvaluation, 'notActive' : encCtrl._withAutoEvaluation }" ng-click="encCtrl.auto(false)" ng-confirm-click="Al cambiar el modo, será necesario inresar los valores nuevamente. ¿Desea continuar?">No</a>
 				</div>
 			</div>
 		</div>
@@ -79,7 +79,9 @@
 			</p>
 		</div>
 
-		<input class="btn btn-default" ng-disabled="!hillForm.$valid" type="submit" value="Empezar"/>
+		<input class="btn btn-default" ng-disabled="!hillForm.$valid" ng-show="!encCtrl.start" type="submit" value="Empezar"/>
+		<input class="btn btn-default" ng-show="encCtrl.start" type="button" ng-click="encCtrl.next()" value="Siguiente"/>
+		<input class="btn btn-default" ng-show="encCtrl.start" type="button" ng-click="encCtrl.finish()" value="Terminar"/>
 
 		<div>&nbsp;</div>
 		<table>
@@ -90,18 +92,18 @@
 								<table>
 								  <tr>
 								  	<td>
-											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a11" id="key">
+											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a11" id="key">
 								  	</td>
 								  	<td>
-											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a12" id="key">
+											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a12" id="key">
 								  	</td>
 							  	</tr>
 								  <tr>
 								  	<td>
-											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a21" id="key">
+											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a21" id="key">
 								  	</td>
 								  	<td>
-											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a22" id="key">
+											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a22" id="key">
 								  	</td>
 							  	</tr>
 						  	</table>
@@ -114,12 +116,12 @@
 								<table>
 								  <tr>
 								  	<td>
-											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a11" id="key">
+											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a11" id="key">
 								  	</td>
 							  	</tr>
 								  <tr>
 								  	<td>
-											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a21" id="key">
+											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a21" id="key">
 								  	</td>
 							  	</tr>
 						  	</table>
@@ -132,12 +134,12 @@
 								<table>
 								  <tr>
 								  	<td>
-											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a11" id="key">
+											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a11" id="key">
 								  	</td>
 							  	</tr>
 								  <tr>
 								  	<td>
-											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a21" id="key">
+											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a21" id="key">
 								  	</td>
 							  	</tr>
 						  	</table>
@@ -148,7 +150,7 @@
 
 		<div class="form-group">
 			<label class="control-label">Resultado</label>
-			<textarea name="result" class="form-control" id="result" rows="3" ng-model="result" ng-pattern="/^[a-z]*$/"></textarea>
+			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="result" class="form-control" id="result" rows="3" ng-model="result" ng-pattern="/^[a-z]*$/"></textarea>
 		</div>
 
 	</form>
