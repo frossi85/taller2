@@ -8,7 +8,26 @@
 </ul>
 </p>
 
-<div ng-controller="PermutationHomeCtrl as homeCtrl">	
-	<button class="btn btn-primary" ng-click="homeCtrl.toEncrypt()">Ir a Cifrado</button>
-	<button class="btn btn-primary" ng-click="homeCtrl.toDecrypt()">Ir a Descifrado</button>
+<div ng-controller="PermutationHomeCtrl as homeCtrl">
+		<div class="form-group">
+			<label>Algoritmo</label>
+			<div class="input-group">
+				<div id="radioBtn" class="btn-group">
+					<a class="btn btn-primary btn-sm" ng-class="{ 'active' : homeCtrl._isEncrypt, 'notActive' : !homeCtrl._isEncrypt }" ng-click="homeCtrl._isEncrypt = true">Cifrado</a>
+					<a class="btn btn-primary btn-sm" ng-class="{ 'active' : !homeCtrl._isEncrypt, 'notActive' : homeCtrl._isEncrypt }" ng-click="homeCtrl._isEncrypt = false">Descifrado</a>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>Modo Autoevaluación</label>
+			<div class="input-group">
+				<div id="radioBtn" class="btn-group">
+					<a class="btn btn-primary btn-sm" ng-class="{ 'active' : homeCtrl._withAutoEvaluation, 'notActive' : !homeCtrl._withAutoEvaluation }" ng-click="homeCtrl._withAutoEvaluation = true">Si</a>
+					<a class="btn btn-primary btn-sm" ng-class="{ 'active' : !homeCtrl._withAutoEvaluation, 'notActive' : homeCtrl._withAutoEvaluation }" ng-click="homeCtrl._withAutoEvaluation = false">No</a>
+				</div>
+			</div>
+		</div>
+	
+	<encrypt-form ng-show="homeCtrl._isEncrypt"></encrypt-form>
+	<decrypt-form ng-hide="homeCtrl._isEncrypt"></decrypt-form>
 </div>

@@ -1,0 +1,21 @@
+<form name="initEncForm" ng-submit="initEncForm.$valid && homeCtrl.initializeProblem()" novalidate>
+	<div class="form-group" ng-class="{'has-error': initEncForm.key.$invalid, 'has-success': initEncForm.key.$valid}">
+		<label class="control-label" for="key">Clave</label>
+		<input name="key" type="text" class="form-control" ng-model="permutation.key" id="key" placeholder="Ingresar clave" key-validation required>
+		<p class="help-block">
+			<strong ng-show="initEncForm.key.$error.required">El campo debe ser completado<br/></strong>
+			<strong ng-show="initEncForm.key.$error.keyValidation">La clave ingresada contiene caracteres inválidos<br/></strong>
+			Escriba una clave que contenga caracteres del alfabeto inglés, sin repetir caracteres, o una clave numérica, sin repetir dígitos
+		</p>
+	</div>
+	<div class="form-group" ng-class="{'has-error': initEncForm.plaintext.$invalid, 'has-success': initEncForm.plaintext.$valid}">
+		<label class="control-label" for="plaintext">Texto a cifrar</label>
+		<textarea class="form-control" name="plaintext" id="plaintext" rows="3" ng-model="permutation.plaintext" ng-pattern="/^[a-z]*$/" required></textarea>
+		<p class="help-block">
+			<strong ng-show="initEncForm.plaintext.$error.required">El campo debe ser completado<br/></strong>
+			<strong ng-show="initEncForm.plaintext.$error.pattern">El texto ingresado contiene caracteres inválidos<br/></strong>
+			Escriba un texto que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin espacios, saltos de linea o caracteres especiales
+		</p>
+	</div>
+	<button ng-class="{ 'btn btn-success' : initEncForm.$valid, 'btn btn-danger' : !initEncForm.$valid }" type="submit">Inicializar</button>
+</form>

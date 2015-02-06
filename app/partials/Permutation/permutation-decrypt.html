@@ -11,7 +11,7 @@
 	</ul>
 
 	<!-- Pseudocodigo de descifrado -->
-	<div ng-hide="decCtrl._withAutoEvaluation">
+	<div ng-hide="decCtrl.permutationDec._withAutoEvaluation">
 		<h3>Algoritmo de Descifrado</h3>
 		<ol>
 			<li ng-class="{ step: decCtrl.isCurrentStep(1) }">Crear una matriz de Kd x L</li>
@@ -22,11 +22,8 @@
 		</ol>
 	</div>
 
-	<!-- Formulario criptograma-clave -->
-	<decrypt-cipher-key-form ng-hide="decCtrl.isInitialized()"></decrypt-cipher-key-form>
-
 	<!-- Texto y clave ingresadas -->
-	<div class="well" ng-show="decCtrl.isInitialized()">
+	<div class="well">
 		<label>Clave</label>
 		<p>{{decCtrl.permutationDec._key}}</p>
 		<label>Criptograma</label>
@@ -36,7 +33,7 @@
 	</div>
 	
 	<!-- Valores de variables -->
-	<div ng-show="decCtrl.isInitialized()">
+	<div>
 		<h3>Variables</h3>
 		<label> L = {{decCtrl.permutationDec.L}}</label><br>
 		<label> M = {{decCtrl.permutationDec.C}}</label><br>
@@ -64,8 +61,8 @@
 
 	<!-- Botones -->
 	<div>
-		<button class="btn btn-primary" ng-show="decCtrl.isInitialized() && !decCtrl.hasFinished()" ng-click="decCtrl.permutationDec.nextDecStep()">Siguiente Paso</button>
-		<button class="btn btn-success" ng-show="decCtrl.isInitialized() && !decCtrl.hasFinished()" ng-click="decCtrl.permutationDec.fullDec()">Ejecutar Todo</button>
+		<button class="btn btn-primary" ng-show="!decCtrl.hasFinished()" ng-click="decCtrl.permutationDec.nextDecStep()">Siguiente Paso</button>
+		<button class="btn btn-success" ng-show="!decCtrl.hasFinished()" ng-click="decCtrl.permutationDec.fullDec()">Ejecutar Todo</button>
 		<button class="btn btn-primary" ng-show="decCtrl.hasFinished()" ng-click="decCtrl.returnHome()">Salir</button>
 	</div>
 	
