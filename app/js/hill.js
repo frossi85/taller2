@@ -42,6 +42,12 @@ define(['angular', 'angular-route'], function(angular) {
 			this.start = true;
 			this.step = 0;
 			this.end = false;
+
+			var chrA = 'a'.charCodeAt(0);
+			$scope.hill = { clave: {} };
+			for (i in $scope.key) {
+				$scope.hill.clave['a'+i] = $scope.key.charCodeAt(i) -  chrA;
+			}
 		}
 
 		this.auto = function(auto) {
