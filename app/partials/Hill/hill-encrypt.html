@@ -47,8 +47,8 @@
 	</div>
 	</div>
 
-	<form name="hillForm" novalidate ng-submit="hillForm.$valid && encCtrl.start()">
-		<div class="form-group">
+	<form name="hillForm" novalidate ng-submit="hillForm.$valid && encCtrl.init()">
+		<div class="form-group" ng-show="!encCtrl.start">
 			<label>Modo Autoevaluación</label>
 			<div class="input-group">
 				<div id="radioBtn" class="btn-group">
@@ -79,44 +79,77 @@
 			</p>
 		</div>
 
-		<input class="btn btn-default" ng-disabled="hillForm.$invalid" type="submit" value="Empezar"/>
+		<input class="btn btn-default" ng-disabled="!hillForm.$valid" type="submit" value="Empezar"/>
 
 		<div>&nbsp;</div>
-		<div class="form-group">
-			<label class="control-label" for="key">Clave</label>
-			<table>
-			  <tr>
-			  	<td>
-						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
-			  	</td>
-			  	<td>
-						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
-			  	</td>
-			  	<td>
-						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
-			  	</td>
-			  	<td>
-						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
-			  	</td>
-		  	</tr>
-			  <tr>
-			  	<td>
-						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
-			  	</td>
-			  	<td>
-						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
-			  	</td>
-			  	<td>
-						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
-			  	</td>
-			  	<td>
-						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
-			  	</td>
-		  	</tr>
-	  	</table>
-  	</div>
-		<textarea name="plaintext" class="form-control" id="plaintext" rows="3" ng-model="plaintext" ng-pattern="/^[a-z]*$/" required></textarea>
+		<table>
+			<tr>
+				<td>
+					<div class="form-group">
+						<label class="control-label" for="key">Clave</label>
+								<table>
+								  <tr>
+								  	<td>
+											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a11" id="key">
+								  	</td>
+								  	<td>
+											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a12" id="key">
+								  	</td>
+							  	</tr>
+								  <tr>
+								  	<td>
+											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a21" id="key">
+								  	</td>
+								  	<td>
+											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a22" id="key">
+								  	</td>
+							  	</tr>
+						  	</table>
+			  		</div>
+  				</td>
+  				<td style="position:relative; bottom: -8px;">&nbsp;*&nbsp;</td>
+  				<td>
+						<div class="form-group">
+							<label class="control-label">Vector</label>
+								<table>
+								  <tr>
+								  	<td>
+											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a11" id="key">
+								  	</td>
+							  	</tr>
+								  <tr>
+								  	<td>
+											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a21" id="key">
+								  	</td>
+							  	</tr>
+						  	</table>
+			  		</div>
+  				</td>
+  				<td style="position:relative; bottom: -6px;">&nbsp;=&nbsp;</td>
+					<td>
+						<div class="form-group">
+							<label class="control-label">Vector</label>
+								<table>
+								  <tr>
+								  	<td>
+											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a11" id="key">
+								  	</td>
+							  	</tr>
+								  <tr>
+								  	<td>
+											<input name="clave11" type="text" class="form-control" ng-model="hill.clave.a21" id="key">
+								  	</td>
+							  	</tr>
+						  	</table>
+			  		</div>
+  				</td>
+  			</tr>
+  		</table>
 
+		<div class="form-group">
+			<label class="control-label">Resultado</label>
+			<textarea name="result" class="form-control" id="result" rows="3" ng-model="result" ng-pattern="/^[a-z]*$/"></textarea>
+		</div>
 
 	</form>
 </div>

@@ -32,12 +32,13 @@ define(['angular', 'angular-route'], function(angular) {
 
 	app.controller('HillEncryptCtrl', function($scope, $location) {
 		this._withAutoEvaluation = false;
+		this.start = false;
 		this.step = 0;
 		this.end = false;
 		$scope.key = '';
 		$scope.plaintext = '';
 
-		this.start = function() {
+		this.init = function() {
 		}
 
 		this.auto = function(auto) {
