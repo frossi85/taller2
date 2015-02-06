@@ -1,20 +1,20 @@
 define(['angular', 'angular-route'], function(angular) {
 	var app = angular.module('permutation', []);
-	
+
 	app.directive('encryptTextKeyForm', function() {
 		return {
 			restrict: 'E',
 			templateUrl: 'partials/Permutation/permutation-encrypt-text-key-form.html',
 		};
 	});
-	
+
 	app.directive('decryptCipherKeyForm', function() {
 		return {
 			restrict: 'E',
 			templateUrl: 'partials/Permutation/permutation-decrypt-cipher-key-form.html',
 		};
 	});
-	
+
 	app.directive('keyValidation', function() {
 		return {
 			require: 'ngModel',
@@ -26,69 +26,72 @@ define(['angular', 'angular-route'], function(angular) {
 			}
 		};
 	});
-	
+
 	app.controller('PermutationHomeCtrl', function($scope, $location) {
 		this.toEncrypt = function () {
 			$location.url('/permutacion/encrypt');
 		};
-		
+
 		this.toDecrypt = function () {
 			$location.url('/permutacion/decrypt');
 		};
 	});
-	
-	app.controller('PermutationEncryptCtrl', function($scope, $location) {
+
+	app.controller('PermutationEncryptCtrl', function($scope, $routeParams, $location) {
 		this.permutationEnc;
 		this._withAutoEvaluation = false;
-		
+		if ($routeParams.hola2) {
+			$scope.permutation = { encKey: $routeParams.hola2 };
+		}
+
 		this.isInitialized = function() {
 			return !(typeof this.permutationEnc == undefined || this.permutationEnc == null);
 			return false;
 		};
-		
+
 		this.hasFinished = function() {
 			return this.isInitialized() && (this.permutationEnc._currentStep === 4);
 		};
-		
+
 		this.isCurrentStep = function(step) {
 			return this.isInitialized() && (this.permutationEnc._currentStep === step);
 		};
-		
+
 		this.returnHome = function() {
 			$location.url('/permutacion');
 		};
-		
+
 		this.goToDecrypt = function() {
 			$location.url('/permutacion/decrypt');
 // 			$scope.permutation.decKey = this.permutationEnc._key;
 // 			$scope.permutation.ciphertext = this.permutationEnc._ciphertext;
 		};
-		
+
 		this.initializeProblem = function() {
 			this.permutationEnc = PermutationLibrary($scope.permutation.encKey, $scope.permutation.plaintext, "");
 		};
 	});
-	
+
 	app.controller('PermutationDecryptCtrl', function($scope, $location) {
 		this.permutationDec;
 		this._withAutoEvaluation = false;
-		
+
 		this.isInitialized = function() {
 			return !(typeof this.permutationDec == undefined || this.permutationDec == null);
 		};
-		
+
 		this.isCurrentStep = function(step) {
 			return this.isInitialized() && (this.permutationDec._currentStep === step);
 		};
-		
+
 		this.hasFinished = function() {
 			return this.isInitialized() && (this.permutationDec._currentStep === 5);
 		};
-		
+
 		this.returnHome = function() {
 			$location.url('/permutacion');
 		};
-		
+
 		this.initializeProblem = function() {
 			this.permutationDec = PermutationLibrary($scope.permutation.decKey, "", $scope.permutation.ciphertext);
 		};
@@ -103,13 +106,13 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 		_padChar: '#',
 		_currentStep: 0,
 		_matrix: [],
-		
+
 		L: key.length,
 		M: plaintext.length,
 		C: ciphertext.length,
 		Kc: "",
 		Kd: "",
-		
+
 		colSwap: function(indexOne, indexTwo) {
 			var tmpVal;
 			for (var r = 0; r < this._matrix.length; r++) {
@@ -118,7 +121,7 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 				this._matrix[r][indexTwo] = tmpVal;
 			}
 		},
-		
+
 		matrixBubbleSort: function() {
 			var rows = this._matrix.length;
 			var cols = this._matrix[0].length;
@@ -131,7 +134,7 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 				}
 			}
 		},
-		
+
 		reorderMatrixByKey: function() {
 			for (var i = 0; i < this._key.length; i++) {
 				var char = this._key.charAt(i);
@@ -144,7 +147,7 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 				}
 			}
 		},
-		
+
 		emptyMatrix: function() {
 			for(var r = 0; r < this._matrix.length; r++) {
 				for(var c = 0; c < this._matrix[0].length; c++) {
@@ -152,7 +155,7 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 				}
 			}
 		},
-		
+
 		validateKey: function(key) {
 			var INTEGER_REGEXP = /^(?:([0-9])(?!.*\1))*$/;
 			var STRING_REGEXP = /^(?:([a-z])(?!.*\1))*$/;
@@ -161,19 +164,19 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 			}
 			return false;
 		},
-		
+
 		addPadding: function() {
 			while (this._plaintext.length % this._key.length != 0) {
 				this._plaintext += this._padChar;
 			}
 		},
-		
+
 		removePadding: function() {
 			while (this._plaintext.charAt(this._plaintext.length - 1) == this._padChar) {
 				this._plaintext = this._plaintext.substr(0, this._plaintext.length - 1);
 			}
 		},
-		
+
 		step1Enc: function() {
 			this.Kc = Math.ceil(this._plaintext.length/this._key.length) + 1;
 			this._matrix = new Array(this.Kc);
@@ -182,7 +185,7 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 			}
 			this.emptyMatrix();
 		},
-		
+
 		step2Enc: function() {
 			this.addPadding();
 			// Clave
@@ -196,11 +199,11 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 				}
 			}
 		},
-		
+
 		step3Enc: function() {
 			this.matrixBubbleSort();
 		},
-		
+
 		step4Enc: function() {
 			this._ciphertext = "";
 			for (var c = 0; c < this._key.length; c++) {
@@ -209,7 +212,7 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 				}
 			}
 		},
-		
+
 		step1Dec: function() {
 			this.Kd = Math.ceil(this._ciphertext.length/this._key.length) + 1;
 			this._matrix = new Array(this.Kd);
@@ -218,7 +221,7 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 			}
 			this.emptyMatrix();
 		},
-		
+
 		step2Dec: function() {
 			// Clave
 			for (var c = 0; c < this._key.length; c++) {
@@ -226,7 +229,7 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 			}
 			this.matrixBubbleSort();
 		},
-		
+
 		step3Dec: function() {
 			// Criptograma
 			for (var c = 0; c < this._key.length; c++) {
@@ -235,11 +238,11 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 				}
 			}
 		},
-		
+
 		step4Dec: function() {
 			this.reorderMatrixByKey();
 		},
-		
+
 		step5Dec: function() {
 			this._plaintext = "";
 			for (var r = 1; r < this.Kd; r++) {
@@ -249,19 +252,19 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 			}
 			this.removePadding();
 		},
-		
+
 		fullEnc: function() {
 			while(this._currentStep < 4) {
 				this.nextEncStep();
 			}
 		},
-		
+
 		fullDec: function() {
 			while(this._currentStep < 5) {
 				this.nextDecStep();
 			}
 		},
-		
+
 		nextEncStep: function() {
 			switch(this._currentStep) {
 				case 0: {
@@ -293,7 +296,7 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 				}
 			}
 		},
-		
+
 		nextDecStep: function() {
 			switch(this._currentStep) {
 				case 0: {

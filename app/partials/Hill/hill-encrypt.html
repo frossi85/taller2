@@ -1,0 +1,122 @@
+<div ng-controller="HillEncryptCtrl as encCtrl">
+
+	<h1>Cifrado de Hill</h1>
+	<p>Para el cifrado se utiliza el abecedario inglés, el cual solo incluye letras de la 'a' a la 'z' sin incluir la 'ñ'. Los espacios, vocales tildadas, mayúsculas, dígitos, símbolos y retornos de linea no están permitidos. De esta manera tenemos un alfabeto de 26 caracteres.</p>
+	<p>Para cifrar el mensaje escrito en el alfabeto antes mencionado, se necesita una matriz de cifrado que debe cumplir las siguientes condiciones:<br>
+	<ul>
+		<li>La matriz debe ser de 2x2 o 3x3, podría ser más grande pero complica los cálculos.</li>
+		<li>La matriz debe estar formada por números naturales</li>
+		<li>La matriz debe ser inversible en módulo 26. Es decir <em>det(K) mod 26 = 1</em></li>
+	</ul>
+	</p>
+
+	<div ng-show="!encCtrl._withAutoEvaluation" class="container-fluid">
+	<div class="row">
+	<div class="col-md-6">
+	<h4>Variables</h4>
+	<ul>
+		<li><em>k</em>: cantidad de filas/columnas de la matriz de cifrado (2 ó 3)</li>
+		<li><em>K</em>: matriz de cifrado kxk</li>
+		<li><em>K-1</em>: matriz de descifrado kxk</li>
+		<li><em>l</em>: longitud del mensaje</li>
+		<li><em>M</em>: cadena de caracteres</li>
+		<li><em>C</em>: cadena de caracteres</li>
+		<li><em>m</em>: vector de kx1</li>
+		<li><em>c</em>: vector de kx1</li>
+	</ul>
+	</div>
+	<div class="col-md-6">
+	<h3>Algoritmo de Cifrado</h3>
+	<em>Condiciones iniciales:</em>
+	<ul>
+		<li>M=vacío</li>
+		<li>C=vacío</li>
+	</ul>
+	<ol>
+		<li>Rellenar el mensaje con caracteres aleatorios al final de él si <em>l mod k != 0</em></li>
+		<li>Colocar el mensaje en M</li>
+		<li>Mientras queden caracteres en el mensaje M:
+		<ol>
+			<li>Tomar los siguientes k caracteres de M, convertirlos al número correspondiente según su posición en el alfabeto y disponerlos en el vector m (de arriba hacia abajo)</li>
+			<li>Calcular <em>c = Km (mod 26)</em>. Si algún ci &lt 0  buscar su congruente tal que 0 <= ci <= 25</li>
+			<li>Concatenar C con c</li>
+		</ol></li>
+		<li>Convertir los números en C a caracteres (cada número es la posición en el alfabeto del caracter que se quiere buscar)</li>
+	</ol>
+	</div>
+	</div>
+	</div>
+
+	<form name="hillForm" novalidate ng-submit="hillForm.$valid && encCtrl.start()">
+		<div class="form-group">
+			<label>Modo Autoevaluación</label>
+			<div class="input-group">
+				<div id="radioBtn" class="btn-group">
+					<a class="btn btn-primary btn-sm" ng-class="{ 'active' : encCtrl._withAutoEvaluation, 'notActive' : !encCtrl._withAutoEvaluation }" ng-click="encCtrl.auto(true)" ng-confirm-click="Al cambiar el modo, será necesario inresar los valores nuevamente. ¿Desea continuar?">Si</a>
+					<a class="btn btn-primary btn-sm" ng-class="{ 'active' : !encCtrl._withAutoEvaluation, 'notActive' : encCtrl._withAutoEvaluation }" ng-click="encCtrl.auto(false)" ng-confirm-click="Al cambiar el modo, será necesario inresar los valores nuevamente. ¿Desea continuar?">No</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group" ng-class="{'has-error': hillForm.key.$invalid}">
+			<label class="control-label" for="key">Clave</label>
+			<input name="key" type="text" class="form-control" ng-model="key" id="key" placeholder="Ingresar clave" ng-pattern="/^[a-z]*$/" ng-minlength="4" ng-maxlength="4" required>
+			<p class="help-block">
+				<strong ng-show="hillForm.key.$error.required">El campo debe estar completado.<br/></strong>
+				<strong ng-show="(hillForm.key.$error.minlength || hillForm.key.$error.maxlength)">La clave debe tener 4 caracteres.<br/></strong>
+				<strong ng-show="hillForm.key.$error.pattern">El texto ingresado contiene caracteres inválidos.<br/></strong>
+				Escriba un texto que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin espacios, saltos de linea o caracteres especiales
+			</p>
+		</div>
+
+		<div class="form-group" ng-class="{'has-error': hillForm.plaintext.$invalid}">
+			<label class="control-label" for="plaintext">Texto a cifrar</label>
+			<textarea name="plaintext" class="form-control" id="plaintext" rows="3" ng-model="plaintext" ng-pattern="/^[a-z]*$/" required></textarea>
+			<p class="help-block">
+				<strong ng-show="hillForm.plaintext.$error.required">El campo debe estar completado.<br/></strong>
+				<strong ng-show="hillForm.plaintext.$error.pattern">El texto ingresado contiene caracteres inválidos.<br/></strong>
+				Escriba un texto que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin espacios, saltos de linea o caracteres especiales
+			</p>
+		</div>
+
+		<input class="btn btn-default" ng-disabled="hillForm.$invalid" type="submit" value="Empezar"/>
+
+		<div>&nbsp;</div>
+		<div class="form-group">
+			<label class="control-label" for="key">Clave</label>
+			<table>
+			  <tr>
+			  	<td>
+						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
+			  	</td>
+			  	<td>
+						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
+			  	</td>
+			  	<td>
+						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
+			  	</td>
+			  	<td>
+						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
+			  	</td>
+		  	</tr>
+			  <tr>
+			  	<td>
+						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
+			  	</td>
+			  	<td>
+						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
+			  	</td>
+			  	<td>
+						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
+			  	</td>
+			  	<td>
+						<input name="clave11" type="text" class="form-control" ng-model="key" id="key">
+			  	</td>
+		  	</tr>
+	  	</table>
+  	</div>
+		<textarea name="plaintext" class="form-control" id="plaintext" rows="3" ng-model="plaintext" ng-pattern="/^[a-z]*$/" required></textarea>
+
+
+	</form>
+</div>

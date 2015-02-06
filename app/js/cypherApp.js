@@ -1,6 +1,6 @@
 ﻿define(['angular', 'angular-route'], function(angular) {
 	var app = angular.module('app', ['ngRoute', 'vigenere', 'permutation', 'nlfsr', 'afin', 'hill', 'rc4']);
-	
+
 	app.config(function($routeProvider, $locationProvider) {
 		$routeProvider.when('/', {
 			templateUrl: 'partials/home.html'
@@ -43,7 +43,15 @@
 		}).
 		when('/hill', {
 			templateUrl: 'partials/Hill/hill-home.html',
-	   controller: 'HillCtrl'
+	   	controller: 'HillCtrl'
+		}).
+		when('/hill/encrypt', {
+			templateUrl: 'partials/Hill/hill-encrypt.html',
+	   	controller: 'HillEncryptCtrl'
+		}).
+		when('/hill/decrypt', {
+			templateUrl: 'partials/Hill/hill-decrypt.html',
+	   	controller: 'HillDecryptCtrl'
 		}).
 		when('/rc4', {
 			templateUrl: 'partials/RC4/rc4-home.html',
@@ -53,19 +61,19 @@
 			redirecTo: '/'
 		});
 	});
-	
+
 	app.directive('navbarTop', function() {
 		return {
 			restrict: 'E',
 			templateUrl: 'partials/navbar-top.html'
 		};
 	});
-	
+
 	app.directive('navbarBottom', function() {
 		return {
 			restrict: 'E',
 			templateUrl: 'partials/navbar-bottom.html'
 		};
 	});
-	
+
 });
