@@ -7,7 +7,7 @@
 	<ul>
 		<li><em>L</em>: longitud de la clave</li>
 		<li><em>M</em>: longitud del mensaje</li>
-		<li><em>Kc</em>: cantidad de filas de la matriz de cifrado. Kc =  &#x2308(M/L)&#x2309 + 1</li>
+		<li><em>Kc</em>: cantidad de filas de la matriz de cifrado. Kc =  &lceil;(M/L)&rceil; + 1</li>
 	</ul>
 
 	<!-- Pseudocodigo de cifrado -->
@@ -15,16 +15,10 @@
 		<h3>Algoritmo de Cifrado</h3>
 		<ol>
 			<li ng-class="{ step: encCtrl.isCurrentStep(1) }">Crear una matriz de Kc x L</li>
-			<li ng-class="{ step: encCtrl.isCurrentStep(2) }">Disponer la clave y el mensaje en la matriz, colocando la clave en la primer fila y el mensaje en las siguientes filas (de izquierda a derecha y de arriba hacia abajo) rellenando con el caracter de padding (<b>'#'</b> en este ejemplo) en caso de quedar celdas vacías en la última fila</li>
+			<li ng-class="{ step: encCtrl.isCurrentStep(2) }">Disponer la clave y el mensaje en la matriz, colocando la clave en la primer fila y el mensaje en las siguientes filas (de izquierda a derecha y de arriba hacia abajo) rellenando con el caracter de padding (<b>'$'</b> en este ejemplo) en caso de quedar celdas vacías en la última fila</li>
 			<li ng-class="{ step: encCtrl.isCurrentStep(3) }">Reordenar las columnas según el orden alfabético (caso clave alfabética) o numérico (caso clave numérica) de la clave, de izquierda a derecha</li>
 			<li ng-class="{ step: encCtrl.isCurrentStep(4) }">Escribir el criptograma tomando los caracteres en el siguiente orden: tomar la primer columna y escribir los caracteres desde arriba hacia abajo (sin tomar los caracteres de la clave), y repetir lo anterior con las siguientes columnas (en forma ordenada), concatenando los resultados</li>
 		</ol>
-		<style>
-		.step {
-			background-color:yellow;
-			font-weight:bold;
-		}
-		</style>
 	</div>
 	
 	<!-- Formulario texto-clave -->
@@ -43,9 +37,9 @@
 	<!-- Valores de variables -->
 	<div ng-show="encCtrl.isInitialized()">
 		<h3>Variables</h3>
-		<p> L = {{encCtrl.permutationEnc.L}}</p>
-		<p> M = {{encCtrl.permutationEnc.M}}</p>
-		<p> Kc = {{encCtrl.permutationEnc.Kc}}</p>
+		<label> L = {{encCtrl.permutationEnc.L}}</label><br>
+		<label> M = {{encCtrl.permutationEnc.M}}</label><br>
+		<label ng-class="{ varUpdate: encCtrl.isCurrentStep(1) }"> Kc = {{encCtrl.permutationEnc.Kc}}</label><br>
 	</div>
 
 	<!-- Valores matriz -->

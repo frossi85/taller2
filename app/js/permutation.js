@@ -20,7 +20,7 @@ define(['angular', 'angular-route'], function(angular) {
 			require: 'ngModel',
 			link: function(scope, elm, attrs, ctrl) {
 				ctrl.$parsers.unshift(function (viewValue) {
-					ctrl.$setValidity('key-validation', PermutationLibrary("", "", "").validateKey(viewValue));
+					ctrl.$setValidity('keyValidation', PermutationLibrary("", "", "").validateKey(viewValue));
 					return viewValue;
 				});
 			}
@@ -37,13 +37,10 @@ define(['angular', 'angular-route'], function(angular) {
 		};
 	});
 
-	app.controller('PermutationEncryptCtrl', function($scope, $routeParams, $location) {
+	app.controller('PermutationEncryptCtrl', function($scope, $location) {
 		this.permutationEnc;
 		this._withAutoEvaluation = false;
-		if ($routeParams.hola2) {
-			$scope.permutation = { encKey: $routeParams.hola2 };
-		}
-
+		
 		this.isInitialized = function() {
 			return !(typeof this.permutationEnc == undefined || this.permutationEnc == null);
 			return false;
@@ -62,9 +59,8 @@ define(['angular', 'angular-route'], function(angular) {
 		};
 
 		this.goToDecrypt = function() {
-			$location.url('/permutacion/decrypt');
-// 			$scope.permutation.decKey = this.permutationEnc._key;
-// 			$scope.permutation.ciphertext = this.permutationEnc._ciphertext;
+			var url = '/permutacion/decrypt?key=' + this.permutationEnc._key + '&ciphertext=' + this.permutationEnc._ciphertext;
+			$location.url(url);
 		};
 
 		this.initializeProblem = function() {
@@ -72,9 +68,12 @@ define(['angular', 'angular-route'], function(angular) {
 		};
 	});
 
-	app.controller('PermutationDecryptCtrl', function($scope, $location) {
+	app.controller('PermutationDecryptCtrl', function($scope, $routeParams, $location) {
 		this.permutationDec;
 		this._withAutoEvaluation = false;
+		if ($routeParams.key && $routeParams.ciphertext) {
+			$scope.permutation = { decKey: $routeParams.key,  ciphertext: $routeParams.ciphertext};
+		}
 
 		this.isInitialized = function() {
 			return !(typeof this.permutationDec == undefined || this.permutationDec == null);
@@ -103,7 +102,7 @@ function PermutationLibrary(key, plaintext, ciphertext) {
 		_key: key,
 		_plaintext: plaintext,
 		_ciphertext: ciphertext,
-		_padChar: '#',
+		_padChar: '$',
 		_currentStep: 0,
 		_matrix: [],
 

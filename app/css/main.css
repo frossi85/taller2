@@ -3,6 +3,15 @@
 	margin-bottom: 40px;
 }
 
+.step {
+	background-color:yellow;
+	font-weight:bold;
+}
+
+.varUpdate {
+	background-color: PowderBlue;
+}
+
 input.ng-dirty.ng-invalid {
 }
 

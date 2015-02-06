@@ -7,7 +7,7 @@
 	<ul>
 		<li><em>L</em>: longitud de la clave</li>
 		<li><em>C</em>: longitud del criptograma</li>
-		<li><em>Kd</em>: cantidad de filas de la matriz de descifrado. Kd = &#x2308(C/L)&#x2309 + 1</li>
+		<li><em>Kd</em>: cantidad de filas de la matriz de descifrado. Kd = &lceil;(C/L)&rceil; + 1</li>
 	</ul>
 
 	<!-- Pseudocodigo de descifrado -->
@@ -20,12 +20,6 @@
 			<li ng-class="{ step: decCtrl.isCurrentStep(4) }">Reordenar las columnas de la matriz para formar la clave original</li>
 			<li ng-class="{ step: decCtrl.isCurrentStep(5) }">Escribir el mensaje tomando los caracteres en el siguiente orden: comenzar por la segunda fila de la matriz y escribir los caracteres desde izquierda hacia derecha, y repetir los anterior con las siguientes filas (en forma ordenada), concatenando los resultados y quitando los caracteres de padding al final del mensaje (si los hubiese)</li>
 		</ol>
-		<style>
-		.step {
-			background-color:yellow;
-			font-weight:bold;
-		}
-		</style>
 	</div>
 
 	<!-- Formulario criptograma-clave -->
@@ -44,9 +38,9 @@
 	<!-- Valores de variables -->
 	<div ng-show="decCtrl.isInitialized()">
 		<h3>Variables</h3>
-		<p> L = {{decCtrl.permutationDec.L}}</p>
-		<p> C = {{decCtrl.permutationDec.C}}</p>
-		<p> Kd = {{decCtrl.permutationDec.Kd}}</p>
+		<label> L = {{decCtrl.permutationDec.L}}</label><br>
+		<label> M = {{decCtrl.permutationDec.C}}</label><br>
+		<label ng-class="{ varUpdate: decCtrl.isCurrentStep(1) }"> Kd = {{decCtrl.permutationDec.Kd}}</label><br>
 	</div>
 	
 	<!-- Valores matriz -->
