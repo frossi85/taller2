@@ -39,7 +39,15 @@
 		}).
 		when('/afin', {
 			templateUrl: 'partials/Afin/afin-home.html',
-	   controller: 'AfinCtrl'
+	   controller: 'AfinHomeCtrl'
+		}).
+		when('/afin/encrypt', {
+			templateUrl: 'partials/Afin/afin-encrypt.html',
+	   controller: 'AfinEncryptCtrl'
+		}).
+		when('/afin/decrypt', {
+			templateUrl: 'partials/Afin/afin-decrypt.html',
+	   controller: 'AfinDecryptCtrl'
 		}).
 		when('/hill', {
 			templateUrl: 'partials/Hill/hill-home.html',

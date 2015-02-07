@@ -1,3 +1,14 @@
-<h1>Cifrado de Afin</h1>
+﻿<h1>Cifrado de Afin</h1>
 
-<p>SARASA</p>
+<p>El cifrado afín por bloques es un cifrado de clave simétrica por bloques en el que se utilizan transformaciones afines de aritmética modular. Este tipo de cifrado es similar al cifrado afín en el que, en lugar de sustituir o cifrar unos símbolos por otros, se cifran bloques.</p>
+<p>El mecanismo para cifrar se basa en sustituir bloques de n caracteres de texto en claro por bloques de n caracteres de texto cifrado utilizando una función afín de aritmética modular:<br>
+<ul>
+	<li>La función de <b>encriptación</b> de una sola letra es donde el módulo es el tamaño del alfabeto y son la clave del cifrado. El valor debe ser elegido de tal manera que sean primos entre sí.</li>
+	<li>La función de <b>descifrado</b> es que es el inverso multiplicativo modular del módulo. El inverso multiplicativo de sólo existe si son primos entre sí.</li>
+</ul>
+</p>
+
+<div ng-controller="AfinHomeCtrl as homeCtrl">	
+	<button class="btn btn-primary" ng-click="homeCtrl.toEncrypt()">Ir a Cifrado</button>
+	<button class="btn btn-primary" ng-click="homeCtrl.toDecrypt()">Ir a Descifrado</button>
+</div>
