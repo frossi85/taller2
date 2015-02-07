@@ -37,7 +37,7 @@
 	<div ng-show="!encCtrl._withAutoEvaluation" class="container-fluid">
 	<div class="row">
 	<div class="col-md-6">
-	<h4>Diccionario de Variables PGA</h4>
+	<h4>Diccionario de Variables PRGA</h4>
 	<ul>
 		<li><em>i y j</em>: Contadores</li>
 		<li><em>t</em>: Indice de carácter de salida cifrado</li>
@@ -79,7 +79,7 @@
 
 		<div class="form-group" ng-class="{'has-error': rc4Form.key.$invalid}">
 			<label class="control-label" for="key">Clave</label>
-			<input name="key" type="text" class="form-control" ng-model="key" id="key" placeholder="Ingresar clave" ng-pattern="/^([a-z]*)$/" required ng-disabled="encCtrl.start">
+			<input name="key" type="text" class="form-control" ng-model="key" id="key" placeholder="Ingresar clave" ng-pattern="/^([a-z]*)|([A-Z]*)$/" required ng-disabled="encCtrl.start">
 			<p class="help-block">
 				<strong ng-show="rc4Form.key.$error.required">El campo debe estar completado.<br/></strong>
 				<strong ng-show="afinForm.key.$error.pattern">El texto ingresado contiene caracteres inválidos.<br/></strong>
@@ -97,25 +97,27 @@
 			</p>
 		</div>
 
-		<input class="btn btn-default" ng-disabled="!afinForm.$valid" ng-show="!encCtrl.start" type="submit" value="Empezar"/>
+		<input class="btn btn-default" ng-disabled="!rc4Form.$valid" ng-show="!encCtrl.start" type="submit" value="Empezar"/>
 		<input class="btn btn-default" ng-show="encCtrl.start" type="button" ng-click="encCtrl.next()" value="Siguiente"/>
-		<input class="btn btn-default" ng-show="encCtrl.start" type="button" ng-click="encCtrl.finish()" value="Terminar"/>
+		<input class="btn btn-default" ng-show="encCtrl.start" type="button" ng-click="encCtrl.finish()" value="Terminar KSA"/>
+		<input class="btn btn-default" ng-show="encCtrl.start" type="button" ng-click="encCtrl.finish()" value="Terminar PRGA"/>
+		<input class="btn btn-default" ng-show="descifrar" type="button" ng-click="encCtrl.descifrar()" value="Descifrar Resultado"/>
 
 		<div>&nbsp;</div>
 		
 		<div class="form-group">
-			<label class="control-label">Parcial</label>
-			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="parcial" class="form-control" id="parcial" rows="3" ng-model="parcial" ng-pattern="/^[a-z]*|[0-9]*$/"></textarea>
+			<label class="control-label" ng-hide = "finalizar">Parcial</label>
+			<textarea ng-disabled="!encCtrl._withAutoEvaluation" ng-hide = "finalizar" name="parcial" class="form-control" id="parcial" rows="6" ng-model="parcial"></textarea>
 		</div>
 
 		<div class="form-group">
 			<label class="control-label">KeyStream</label>
-			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="ksa" class="form-control" id="ksa" rows="3" ng-model="ksa" ng-pattern="/^[a-z]*|[0-9]*$/"></textarea>
+			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="ksa" class="form-control" id="ksa" rows="4" ng-model="ksa"></textarea>
 		</div>
 
 		<div class="form-group">
 			<label class="control-label">Resultado</label>
-			<textarea ng-disabled=true name="result" class="form-control" id="result" rows="3" ng-model="result" ></textarea>
+			<textarea ng-disabled=true name="result" class="form-control" id="result" rows="4" ng-model="result" ></textarea>
 		</div>
 
 	</form>

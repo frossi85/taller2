@@ -89,13 +89,13 @@
 		
 		
 		<div class="form-group">
-			<label class="control-label">Parcial</label>
-			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="parcial" class="form-control" id="parcial" rows="3" ng-model="parcial" ng-pattern="/^[a-z]*|[0-9]*$/"></textarea>
+			<label class="control-label" ng-hide = "hideParcial">Parcial</label>
+			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="parcial" ng-hide = "hideParcial" class="form-control" id="parcial" rows="3" ng-model="parcial" ng-pattern="/^[a-z]*|[0-9]*$/"></textarea>
 		</div>
 
 		<div class="form-group">
-			<label class="control-label">Resultado</label>
-			<textarea ng-disabled=true name="result" class="form-control" id="result" rows="3" ng-model="result" ></textarea>
+			<label class="control-label" ng-hide = "hideResult">Resultado</label>
+			<textarea ng-disabled=true name="result" class="form-control" ng-hide = "hideResult" id="result" rows="3" ng-model="result" ></textarea>
 		</div>
 
 	</form>

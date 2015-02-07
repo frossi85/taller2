@@ -31,31 +31,44 @@ define(['angular', 'angular-route'], function(angular) {
 
 
 	app.controller('Rc4EncryptCtrl', function($scope, $location) {
-		this.z26 = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 		this._withAutoEvaluation = false;
 		this.start = false;
 		this.step = 0;
 		this.end = false;
-		this.char = '';
-		this.M = 0;
+
+		this.s = [];
+		this.ksa = false;
+		this.i = 0;
+		this.j = 0;
+
+		$scope.descifrar = false;
 		$scope.key = '';
 		$scope.plaintext = '';
-
+		$scope.finalizar = true;
 
 		this.init = function() {
-			console.log($scope.key);
-			console.log($scope.plaintext);
-
+	
 			$scope.parcial= '';
+			$scope.ksa = '';
 			$scope.result = '';
-			
+			$scope.finalizar = false;
+			$scope.descifrar = false;	
+		
+			this.s = [];
+			this.ksa = false;
 			this.start = true;
 			this.step = 0;
 			this.end = false;
-			this.char = '';
-			this.M = 0;
 
-			this.stepCifrado();
+			this.i = 0;
+			this.j = 0;
+
+			for ( this.i = 0; this.i < 256; this.i++) {
+				this.s[this.i] = this.i;
+			}
+			
+			this.i = 0;
+			this.stepKSA();
 		}
 
 		this.auto = function(auto) {
@@ -67,86 +80,128 @@ define(['angular', 'angular-route'], function(angular) {
 		this.reset = function() {
 			console.log("reset");
 			$scope.key = '';
+			$scope.ksa = '';
 			$scope.plaintext = '';
+			$scope.parcial = '';
+			$scope.result = '';
+			$scope.finalizar = false;
+			$scope.descifrar = false;
+			this.i = 0;
+			this.j = 0;
+			this.s = [];
+			this.ksa = false;
 		}
 
 		this.next = function() {
-
-			this.stepCifrado();
+			
+			console.log("next");
+			
+			if(this.ksa == false){
+				this.stepKSA();
+			}
+			else{
+				this.stepPGA();
+			}
 		}
 
 		this.finish = function() {
 			console.log("finish");
-			
-			console.log($scope.plaintext.length);
-			console.log(this.step);
-			var result = '';
 
-			for(j = this.step; j < $scope.plaintext.length; j++ ){
-	
-				this.char = $scope.plaintext.charAt(j);			
-				var A= parseInt($scope.key);
-
-				if(this.char != " "){
-					M = this.getPos(this.char);
-					parcial = this.z26[((( M * A ) + B) % 26 + 26)%26];
-				}
-				else{
-					parcial = " ";
-				}
-
-				if(result != ''){
-					result += parcial;
-									
-				}
-				else{
-					result = parcial;
+			if(this.ksa == false){
+				console.log("KSA init");
+				for( cont = this.i ; cont <= 256 ; cont++){
+					this.stepKSA();
 				}				
-			}
-
-			$scope.result += result;
-
-			console.log($scope.plaintext.length);
-			this.start = false;
-			this.end = true;
-		}
-
-		this.getPos = function(caracter){
-			for(i = 0; i < this.z26.length; i++) {
-				if(this.z26[i] == caracter){
-					return i;
-				}
-			}
-		}
-		
-		this.stepCifrado = function(){
-			this.char = $scope.plaintext.charAt(this.step);			
-			var A= parseInt($scope.key);
-			if(this.char != " "){
-				M = this.getPos(this.char);
-				$scope.parcial = this.z26[((( M * A ) + B) % 26 + 26)%26];
+				console.log("KSA finish");
 			}
 			else{
-				$scope.parcial = " ";
+				console.log("PGA init");
+				for( cont = this.step ; cont < $scope.plaintext.length ; cont++){
+					this.stepPGA();
+				}
+				console.log("PGA finish");
+				this.start = false;
+				this.end = true;
+				$scope.descifrar = true;
+				$scope.finalizar = true;
+			}			
+		}
+		
+		this.stepKSA = function(){
+			this.j =  (this.j + this.s[this.i] + $scope.key.charCodeAt(this.i % $scope.key.length)) % 256;
+		
+			this.s = this.swap(this.s,this.i,this.j);
+			$scope.parcial = this.s.toString();
+			
+			if(this.i >= 256){
+				
+				for(x = 0; x < this.s.length; x++){
+					if($scope.ksa != ''){
+						$scope.ksa += String.fromCharCode(parseInt(this.s[x]));
+					}
+					else{
+						$scope.ksa = String.fromCharCode(parseInt(this.s[x]));
+					}
+				}
+	
+				this.i = 0;
+				this.j = 0;
+				this.iter = 0;	
+				this.ksa = true;
+				this.step =  0;
 			}
+			else{
+				this.i++;
+			}
+		}
+
+		this.swap = function (s, i, j){
+			var m = s[i];
+			s[i] = s[j];
+			s[j] = m;
+			return s;
+		}
+
+		this.stepPGA = function(){
+
+			this.i = (parseInt(this.i) + 1) % 256;
+			console.log("I = " + this.i);
+
+			this.j = (parseInt(this.j) + parseInt(this.s[this.i])) % 256;
+			console.log("J = " + this.j);
+			
+			this.s = this.swap(this.s,this.i,this.j);
+						
+			$scope.parcial = String.fromCharCode($scope.plaintext.charCodeAt(this.step) ^ this.s[(parseInt(this.s[this.i]) + parseInt(this.s[this.j])) % 256]); 
+			console.log("parcial = " + $scope.parcial);
 
 			if($scope.result != ''){
 				$scope.result += $scope.parcial;
+				console.log("parcial = " + $scope.result);
 									
 			}
 			else{
 				$scope.result = $scope.parcial;
+				console.log("parcial = " + $scope.result);
 			}
 			
 			this.step++;
 
 			if(this.step >= $scope.plaintext.length){
 				this.end = true;
+				$scope.finalizar = true;
 				this.finish();
 			}
 
 			console.log($scope.result);
 		}
 
+		this.descifrar = function(){
+			$scope.plaintext = $scope.result;
+			$scope.parcial = '';
+			$scope.result = '';
+			$scope.ksa = '';
+			$scope.descifrar = false;
+		}
 	});
 });

@@ -1,4 +1,4 @@
-﻿<h1>Cifrado de Afin - Método de Decifrado</h1>
+﻿<h1>Cifrado de Afin - Método de Descifrado</h1>
 
 <div ng-controller="AfinDecryptCtrl as encCtrl">
 
@@ -16,7 +16,7 @@
 	</ul>
 	</div>
 	<div class="col-md-6">
-	<h4>Algoritmo de Cifrado</h4>
+	<h4>Algoritmo de Descifrado</h4>
 	<ul>
 		<p>La funcion de descifrado es d ( x ) = a−1 ( x − b )(mod m ) donde a−1 es la inversa multiplicativa de a modulo m; en el caso de a = 3, a−1 = 9 ya que 3 · 9 = 27 = 1 modulo 26, por lo tanto la función de desencriptación será:</p>
 		<p><b> Mi = A−1 * ( Ci − B) MOD N</b></p>
@@ -89,13 +89,13 @@
 		
 		
 		<div class="form-group">
-			<label class="control-label">Parcial</label>
-			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="parcial" class="form-control" id="parcial" rows="3" ng-model="parcial" ng-pattern="/^[a-z]*|[0-9]*$/"></textarea>
+			<label class="control-label" ng-hide = "hideParcial">Parcial</label>
+			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="parcial" class="form-control" ng-hide = "hideParcial" id="parcial" rows="3" ng-model="parcial" ng-pattern="/^[a-z]*|[0-9]*$/"></textarea>
 		</div>
 
 		<div class="form-group">
-			<label class="control-label">Resultado</label>
-			<textarea ng-disabled=true name="result" class="form-control" id="result" rows="3" ng-model="result" ></textarea>
+			<label class="control-label" ng-hide = "hideResult" >Resultado</label>
+			<textarea ng-disabled=true name="result" class="form-control" id="result" ng-hide = "hideResult" rows="3" ng-model="result" ></textarea>
 		</div>
 
 	</form>

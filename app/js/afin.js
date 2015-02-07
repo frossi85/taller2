@@ -43,15 +43,16 @@ define(['angular', 'angular-route'], function(angular) {
 		$scope.plaintext = '';
 		$scope.parcial= '';
 		$scope.result = '';
+		$scope.hideParcial = true;
+		$scope.hideResult = true;
 
 
 		this.init = function() {
-			console.log($scope.keyA);
-			console.log($scope.keyB);
-			console.log($scope.plaintext);
 
 			$scope.parcial= '';
 			$scope.result = '';
+			$scope.hideParcial = false;
+			$scope.hideResult = false;
 			
 			this.start = true;
 			this.step = 0;
@@ -63,18 +64,18 @@ define(['angular', 'angular-route'], function(angular) {
 		}
 
 		this.auto = function(auto) {
-			console.log("auto");
 			this._withAutoEvaluation = auto;
 			this.reset();
 		}
 
 		this.reset = function() {
-			console.log("reset");
 			$scope.keyA = '';
 			$scope.keyB = '';
 			$scope.plaintext = '';
 			$scope.parcial= '';
 			$scope.result = '';
+			$scope.hideParcial = true;
+			$scope.hideResult = true;
 		}
 
 		this.next = function() {
@@ -83,10 +84,6 @@ define(['angular', 'angular-route'], function(angular) {
 		}
 
 		this.finish = function() {
-			console.log("finish");
-			
-			console.log($scope.plaintext.length);
-			console.log(this.step);
 			var result = '';
 
 			for(j = this.step; j < $scope.plaintext.length; j++ ){
@@ -113,8 +110,8 @@ define(['angular', 'angular-route'], function(angular) {
 			}
 
 			$scope.result += result;
+			$scope.hideParcial = true;
 
-			console.log($scope.plaintext.length);
 			this.start = false;
 			this.end = true;
 		}
@@ -152,10 +149,9 @@ define(['angular', 'angular-route'], function(angular) {
 
 			if(this.step >= $scope.plaintext.length){
 				this.end = true;
-				this.finish();
+				this.finish();	
+				$scope.hideParcial = true;
 			}
-
-			console.log($scope.result);
 		}
 
 	});
@@ -173,15 +169,16 @@ define(['angular', 'angular-route'], function(angular) {
 		$scope.keyA = '';
 		$scope.keyB = '';
 		$scope.plaintext = '';
+		$scope.hideParcial = true;
+		$scope.hideResult = true;
 
 
 		this.init = function() {
-			console.log($scope.keyA);
-			console.log($scope.keyB);
-			console.log($scope.plaintext);
 
 			$scope.parcial= '';
 			$scope.result = '';
+			$scope.hideParcial = false;
+			$scope.hideResult = false;
 			
 			this.invKeyA = this.inversoMulti($scope.keyA);
 
@@ -195,18 +192,18 @@ define(['angular', 'angular-route'], function(angular) {
 		}
 
 		this.auto = function(auto) {
-			console.log("auto");
 			this._withAutoEvaluation = auto;
 			this.reset();
 		}
 
 		this.reset = function() {
-			console.log("reset");
 			$scope.keyA = '';
 			$scope.keyB = '';
 			$scope.plaintext = '';
 			$scope.parcial = '';
 			$scope.result = '';
+			$scope.hideParcial = true;
+			$scope.hideResult = true;
 		}
 
 		this.next = function() {
@@ -215,10 +212,6 @@ define(['angular', 'angular-route'], function(angular) {
 		}
 
 		this.finish = function() {
-			console.log("finish");
-			
-			console.log($scope.plaintext.length);
-			console.log(this.step);
 			var result = '';
 
 			for(j = this.step; j < $scope.plaintext.length; j++ ){
@@ -245,8 +238,8 @@ define(['angular', 'angular-route'], function(angular) {
 			}
 
 			$scope.result += result;
+			$scope.hideParcial = true;
 
-			console.log($scope.plaintext.length);
 			this.start = false;
 			this.end = true;
 		}
@@ -260,8 +253,6 @@ define(['angular', 'angular-route'], function(angular) {
 		}
 		
 		this.stepDeCifrado = function(){
-	
-						console.log("inicio " + $scope.result);
 			this.invKeyA = this.inversoMulti($scope.keyA);
 
 			this.char = $scope.plaintext.charAt(this.step);	
@@ -289,9 +280,8 @@ define(['angular', 'angular-route'], function(angular) {
 			if(this.step >= $scope.plaintext.length){
 				this.end = true;
 				this.finish();
+				$scope.hideParcial = true;
 			}
-
-			console.log($scope.result);
 		}
 
 		this.inversoMulti = function(keyA){
