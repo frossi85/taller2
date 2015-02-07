@@ -2,8 +2,11 @@
 
 <div ng-controller="AfinEncryptCtrl as encCtrl">
 
-	<!-- Significado variables -->
-	<h3>Diccionario de Variables</h3>
+	<!-- Significado variables y algoritmo-->
+	<div ng-show="!encCtrl._withAutoEvaluation" class="container-fluid">
+	<div class="row">
+	<div class="col-md-6">
+	<h4>Diccionario de Variables</h4>
 	<ul>
 		<li><em>Ci</em>: Caracter de mensaje cifrado</li>
 		<li><em>A</em>: Constante de decimación</li>
@@ -11,18 +14,17 @@
 		<li><em>Mi</em>: Carácter del mensaje original</li>
 		<li><em>N</em>: Longitud del alfabeto</li>
 	</ul>
-
-	<!-- Pseudocodigo de cifrado -->
-	<div ng-show="!encCtrl._withAutoEvaluation" class="container-fluid">
-		<h3>Algoritmo de Cifrado</h3>
-		<ul>
-			<p>El algoritmo de cifrado se basa en la siguiente formula:</p>
-			<p><b>Ci = (A * Mi + B) MOD N</b></p>
-		</ul>
-		<ol>
-			<li ng-class="{ step: encCtrl.isCurrentStep(1) }">Tomar el primer carácter del mensaje de entrada o el siguiente al último procesado y pasarlo al número de su posición en el alfabeto de longitud 26</li>
-			<li ng-class="{ step: encCtrl.isCurrentStep(2) }">Aplicar la formula de cifrado al número de posición obtenido en el paso anterior</li>
-			<li ng-class="{ step: encCtrl.isCurrentStep(3) }">Tomar el resultado del paso anterior y obtener el carácter correspondiente a esa posición en el alfabeto de longitud 26. Carácter cifrado</li>
+	</div>
+	<div class="col-md-6">
+	<h4>Algoritmo de Cifrado</h4>
+	<ul>
+		<p>El algoritmo de cifrado se basa en la siguiente formula:</p>
+		<p><b>Ci = (A * Mi + B) MOD N</b></p>
+	</ul>
+	<ol>
+		<li ng-class="{ step: encCtrl.isCurrentStep(1) }">Tomar el primer carácter del mensaje de entrada o el siguiente al último procesado y pasarlo al número de su posición en el alfabeto de longitud 26</li>
+		<li ng-class="{ step: encCtrl.isCurrentStep(2) }">Aplicar la formula de cifrado al número de posición obtenido en el paso anterior</li>
+		<li ng-class="{ step: encCtrl.isCurrentStep(3) }">Tomar el resultado del paso anterior y obtener el carácter correspondiente a esa posición en el alfabeto de longitud 26. Carácter cifrado</li>
 		</ol>
 		<style>
 		.step {
@@ -30,6 +32,9 @@
 			font-weight:bold;
 		}
 		</style>
+	</ol>
+	</div>
+	</div>
 	</div>
 
 	<!-- Formulario texto-clave -->

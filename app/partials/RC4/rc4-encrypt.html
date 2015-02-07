@@ -1,0 +1,124 @@
+﻿<h1>Cifrado de RC4 - Método de Cifrado</h1>
+
+<div ng-controller="Rc4EncryptCtrl as encCtrl">
+
+	<!-- Significado variables y algoritmo KSA -->
+	<div ng-show="!encCtrl._withAutoEvaluation" class="container-fluid">
+	<p> Inicialmente se Aplica el algoritmo KSA para obtener el Keystream apartir de la clave de entrada y el mensaje a cifrar:</p>
+	<p> Con el resultado del KSA  (keystream data), se utiliza en el Pseudo-Random Generation Algorithm (PRGA). Este algoritmo tiene 2 contadores, el i y la j, en el cual ambos son inicializados en 0 para comenzar. Después de eso, cada bit de keystream data es usado en el PRGA:</p>
+	<div class="row">
+	<div class="col-md-6">
+	<h4>Diccionario de Variables KSA</h4>
+	<ul>
+		<li><em>i y j</em>: Contadores</li>
+		<li><em>S[i]</em>: Clave de entrada del algoritmo</li>
+		<li><em>k[i]</em>: Array con valores de 0 a 255</li>
+	</ul>
+	</div>
+	<div class="col-md-6">
+	<h4>Algoritmo de Cifrado KSA</h4>
+	<em>Condiciones iniciales:</em>
+	<ul>
+		<li>j=vacío</li>
+	</ul>
+	<ol>
+		<li>Para i = 0 hasta 255:
+		<ol>
+			<li>Asignar a j = (j + S[i] + K[i]) MOD 256</li>
+			<li>Intencambiar el valor del caracter i de S con el caracter en la posición j de S  ( S[i] por S[j])</li>
+		</ol></li>
+	</ol>
+	</div>
+	</div>
+	</div>
+
+	
+	<!-- Significado variables y algoritmo PRGA -->
+	<div ng-show="!encCtrl._withAutoEvaluation" class="container-fluid">
+	<div class="row">
+	<div class="col-md-6">
+	<h4>Diccionario de Variables PGA</h4>
+	<ul>
+		<li><em>i y j</em>: Contadores</li>
+		<li><em>t</em>: Indice de carácter de salida cifrado</li>
+		<li><em>S[i]</em>: Mensaje Original / cifrado final</li>
+	</ul>
+	</div>
+	<div class="col-md-6">
+	<h4>Algoritmo de Cifrado PRGA</h4>
+	<em>Condiciones iniciales:</em>
+	<ul>
+		<li>i=vacío</li>
+		<li>j=vacío</li>
+	</ul>
+	<ol>
+		<li>Mientras queden caracteres en el mensaje S:
+		<ol>
+			<li>Asignar a i = (i + 1) MOD 256</li>
+			<li>Asignar a j = (j + S[i]) MOD 256</li>
+			<li>Intencambiar el valor del caracter i de S con el caracter en la posición j de S  ( S[i] por S[j])</li>
+			<li>Asignar a t = (S[i] + S[j]) MOD 256</li>
+			<li>Caracter cifrado S[t]</li>
+		</ol></li>
+	</ol>
+	</div>
+	</div>
+	</div>
+
+	<!-- Formulario texto-clave -->
+	<form name="rc4Form" novalidate ng-submit="rc4Form.$valid && encCtrl.init()">
+		<div class="form-group">
+			<label>Modo Autoevaluación</label>
+			<div class="input-group">
+				<div id="radioBtn" class="btn-group">
+					<a class="btn btn-primary btn-sm" ng-disabled="encCtrl.start" ng-class="{ 'active' : encCtrl._withAutoEvaluation, 'notActive' : !encCtrl._withAutoEvaluation }" ng-click="encCtrl.auto(true)" ng-confirm-click="Al cambiar el modo, será necesario inresar los valores nuevamente. ¿Desea continuar?">Si</a>
+					<a class="btn btn-primary btn-sm" ng-disabled="encCtrl.start" ng-class="{ 'active' : !encCtrl._withAutoEvaluation, 'notActive' : encCtrl._withAutoEvaluation }" ng-click="encCtrl.auto(false)" ng-confirm-click="Al cambiar el modo, será necesario inresar los valores nuevamente. ¿Desea continuar?">No</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group" ng-class="{'has-error': rc4Form.key.$invalid}">
+			<label class="control-label" for="key">Clave</label>
+			<input name="key" type="text" class="form-control" ng-model="key" id="key" placeholder="Ingresar clave" ng-pattern="/^([a-z]*)$/" required ng-disabled="encCtrl.start">
+			<p class="help-block">
+				<strong ng-show="rc4Form.key.$error.required">El campo debe estar completado.<br/></strong>
+				<strong ng-show="afinForm.key.$error.pattern">El texto ingresado contiene caracteres inválidos.<br/></strong>
+				Escriba un texto que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin saltos de linea o caracteres especiales
+			</p>
+		</div>
+
+		<div class="form-group" ng-class="{'has-error': rc4Form.plaintext.$invalid}">
+			<label class="control-label" for="plaintext">Texto a cifrar</label>
+			<textarea name="plaintext" class="form-control" id="plaintext" rows="3" ng-model="plaintext" placeholder="Ingresar Texto a cifrar" ng-pattern="/^([a-z]*)|([ ]*)$/" required ng-disabled="encCtrl.start"></textarea>
+			<p class="help-block">
+				<strong ng-show="afinForm.plaintext.$error.required">El campo debe estar completado.<br/></strong>
+				<strong ng-show="afinForm.plaintext.$error.pattern">El texto ingresado contiene caracteres inválidos.<br/></strong>
+				Escriba un texto que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin saltos de linea o caracteres especiales
+			</p>
+		</div>
+
+		<input class="btn btn-default" ng-disabled="!afinForm.$valid" ng-show="!encCtrl.start" type="submit" value="Empezar"/>
+		<input class="btn btn-default" ng-show="encCtrl.start" type="button" ng-click="encCtrl.next()" value="Siguiente"/>
+		<input class="btn btn-default" ng-show="encCtrl.start" type="button" ng-click="encCtrl.finish()" value="Terminar"/>
+
+		<div>&nbsp;</div>
+		
+		<div class="form-group">
+			<label class="control-label">Parcial</label>
+			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="parcial" class="form-control" id="parcial" rows="3" ng-model="parcial" ng-pattern="/^[a-z]*|[0-9]*$/"></textarea>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label">KeyStream</label>
+			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="ksa" class="form-control" id="ksa" rows="3" ng-model="ksa" ng-pattern="/^[a-z]*|[0-9]*$/"></textarea>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label">Resultado</label>
+			<textarea ng-disabled=true name="result" class="form-control" id="result" rows="3" ng-model="result" ></textarea>
+		</div>
+
+	</form>
+
+</div>
+

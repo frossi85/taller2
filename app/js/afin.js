@@ -41,6 +41,8 @@ define(['angular', 'angular-route'], function(angular) {
 		$scope.keyA = '';
 		$scope.keyB = '';
 		$scope.plaintext = '';
+		$scope.parcial= '';
+		$scope.result = '';
 
 
 		this.init = function() {
@@ -71,6 +73,8 @@ define(['angular', 'angular-route'], function(angular) {
 			$scope.keyA = '';
 			$scope.keyB = '';
 			$scope.plaintext = '';
+			$scope.parcial= '';
+			$scope.result = '';
 		}
 
 		this.next = function() {
@@ -201,6 +205,8 @@ define(['angular', 'angular-route'], function(angular) {
 			$scope.keyA = '';
 			$scope.keyB = '';
 			$scope.plaintext = '';
+			$scope.parcial = '';
+			$scope.result = '';
 		}
 
 		this.next = function() {

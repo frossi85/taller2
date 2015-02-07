@@ -1,3 +1,18 @@
-<h1>Cifrado RC4</h1>
+﻿<h1>Cifrado de RC4</h1>
 
-<p>SARASA test</p>
+<p>RC4 es un un algoritmo sorprendentemente simple. Este consiste en 2 algoritmos: 1-Key Scheduling Algorithm (KSA) y 2- Pseudo-Random Generation Algorithm (PRGA). Ambos de estos algoritmos usan 8-by-8 S-box, el cual es solo un array de 256 números en el cual ambos son únicos en cuanto a rango y su valor va desde 0 hasta 255. Todos los números de 0 a 255 existen dentro del array, pero están solo mezclados de diferentes maneras, el KSA se encarga de realizar la primera mezcla en el S-Box, basado en el valor de la semilla dada dentro de él, y esta "semilla" puede ser de 256 bits de largo.</p>
+<p>RC4 es parte de los protocolos de cifrado más comunes como WEP, WPA para tarjetas wireless y TLS. Entre los factores principales que han ayudado a que RC4 esté en un rango tan amplio de aplicaciones son su increíble velocidad y simplicidad<br>
+<p>El algoritmo de cifrado se basa en dos algoritmo:<p>
+
+<ul>
+	<li><b>KSA</B> ( Key Scheduling Algorithm ) </li>
+	<li><b>PRGA</b> ( Pseudo-Random Generation Algorithm )</li>
+</ul>
+
+<p>El mismo método utilizado para el cifrado del mensaje se utiliza para el descifrado<p>
+</p>
+
+
+<div ng-controller="Rc4HomeCtrl as homeCtrl">	
+	<button class="btn btn-primary" ng-click="homeCtrl.toEncrypt()">Ir a Cifrado / Descifrado</button>
+</div>

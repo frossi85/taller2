@@ -39,15 +39,15 @@
 		}).
 		when('/afin', {
 			templateUrl: 'partials/Afin/afin-home.html',
-	   controller: 'AfinHomeCtrl'
+	   	controller: 'AfinHomeCtrl'
 		}).
 		when('/afin/encrypt', {
 			templateUrl: 'partials/Afin/afin-encrypt.html',
-	   controller: 'AfinEncryptCtrl'
+	   	controller: 'AfinEncryptCtrl'
 		}).
 		when('/afin/decrypt', {
 			templateUrl: 'partials/Afin/afin-decrypt.html',
-	   controller: 'AfinDecryptCtrl'
+	   	controller: 'AfinDecryptCtrl'
 		}).
 		when('/hill', {
 			templateUrl: 'partials/Hill/hill-home.html',
@@ -63,7 +63,11 @@
 		}).
 		when('/rc4', {
 			templateUrl: 'partials/RC4/rc4-home.html',
-	   controller: 'HillCtrl'
+	   	controller: 'Rc4HomeCtrl'
+		}).
+		when('/rc4/encrypt', {
+			templateUrl: 'partials/Rc4/rc4-encrypt.html',
+	   	controller: 'Rc4EncryptCtrl'
 		}).
 		otherwise({
 			redirecTo: '/'
