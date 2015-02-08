@@ -1,0 +1,67 @@
+<h1>Cifrado de Permutación - Método de Descifrado</h1>
+
+<div ng-controller="PermutationDecryptAutoevaluationCtrl as decCtrl">
+
+	<!-- Significado variables -->
+	<h3>Diccionario de Variables</h3>
+	<ul>
+		<li><em>L</em>: longitud de la clave</li>
+		<li><em>C</em>: longitud del criptograma</li>
+		<li><em>Kd</em>: cantidad de filas de la matriz de descifrado. Kd = &lceil;(C/L)&rceil; + 1</li>
+	</ul>
+
+	<!-- Texto y clave ingresadas -->
+	<div class="well">
+		<label>Clave</label>
+		<p>{{decCtrl.permutationDec._key}}</p>
+		<label>Criptograma</label>
+		<p>{{decCtrl.permutationDec._ciphertext}}</p>
+		<label>Paso actual</label>
+		<p>{{decCtrl.permutationDec._currentStep}}</p>
+	</div>
+	
+	<!-- Valores de variables -->
+	<div>
+		<h3>Variables</h3>
+		<label> L = {{decCtrl.permutationDec.L}}</label><br>
+		<label> C = {{decCtrl.permutationDec.C}}</label><br>
+		<form class="form-inline">
+			<div class="form-group">
+				<label for="inputVarKd" class="control-label">Kd = </label>
+				<input ng-readonly="!decCtrl.isCurrentStep(1)" type="text" size="2" maxlength="2" class="form-control text-center" id="inputVarKd" ng-model="varKd">
+			</div>
+		</form>
+		<br>
+	</div>
+	
+	<!-- Valores matriz -->
+	<div ng-show="decCtrl.permutationDec._currentStep > 1">
+		<h3>Matriz</h3>
+		<table class="table table-bordered table-hover" style="width:40%" id="testMatrix" name="testMatrix">
+			<tr ng-repeat="row in decCtrl.permutationDec._matrix" ng-class="{ info: $index==0 }">             
+				<td class="text-center" ng-repeat="col in row track by $index">                    
+				<input type="text" class="form-control text-center" ng-disabled="$parent.$index != 0 && decCtrl.isCurrentStep(2)" size="1" minlength="1" maxlength="1" ng-model="matrix[$parent.$index][$index]">
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- Resultado mensaje -->
+	<div class="alert alert-success" ng-show="decCtrl.isCurrentStep(5)">
+		<form class="form-inline">
+			<div class="form-group">
+				<label for="inputPlaintext" class="control-label lead">Texto plano: </label>
+				<input type="text" class="form-control" size="100" id="inputPlaintext" ng-model="plaintext">
+			</div>
+		</form>
+	</div>
+	
+	<br>
+
+	<!-- Botones -->
+	<div>
+		<button class="btn btn-primary" ng-hide="decCtrl.hasFinished()" ng-click="decCtrl.nextStep()">Siguiente Paso</button>
+		<button class="btn btn-primary" ng-show="decCtrl.hasFinished()" ng-click="decCtrl.returnHome()">Salir</button>
+	</div>
+	
+</div>

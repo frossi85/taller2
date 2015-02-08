@@ -1,0 +1,67 @@
+<h1>Cifrado de Permutación - Método de Cifrado</h1>
+
+<div ng-controller="PermutationEncryptAutoevaluationCtrl as encCtrl">
+
+	<!-- Significado variables -->
+	<h3>Diccionario de Variables</h3>
+	<ul>
+		<li><em>L</em>: longitud de la clave</li>
+		<li><em>M</em>: longitud del mensaje</li>
+		<li><em>Kc</em>: cantidad de filas de la matriz de cifrado. Kc =  &lceil;(M/L)&rceil; + 1</li>
+	</ul>
+
+	<!-- Texto y clave ingresadas -->
+	<div class="well">
+		<label>Clave</label>
+		<p>{{encCtrl.permutationEnc._key}}</p>
+		<label>Mensaje</label>
+		<p>{{encCtrl.permutationEnc._plaintext}}</p>
+		<label>Paso actual</label>
+		<p>{{encCtrl.permutationEnc._currentStep}}</p>
+	</div>
+	
+	<!-- Valores de variables -->
+	<div>
+		<h3>Variables</h3>
+		<label> L = {{encCtrl.permutationEnc.L}}</label><br>
+		<label> M = {{encCtrl.permutationEnc.M}}</label><br>
+		<form class="form-inline">
+			<div class="form-group">
+				<label for="inputVarKc" class="control-label">Kc = </label>
+				<input ng-readonly="!encCtrl.isCurrentStep(1)" type="text" size="2" maxlength="2" class="form-control text-center" id="inputVarKc" ng-model="varKc">
+			</div>
+		</form>
+		<br>
+	</div>
+	
+	<!-- Valores matriz -->
+	<div ng-show="encCtrl.permutationEnc._currentStep > 1">
+		<h3>Matriz</h3>
+		<table class="table table-bordered table-hover" style="width:40%" id="testMatrix" name="testMatrix">
+			<tr ng-repeat="row in encCtrl.permutationEnc._matrix" ng-class="{ info: $index==0 }">             
+				<td class="text-center" ng-repeat="col in row track by $index">                    
+				<input type="text" class="form-control text-center" size="1" minlength="1" maxlength="1" ng-model="matrix[$parent.$index][$index]">
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<!-- Resultado criptograma -->
+	<div class="alert alert-success" ng-show="encCtrl.isCurrentStep(4)">
+		<form class="form-inline">
+			<div class="form-group">
+				<label for="inputCiphertext" class="control-label lead">Criptograma: </label>
+				<input type="text" class="form-control" size="100" id="inputCiphertext" ng-model="ciphertext">
+			</div>
+		</form>
+	</div>
+	
+	<br>
+	
+	<!-- Botones -->
+	<div>
+		<button class="btn btn-primary" ng-hide="encCtrl.hasFinished()" ng-click="encCtrl.nextStep()">Siguiente Paso</button>
+		<button class="btn btn-info" ng-show="encCtrl.hasFinished()" ng-click="encCtrl.goToDecrypt()">Descifrar Resultado</button>
+		<button class="btn btn-primary" ng-show="encCtrl.hasFinished()" ng-click="encCtrl.returnHome()">Salir</button>
+	</div>
+</div>

@@ -1,5 +1,5 @@
 <form name="initDecForm" ng-submit="initDecForm.$valid && homeCtrl.initializeProblem()" novalidate>
-	<div class="form-group" ng-class="{'has-error': initDecForm.key.$invalid, 'has-success': initDecForm.key.$valid}">
+	<div class="form-group" ng-class="{ 'has-error': initDecForm.key.$invalid, 'has-success': initDecForm.key.$valid }">
 		<label class="control-label" for="key">Clave</label>
 		<input name="key" type="text" class="form-control" ng-model="permutation.key" id="key" placeholder="Ingresar clave" key-validation required>
 		<p class="help-block">
@@ -10,10 +10,11 @@
 	</div>
 	<div class="form-group" ng-class="{'has-error': initDecForm.ciphertext.$invalid, 'has-success': initDecForm.ciphertext.$valid}">
 		<label class="control-label" for="ciphertext">Criptograma a descifrar</label>
-		<textarea class="form-control" name="ciphertext" id="ciphertext" rows="3" ng-model="permutation.ciphertext" ng-pattern="/^[a-z || \$]*$/" required></textarea>
+		<textarea class="form-control" name="ciphertext" id="ciphertext" rows="3" ng-model="permutation.ciphertext" cipher-size-validation="{{permutation.key.length}}" ng-pattern="/^[a-z||\$]*$/" required></textarea>
 		<p class="help-block">
 			<strong ng-show="initDecForm.ciphertext.$error.required">El campo debe ser completado<br/></strong>
-			<strong ng-show="initDecForm.ciphertext.$error.pattern">El texto ingresado contiene caracteres inválidos<br/></strong>
+			<strong ng-show="initDecForm.ciphertext.$error.cipherSizeValidation">El criptograma debe tener una cantidad de caracteres múltiplo de {{permutation.key.length}}. Puede rellenar con caracter de padding ('$')<br/></strong>
+			<strong ng-show="initDecForm.ciphertext.$error.pattern">El criptograma ingresado contiene caracteres inválidos<br/></strong>
 			Escriba un criptograma que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin espacios, saltos de linea o caracteres especiales (excepto el caracter de padding '$')
 		</p>
 	</div>

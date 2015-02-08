@@ -27,6 +27,26 @@ define(['angular', 'angular-route'], function(angular) {
 		};
 	});
 	
+	app.directive('cipherSizeValidation', function() {
+		return {
+			require: 'ngModel',
+			link: function(scope, elm, attrs, ctrl) {
+				var validate = function(viewValue) {
+					var keySize = attrs.cipherSizeValidation;
+					var valid = viewValue ? (viewValue.length % keySize === 0) : true;
+					ctrl.$setValidity('cipherSizeValidation', valid);
+					return viewValue;
+				}
+				ctrl.$parsers.unshift(validate);
+				ctrl.$formatters.push(validate);
+				
+				attrs.$observe('cipherSizeValidation', function(keySize) {
+					return validate(ctrl.$viewValue);
+				});
+			}
+		};
+	});
+	
 	app.factory("PermutationEnc",function() {
 		return {};
 	});
@@ -41,19 +61,61 @@ define(['angular', 'angular-route'], function(angular) {
 
 		this.initializeProblem = function() {
 			if(this._isEncrypt) {
-				PermutationEnc = PermutationLibrary($scope.permutation.key, $scope.permutation.plaintext, "", this._withAutoEvaluation);
-				$location.url('/permutacion/encrypt');
+				PermutationEnc = PermutationLibrary($scope.permutation.key, $scope.permutation.plaintext, "");
+				if(this._withAutoEvaluation) {
+					PermutationEnc.nextEncStep();
+					$location.url('/permutacion/encrypt-autoevaluation');
+				}
+				else {
+					$location.url('/permutacion/encrypt');
+				}
 			}
 			else {
-				PermutationDec = PermutationLibrary($scope.permutation.key, "", $scope.permutation.ciphertext, this._withAutoEvaluation);
+				PermutationDec = PermutationLibrary($scope.permutation.key, "", $scope.permutation.ciphertext);
+				if(this._withAutoEvaluation) {
+					PermutationDec.nextDecStep();
+					$location.url('/permutacion/decrypt-autoevaluation');
+				}
+				else {
 				$location.url('/permutacion/decrypt');
-			}		
+				}		
+			}
 		};
 	});
 
 	app.controller('PermutationEncryptCtrl', function($scope, $location) {
 		this.permutationEnc = function() {
-			var permutation;
+			var permutation = {};
+			try {
+				permutation = PermutationEnc;
+			}
+			catch(e) {
+				$location.url('/permutacion');
+			}
+			return permutation;
+		}();
+
+		this.isCurrentStep = function(step) {
+			return this.permutationEnc._currentStep === step;
+		};
+		
+		this.hasFinished = function() {
+			return this.permutationEnc._currentStep === 4;
+		};
+
+		this.returnHome = function() {
+			$location.url('/permutacion');
+		};
+
+		this.goToDecrypt = function() {
+			PermutationDec = PermutationLibrary(this.permutationEnc._key, "", this.permutationEnc._ciphertext);
+			$location.url('/permutacion/decrypt');
+		};
+	});
+	
+	app.controller('PermutationEncryptAutoevaluationCtrl', function($scope, $location) {
+		this.permutationEnc = function() {
+			var permutation = {};
 			try {
 				permutation = PermutationEnc;
 			}
@@ -63,12 +125,81 @@ define(['angular', 'angular-route'], function(angular) {
 			return permutation;
 		}();
 		
-		this.hasFinished = function() {
-			return this.permutationEnc._currentStep === 4;
+		this._hasFinished = false;
+		
+		this.validateKc = function() {
+			return parseInt($scope.varKc) === parseInt(this.permutationEnc.Kc);
+		};
+		
+		this.validateMatrix = function() {
+			for (var r = 0; r < this.permutationEnc.Kc; r++) {
+				for (var c = 0; c < this.permutationEnc.L; c++) {
+					if($scope.matrix[r][c] != this.permutationEnc._matrix[r][c]) {
+						return false;
+					}
+				}
+			}
+			return true;
+		};
+		
+		this.validateCiphertext = function() {
+			return $scope.ciphertext === this.permutationEnc._ciphertext;
+		};
+		
+		this.informCorrect = function() {
+			alert("CORRECTO");
+		};
+		
+		this.informIncorrect = function() {
+			alert("INCORRECTO");
+		};
+		
+		this.nextStep = function() {
+			switch(this.permutationEnc._currentStep) {
+				case 1: {
+					if(this.validateKc()) {
+						this.permutationEnc.nextEncStep();
+						$scope.matrix = new Array(this.permutationEnc.Kc);
+						for (var r = 0; r < this.permutationEnc.Kc; r++) {
+							$scope.matrix[r] = new Array(this.permutationEnc.L);
+						}
+						this.informCorrect();
+					}
+					else {
+						this.informIncorrect();
+					}
+					return;
+				}
+				case 2 :
+				case 3 : {
+					if(this.validateMatrix()) {
+						this.permutationEnc.nextEncStep();
+						this.informCorrect();
+					}
+					else {
+						this.informIncorrect();
+					}
+					return;
+				}
+				case 4: {
+					if(this.validateCiphertext()) {
+						this._hasFinished = true;
+						this.informCorrect();
+					}
+					else {
+						this.informIncorrect();
+					}
+					return;
+				}
+			}
 		};
 
 		this.isCurrentStep = function(step) {
 			return this.permutationEnc._currentStep === step;
+		};
+		
+		this.hasFinished = function() {
+			return this._hasFinished;
 		};
 
 		this.returnHome = function() {
@@ -76,14 +207,15 @@ define(['angular', 'angular-route'], function(angular) {
 		};
 
 		this.goToDecrypt = function() {
-			PermutationDec = PermutationLibrary(this.permutationEnc._key, "", this.permutationEnc._ciphertext, this.permutationEnc._withAutoEvaluation);
-			$location.url('/permutacion/decrypt');
+			PermutationDec = PermutationLibrary(this.permutationEnc._key, "", this.permutationEnc._ciphertext);
+			PermutationDec.nextDecStep();
+			$location.url('/permutacion/decrypt-autoevaluation');
 		};
 	});
 
-	app.controller('PermutationDecryptCtrl', function($scope, $routeParams, $location) {
+	app.controller('PermutationDecryptCtrl', function($scope, $location) {
 		this.permutationDec = function() {
-			var permutation;
+			var permutation = {};
 			try {
 				permutation = PermutationDec;
 			}
@@ -92,11 +224,6 @@ define(['angular', 'angular-route'], function(angular) {
 			}
 			return permutation;
 		}();
-
-		if ($routeParams.key && $routeParams.ciphertext) {
-			this.permutationDec._key = $routeParams.key;
-			this.permutationDec._ciphertext = $routeParams.ciphertext;
-		}
 
 		this.isCurrentStep = function(step) {
 			return this.permutationDec._currentStep === step;
@@ -110,14 +237,116 @@ define(['angular', 'angular-route'], function(angular) {
 			$location.url('/permutacion');
 		};
 	});
+	
+	app.controller('PermutationDecryptAutoevaluationCtrl', function($scope, $location) {
+		this.permutationDec = function() {
+			var permutation = {};
+			try {
+				permutation = PermutationDec;
+			}
+			catch(e) {
+				$location.url('/permutacion');
+			}
+			return permutation;
+		}();
+		
+		this._hasFinished = false;
+		
+		this.validateKd = function() {
+			return parseInt($scope.varKd) === parseInt(this.permutationDec.Kd);
+		};
+		
+		this.validateMatrix = function() {
+			for (var r = 0; r < this.permutationDec.Kd; r++) {
+				for (var c = 0; c < this.permutationDec.L; c++) {
+					if($scope.matrix[r][c] != this.permutationDec._matrix[r][c]) {
+						return false;
+					}
+				}
+			}
+			return true;
+		};
+		
+		this.validatePlaintext = function() {
+			return $scope.plaintext === this.permutationDec._plaintext;
+		};
+		
+		this.informCorrect = function() {
+			alert("CORRECTO");
+		};
+		
+		this.informIncorrect = function() {
+			alert("INCORRECTO");
+		};
+		
+		this.nextStep = function() {
+			switch(this.permutationDec._currentStep) {
+				case 1: {
+					if(this.validateKd()) {
+						this.permutationDec.nextDecStep();
+						$scope.matrix = new Array(this.permutationDec.Kd);
+						for (var r = 0; r < this.permutationDec.Kd; r++) {
+							$scope.matrix[r] = new Array(this.permutationDec.L);
+						}
+						this.informCorrect();
+					}
+					else {
+						this.informIncorrect();
+					}
+					return;
+				}
+				case 2 :
+					if(this.validateMatrix()) {
+						this.permutationDec.nextDecStep();
+						this.informCorrect();
+					}
+					else {
+						this.informIncorrect();
+					}
+					return;
+				case 3 :
+				case 4 : {
+					if(this.validateMatrix()) {
+						this.permutationDec.nextDecStep();
+						this.informCorrect();
+					}
+					else {
+						this.informIncorrect();
+					}
+					return;
+				}
+				case 5: {
+					if(this.validatePlaintext()) {
+						this._hasFinished = true;
+						this.informCorrect();
+					}
+					else {
+						this.informIncorrect();
+					}
+					return;
+				}
+			}
+		};
+		
+		this.isCurrentStep = function(step) {
+			return this.permutationDec._currentStep === step;
+		};
+
+		this.hasFinished = function() {
+			return this._hasFinished;
+		};
+
+		this.returnHome = function() {
+			$location.url('/permutacion');
+		};
+	});
 });
 
-function PermutationLibrary(key, plaintext, ciphertext, withAutoEvaluation) {
+function PermutationLibrary(key, plaintext, ciphertext) {
 	return {
 		_key: key,
 		_plaintext: plaintext,
 		_ciphertext: ciphertext,
-		_withAutoEvaluation: withAutoEvaluation,
 		_padChar: '$',
 		_currentStep: 0,
 		_matrix: [],
@@ -163,14 +392,6 @@ function PermutationLibrary(key, plaintext, ciphertext, withAutoEvaluation) {
 			}
 		},
 
-		emptyMatrix: function() {
-			for(var r = 0; r < this._matrix.length; r++) {
-				for(var c = 0; c < this._matrix[0].length; c++) {
-					this._matrix[r][c] = '';
-				}
-			}
-		},
-
 		validateKey: function(key) {
 			var INTEGER_REGEXP = /^(?:([0-9])(?!.*\1))*$/;
 			var STRING_REGEXP = /^(?:([a-z])(?!.*\1))*$/;
@@ -198,7 +419,6 @@ function PermutationLibrary(key, plaintext, ciphertext, withAutoEvaluation) {
 			for (var r = 0; r < this.Kc; r++) {
 				this._matrix[r] = new Array(this._key.length);
 			}
-			this.emptyMatrix();
 		},
 
 		step2Enc: function() {
@@ -234,7 +454,6 @@ function PermutationLibrary(key, plaintext, ciphertext, withAutoEvaluation) {
 			for (var r = 0; r < this.Kd; r++) {
 				this._matrix[r] = new Array(this._key.length);
 			}
-			this.emptyMatrix();
 		},
 
 		step2Dec: function() {
@@ -348,5 +567,5 @@ function PermutationLibrary(key, plaintext, ciphertext, withAutoEvaluation) {
 				}
 			}
 		}
-	};
+	}
 }

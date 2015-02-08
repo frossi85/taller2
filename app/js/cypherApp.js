@@ -33,6 +33,14 @@
 			templateUrl: 'partials/Permutation/permutation-decrypt.html',
 	   controller: 'PermutationDecryptCtrl'
 		}).
+		when('/permutacion/encrypt-autoevaluation', {
+			templateUrl: 'partials/Permutation/permutation-encrypt-autoevaluation.html',
+	   controller: 'PermutationEncryptAutoevaluationCtrl'
+		}).
+		when('/permutacion/decrypt-autoevaluation', {
+			templateUrl: 'partials/Permutation/permutation-decrypt-autoevaluation.html',
+	   controller: 'PermutationDecryptAutoevaluationCtrl'
+		}).
 		when('/nlfsr', {
 			templateUrl: 'partials/NLFSR/nlfsr-init.html',
 			controller: 'NlfsrCtrl'
