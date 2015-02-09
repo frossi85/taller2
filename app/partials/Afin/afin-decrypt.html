@@ -49,26 +49,71 @@
 			</div>
 		</div>
 
+		<div class="row">
+		<div class="col-md-6">
 		<div class="form-group" ng-class="{'has-error': afinForm.keyB.$invalid}">
-			<label class="control-label" for="keyB">Clave</label>
-			<input name="keyB" type="text" class="form-control" ng-model="keyB" id="keyB" placeholder="Ingresar clave" ng-pattern="/^([1-9]|[1][0-9]|[2][0-6])$/" ng-minlength="1" ng-maxlength="2" required ng-disabled="encCtrl.start">
-			<p class="help-block">
-				<strong ng-show="afinForm.keyB.$error.required">El campo debe estar completado.<br/></strong>
-				<strong ng-show="((afinForm.keyB >26 || (afinForm.keyB < 1))).$error.pattern">La clave debe cumplir con que se encuentre entre 1 y 26/></strong>
-				<strong ng-show="afinForm.keyB.$error.pattern">El texto ingresado contiene caracteres inválidos.<br/></strong>
-				Escriba un número entero que cumpla con que se encuentre entre 1 y 26. Debe ser un número coprimo con la Constante. 
-			</p>
+			<label class="control-label" for="keyA">Constante de Cifrado - A</label>
+			<div ng-init="keyA" id="keyA" input name="keyA" type="text" ng-model="keyA" required >
+	    			<select ng-model="keyA" >
+      					<option value="1">1</option>
+      					<option value="3">3</option>
+				        <option value="5">5</option>
+				        <option value="7">7</option>
+				        <option value="9">9</option>
+			        	<option value="11">11</option>
+				        <option value="15">15</option>
+				        <option value="17">17</option>
+				        <option value="19">19</option>
+		  		        <option value="21">21</option>
+     			 		<option value="23">23</option>
+			        	<option value="25">25</option>
+    				</select>
+				<p class="help-block">
+					Seleccione un valor para la Constante de cifrado A.
+				</p>
+			</div>
+		</div>
 		</div>
 
-		<div class="form-group" ng-class="{'has-error': afinForm.keyA.$invalid}">
-			<label class="control-label" for="keyA">Constante de Cifrado</label>
-			<input name="keyA" type="text" class="form-control" ng-model="keyA" id="keyA" placeholder="Ingresar Constante" ng-pattern="/^([1-9]|[1][0-9]|[2][0-6])$/" ng-minlength="1" ng-maxlength="2" required ng-disabled="encCtrl.start">
-			<p class="help-block">
-				<strong ng-show="afinForm.keyA.$error.required">El campo debe estar completado.<br/></strong>
-				<strong ng-show="(afinForm.keyA.$error.minlength || afinForm.keyA.$error.maxlength)">La constante debe cumplir con que sea menor que 26 y distinta de 0.<br/></strong>
-				<strong ng-show="afinForm.keyA.$error.pattern">El texto ingresado contiene caracteres inválidos.<br/></strong>
-				Escriba un número entero que cumpla con que sea distinto de 1 y menor de 27. Debe ser un número coprimo con la Clave. 
-			</p>
+		<div class="col-md-6">
+		<div class="form-group" ng-class="{'has-error': afinForm.keyB.$invalid}">
+			<label class="control-label" for="keyB">Clave - B</label>
+			<div ng-init="keyB" id="keyB" input name="keyB" type="text" ng-model="keyB" required >
+	    			<select ng-model="keyB">
+					<option value="0">0</option>
+					<option value="1">1</option>
+      					<option value="2">2</option>
+				        <option value="3">3</option>
+				        <option value="4">4</option>
+				        <option value="5">5</option>
+			        	<option value="6">6</option>
+				        <option value="7">7</option>
+				        <option value="8">8</option>
+				        <option value="9">9</option>
+		  		        <option value="10">10</option>
+     			 		<option value="11">11</option>
+			        	<option value="12">12</option>
+      					<option value="13">13</option>
+      					<option value="14">14</option>
+				        <option value="15">15</option>
+				        <option value="16">16</option>
+				        <option value="17">17</option>
+			        	<option value="18">18</option>
+				        <option value="19">19</option>
+				        <option value="20">20</option>
+				        <option value="21">22</option>
+		  		        <option value="22">22</option>
+     			 		<option value="23">23</option>
+			        	<option value="24">24</option>
+      					<option value="25">25</option>
+      					<option value="26">26</option>
+    				</select>
+				<p class="help-block">
+					Seleccione un valor para la Clave de cifrado, tal que 1<=B<=26.
+				</p>
+			</div>
+		</div>
+		</div>
 		</div>
 
 		<div class="form-group" ng-class="{'has-error': afinForm.plaintext.$invalid}">
@@ -84,6 +129,7 @@
 		<input class="btn btn-default" ng-disabled="!afinForm.$valid" ng-show="!encCtrl.start" type="submit" value="Empezar"/>
 		<input class="btn btn-default" ng-show="encCtrl.start" type="button" ng-click="encCtrl.next()" value="Siguiente"/>
 		<input class="btn btn-default" ng-show="encCtrl.start" type="button" ng-click="encCtrl.finish()" value="Terminar"/>
+		<input class="btn btn-default" ng-show="cifrar" type="button" ng-click="encCtrl.cifrar()" value="Cifrar Resultado"/>
 
 		<div>&nbsp;</div>
 		
@@ -91,6 +137,7 @@
 		<div class="form-group">
 			<label class="control-label" ng-hide = "hideParcial">Parcial</label>
 			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="parcial" class="form-control" ng-hide = "hideParcial" id="parcial" rows="3" ng-model="parcial" ng-pattern="/^[a-z]*|[0-9]*$/"></textarea>
+			<p ng-show="parcialError"><b>El valor ingresado es incorrecto.</b></p>
 		</div>
 
 		<div class="form-group">
