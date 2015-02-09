@@ -12,6 +12,7 @@ requirejs.config({
     'jquery': '../lib/jquery.min',
     'angular': '../lib/angular.min',
     'angular-route': '../lib/angular-route.min',
+    'angular-animate': '../lib/angular-animate.min',
 	'controllers': './js/controllers/controllers'
   },
 

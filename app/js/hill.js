@@ -1,5 +1,5 @@
-define(['angular', 'angular-route'], function(angular) {
-	var app = angular.module('hill', []);
+define(['angular', 'angular-route', 'angular-animate'], function(angular) {
+	var app = angular.module('hill', ['ngAnimate']);
 
 	app.directive('ngConfirmClick', [
 	  function(){
