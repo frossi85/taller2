@@ -23,6 +23,10 @@ requirejs.config({
 
     'angular-route': {
       deps: ['angular']
+    },
+
+    'angular-animate': {
+      deps: ['angular']
     }
 
   }
