@@ -41,10 +41,21 @@ define(['angular', 'angular-route'], function(angular) {
 		this.i = 0;
 		this.j = 0;
 
+		this.parcial  = '';
+		this.jParcial = 0;
+		this.iParcial = 0;
+		this.sParcial = [];
+		this.resultParcial = '';
+
 		$scope.descifrar = false;
 		$scope.key = '';
 		$scope.plaintext = '';
 		$scope.finalizar = true;
+		$scope.showPGRA = false;
+		$scope.showKSA = false;
+		$scope.parcialError = false;
+		$scope.resultValue = '';
+		$scope.plaintextValue = '';
 
 		this.init = function() {
 	
@@ -53,12 +64,22 @@ define(['angular', 'angular-route'], function(angular) {
 			$scope.result = '';
 			$scope.finalizar = false;
 			$scope.descifrar = false;	
+			$scope.showPGRA = false;
+			$scope.showKSA = true;
+			$scope.parcialError = false;
 		
 			this.s = [];
 			this.ksa = false;
 			this.start = true;
 			this.step = 0;
 			this.end = false;
+
+			this.parcial  = '';
+			this.jParcial = 0;
+			this.iParcial = 0;
+			this.sParcial = [];
+
+			this.resultParcial = '';
 
 			this.i = 0;
 			this.j = 0;
@@ -68,7 +89,16 @@ define(['angular', 'angular-route'], function(angular) {
 			}
 			
 			this.i = 0;
-			this.stepKSA();
+			$scope.parcial = this.s.toString();	
+			
+			for(var cont= 0; cont < $scope.plaintext.length; cont++){
+				if($scope.plaintextValue != ''){		
+					$scope.plaintextValue += $scope.plaintext.charCodeAt(cont) + ",";
+				}
+				else{
+					$scope.plaintextValue = $scope.plaintext.charCodeAt(cont) + ",";
+				}
+			}
 		}
 
 		this.auto = function(auto) {
@@ -84,49 +114,100 @@ define(['angular', 'angular-route'], function(angular) {
 			$scope.plaintext = '';
 			$scope.parcial = '';
 			$scope.result = '';
-			$scope.finalizar = false;
+			$scope.finalizar = true;
 			$scope.descifrar = false;
+			$scope.parcialError = false;
+			$scope.resultValue = '';
+			$scope.plaintextValue = '';
+			
+
 			this.i = 0;
 			this.j = 0;
 			this.s = [];
 			this.ksa = false;
+
+			this.parcial  = '';
+			this.jParcial = 0;
+			this.iParcial = 0;
+			this.sParcial = [];
+
+			this.resultParcial = '';
 		}
 
 		this.next = function() {
 			
-			console.log("next");
-			
 			if(this.ksa == false){
-				this.stepKSA();
+
+				if(this._withAutoEvaluation == false){
+					this.stepKSA();
+				}
+				else{
+					this.stepKSAEval(false);
+				}	
 			}
 			else{
-				this.stepPGA();
+				if(this._withAutoEvaluation == false){
+					this.stepPGA();
+				}
+				else{
+					this.stepPGAEval(false);
+				}
 			}
 		}
 
 		this.finish = function() {
-			console.log("finish");
-
-			if(this.ksa == false){
-				console.log("KSA init");
-				for( cont = this.i ; cont <= 256 ; cont++){
-					this.stepKSA();
-				}				
-				console.log("KSA finish");
+			if(this._withAutoEvaluation == false){
+				this.finishStep();
 			}
 			else{
-				console.log("PGA init");
+				this.finishStepEval();
+			}					
+		}
+		
+		this.finishStep = function(){
+			if(this.ksa == false){
+				for( cont = this.i ; cont <= 256 ; cont++){
+					this.stepKSA();
+				}			
+			}
+			else{
 				for( cont = this.step ; cont < $scope.plaintext.length ; cont++){
 					this.stepPGA();
 				}
-				console.log("PGA finish");
 				this.start = false;
 				this.end = true;
 				$scope.descifrar = true;
 				$scope.finalizar = true;
-			}			
+				$scope.showPGRA = false;
+				$scope.showKSA = false;
+			}	
 		}
-		
+
+		this.finishStepEval = function(){
+				
+			this.iAux = this.i;
+			this.jAux = this.j;
+			this.sAux = this.s.slice();
+
+			if(this.ksa == false){
+				for( cont = this.i ; cont <= 256 ; cont++){
+					this.stepKSAEval(true);
+				}		
+			}
+			else{
+				console.log("inicio");
+				if($scope.parcial[$scope.parcial.length -1] == ","){
+					var pos = $scope.parcial.length -1;
+					$scope.parcial = $scope.parcial.slice(0,pos);
+				}
+
+				for( cont = this.step ; cont < $scope.plaintext.length ; cont++){
+					this.stepPGAEval(true);
+				}
+			}
+		}
+
+
 		this.stepKSA = function(){
 			this.j =  (this.j + this.s[this.i] + $scope.key.charCodeAt(this.i % $scope.key.length)) % 256;
 		
@@ -134,55 +215,144 @@ define(['angular', 'angular-route'], function(angular) {
 			$scope.parcial = this.s.toString();
 			
 			if(this.i >= 256){
-				
-				for(x = 0; x < this.s.length; x++){
-					if($scope.ksa != ''){
-						$scope.ksa += String.fromCharCode(parseInt(this.s[x]));
-					}
-					else{
-						$scope.ksa = String.fromCharCode(parseInt(this.s[x]));
-					}
-				}
+
+				$scope.ksa = $scope.parcial;
 	
 				this.i = 0;
 				this.j = 0;
 				this.iter = 0;	
 				this.ksa = true;
 				this.step =  0;
+				$scope.showPGRA = true;
+				$scope.showKSA = false;
+				$scope.parcial = '';
 			}
 			else{
 				this.i++;
 			}
 		}
 
-		this.swap = function (s, i, j){
-			var m = s[i];
-			s[i] = s[j];
-			s[j] = m;
-			return s;
+		this.stepKSAEval = function( finish ){
+
+			if(this.sParcial == ''){
+				this.sParcial = this.s.slice();
+			}
+
+			this.jParcial =  (this.jParcial + this.sParcial[this.iParcial] + $scope.key.charCodeAt(this.iParcial % $scope.key.length)) % 256;		
+	
+			this.sParcial = this.swap(this.sParcial,this.iParcial,this.jParcial);
+			this.parcial = this.sParcial.toString();
+
+			if(finish == false){
+			
+				if(this.parcial.toString() != $scope.parcial.toString()){
+					$scope.parcialError = true;
+					this.jParcial = this.j;
+					this.iParcial = this.i;
+					this.sParcial = '';
+				}
+				else{
+					this.s = this.sParcial.slice();
+					this.j = this.jParcial;
+					this.i = this.iParcial;
+
+					$scope.parcialError = false;
+
+					$scope.ksa = $scope.parcial;
+
+					if(this.i >= 256){
+						this.i = 0;
+						this.j = 0;
+						this.iter = 0;	
+						this.ksa = true;
+						this.step =  0;
+						$scope.showPGRA = true;
+						$scope.showKSA = false;
+						$scope.parcial = '';
+						this.iParcial = this.i;
+						this.jParcial = this.j;
+						this.sParcial = '';
+					}
+					else{
+						this.i++;
+						this.iParcial = this.i;
+					}
+				}
+			}
+			else{
+				if(this.i >= 256){
+
+					if($scope.parcial[$scope.parcial.length -1] != ","){
+						$scope.parcial += ",";
+					}						
+
+					if(this.parcial.toString() == $scope.parcial.toString()){
+
+						this.s = this.sParcial.slice();
+						this.j = this.jParcial;
+						this.i = this.iParcial;
+
+						$scope.parcialError = false;
+
+						$scope.ksa = $scope.parcial;
+
+						this.i = 0;
+						this.j = 0;
+						this.iter = 0;	
+						this.ksa = true;
+						this.step =  0;
+						$scope.showPGRA = true;
+						$scope.showKSA = false;
+						$scope.parcial = '';
+						this.iParcial = this.i;
+						this.jParcial = this.j;
+						this.sParcial = '';
+					}
+					else{
+						this.i = this.iAux;
+						this.j = this.jAux;
+						this.s = this.sAux.slice();
+	
+						this.iParcial = this.i;
+						this.jParcial = this.j;
+						this.sParcial = '';
+						$scope.parcialError = true;
+					}	
+				}
+				else{
+					this.i++;
+					this.iParcial = this.i;
+					this.j = this.jParcial;
+				}
+			}
+		}
+
+		this.swap = function (sAux, i, j){
+			var m = sAux[i];
+			sAux[i] = sAux[j];
+			sAux[j] = m;
+			return sAux;
 		}
 
 		this.stepPGA = function(){
 
 			this.i = (parseInt(this.i) + 1) % 256;
-			console.log("I = " + this.i);
 
 			this.j = (parseInt(this.j) + parseInt(this.s[this.i])) % 256;
-			console.log("J = " + this.j);
 			
 			this.s = this.swap(this.s,this.i,this.j);
 						
-			$scope.parcial = String.fromCharCode($scope.plaintext.charCodeAt(this.step) ^ this.s[(parseInt(this.s[this.i]) + parseInt(this.s[this.j])) % 256]); 
-			console.log("parcial = " + $scope.parcial);
+			var temp = String.fromCharCode($scope.plaintext.charCodeAt(this.step) ^ this.s[(parseInt(this.s[this.i]) + parseInt(this.s[this.j])) % 256]); 
+
+			$scope.parcial = $scope.plaintext.charCodeAt(this.step) ^ this.s[(parseInt(this.s[this.i]) + parseInt(this.s[this.j])) % 256]; 	
 
 			if($scope.result != ''){
-				$scope.result += $scope.parcial;
-				console.log("parcial = " + $scope.result);
-									
+				$scope.result += temp;		
+				$scope.resultValue += $scope.result.charCodeAt(this.step) + ",";			
 			}
 			else{
-				$scope.result = $scope.parcial;
-				console.log("parcial = " + $scope.result);
+				$scope.result = temp;
+				$scope.resultValue = $scope.result.charCodeAt(this.step) + ",";
 			}
 			
 			this.step++;
@@ -192,8 +362,141 @@ define(['angular', 'angular-route'], function(angular) {
 				$scope.finalizar = true;
 				this.finish();
 			}
+		}
 
-			console.log($scope.result);
+
+		this.stepPGAEval = function(finish){
+			
+			$scope.parcialError = false;
+
+			if(this.sParcial == ''){
+				this.sParcial = this.s.slice();
+			}
+
+			this.iParcial = (parseInt(this.i) + 1) % 256;
+
+			this.jParcial = (parseInt(this.j) + parseInt(this.s[this.iParcial])) % 256;
+			
+			this.sParcial = this.swap(this.sParcial,this.iParcial,this.jParcial);
+						
+			this.parcial = String.fromCharCode($scope.plaintext.charCodeAt(this.step) ^ this.sParcial[(parseInt(this.sParcial[this.iParcial]) + parseInt(this.sParcial[this.jParcial])) % 256]); 
+			var temp = $scope.plaintext.charCodeAt(this.step) ^ this.sParcial[(parseInt(this.sParcial[this.iParcial]) + parseInt(this.sParcial[this.jParcial])) % 256]; 
+	
+			if(finish == false){
+
+				console.log("temp " + temp );
+				console.log("$scope.parcial " + $scope.parcial);
+
+				if(temp.toString() == $scope.parcial.toString()){
+	
+					this.i = this.iParcial;
+					this.j = this.jParcial;
+					this.s = this.sParcial.slice();
+
+					$scope.parcial = '';
+	
+					$scope.parcialError = false;
+
+					if($scope.result != ''){
+						$scope.result += this.parcial;	
+						$scope.resultValue += $scope.result.charCodeAt(this.step) + ",";			
+					}
+					else{
+						$scope.result = this.parcial;
+						$scope.resultValue = $scope.result.charCodeAt(this.step) + ",";
+					}
+			
+					this.step++;
+
+					if(this.step >= $scope.plaintext.length){
+						this.end = true;
+						$scope.finalizar = true;
+						this.finish();
+						$scope.parcialError = false;
+						this.start = false;
+						$scope.descifrar = true;
+						$scope.finalizar = true;
+						$scope.showPGRA = false;
+						$scope.showKSA = false;
+					}
+				}
+				else{
+					$scope.parcialError = true;
+				}
+			}
+			else{
+				this.i = this.iParcial;
+				this.j = this.jParcial;
+				this.s = this.sParcial.slice();
+
+				if(this.resultParcial != ''){
+					this.resultParcial += this.parcial;				
+				}
+				else{
+					this.resultParcial = this.parcial;
+				}
+			
+				
+				this.step++;
+			
+				if(this.step >= $scope.plaintext.length){
+
+					var parcialTemp = $scope.parcial.split(",");	
+					var resultTemp = $scope.result;
+
+					for( var cont= 0; cont< parcialTemp.length; cont++){
+
+						var char = String.fromCharCode(parcialTemp[cont]);
+						if(resultTemp != ''){
+							resultTemp += char;
+						}
+						else{
+							resultTemp = char;
+						}
+					}
+
+					if($scope.result.toString() != ''){
+						this.result = $scope.result.toString() + this.resultParcial.toString();
+					}
+					else{
+						this.result = this.resultParcial.toString();
+					}
+				
+					if(this.result.toString() == resultTemp.toString()){
+
+						$scope.result = this.result;
+						$scope.resultValue = '';
+						for(var cont = 0; cont < $scope.result.length; cont++){
+							if($scope.resultValue != ''){
+								$scope.resultValue += this.result.charCodeAt(cont) + ",";
+							}
+							else{
+								$scope.resultValue = this.result.charCodeAt(cont) + ",";
+							}
+						}
+			
+						
+						this.end = true;
+						$scope.finalizar = true;
+						$scope.parcialError = false;
+						this.start = false;
+						this.end = true;
+						$scope.descifrar = true;
+						$scope.finalizar = true;
+						$scope.showPGRA = false;
+						$scope.showKSA = false;
+					}
+					else{
+						this.resultParcial = ''; 
+						this.step = $scope.result.length;
+						$scope.parcialError = true;	
+						this.i = this.iAux;
+						this.j = this.jAux;
+						this.s = this.sAux.slice();
+						this.sParcial = '';						
+					}
+				}
+			}
 		}
 
 		this.descifrar = function(){
@@ -202,6 +505,8 @@ define(['angular', 'angular-route'], function(angular) {
 			$scope.result = '';
 			$scope.ksa = '';
 			$scope.descifrar = false;
+			$scope.resultValue = '';
+			$scope.plaintextValue = '';
 		}
 	});
 });

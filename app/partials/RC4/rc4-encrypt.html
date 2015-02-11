@@ -88,19 +88,26 @@
 		</div>
 
 		<div class="form-group" ng-class="{'has-error': rc4Form.plaintext.$invalid}">
-			<label class="control-label" for="plaintext">Texto a cifrar</label>
-			<textarea name="plaintext" class="form-control" id="plaintext" rows="3" ng-model="plaintext" placeholder="Ingresar Texto a cifrar" ng-pattern="/^([a-z]*)|([ ]*)$/" required ng-disabled="encCtrl.start"></textarea>
-			<p class="help-block">
-				<strong ng-show="afinForm.plaintext.$error.required">El campo debe estar completado.<br/></strong>
-				<strong ng-show="afinForm.plaintext.$error.pattern">El texto ingresado contiene caracteres inválidos.<br/></strong>
-				Escriba un texto que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin saltos de linea o caracteres especiales
-			</p>
+			<div class="row">
+			<div class="col-md-6">
+				<label class="control-label" for="plaintext">Texto a cifrar</label>
+				<textarea name="plaintext" class="form-control" id="plaintext" rows="3" ng-model="plaintext" placeholder="Ingresar Texto a cifrar" required ng-disabled="encCtrl.start"></textarea>
+				<p class="help-block">
+					<strong ng-show="afinForm.plaintext.$error.required">El campo debe estar completado.<br/></strong>
+					Escriba un texto que contenga caracteres del alfabeto inglés. 
+				</p>
+			</div>
+			<div class="col-md-6">
+				<label class="control-label" for="plaintext">Texto a cifrar - Valores</label>
+				<textarea name="plaintextValue" class="form-control" id="plaintextValue" rows="3" ng-model="plaintextValue" ng-disabled= true></textarea>
+			</div>
+			</div>			
 		</div>
 
 		<input class="btn btn-default" ng-disabled="!rc4Form.$valid" ng-show="!encCtrl.start" type="submit" value="Empezar"/>
 		<input class="btn btn-default" ng-show="encCtrl.start" type="button" ng-click="encCtrl.next()" value="Siguiente"/>
-		<input class="btn btn-default" ng-show="encCtrl.start" type="button" ng-click="encCtrl.finish()" value="Terminar KSA"/>
-		<input class="btn btn-default" ng-show="encCtrl.start" type="button" ng-click="encCtrl.finish()" value="Terminar PRGA"/>
+		<input class="btn btn-default" ng-show="showKSA" type="button" ng-click="encCtrl.finish()" value="Terminar KSA"/>
+		<input class="btn btn-default" ng-show="showPGRA" type="button" ng-click="encCtrl.finish()" value="Terminar PRGA"/>
 		<input class="btn btn-default" ng-show="descifrar" type="button" ng-click="encCtrl.descifrar()" value="Descifrar Resultado"/>
 
 		<div>&nbsp;</div>
@@ -108,16 +115,27 @@
 		<div class="form-group">
 			<label class="control-label" ng-hide = "finalizar">Parcial</label>
 			<textarea ng-disabled="!encCtrl._withAutoEvaluation" ng-hide = "finalizar" name="parcial" class="form-control" id="parcial" rows="6" ng-model="parcial"></textarea>
+			<p ng-hide = "finalizar">Escriba los valores para cada paso del cifrado, en caso de ingresar todos los pasos hasta el final y terminar el algoritmo, separe los valores por el caracter de la coma ",".</p>
+			<p ng-show="parcialError"><b>El valor ingresado es incorrecto.</b></p>
 		</div>
 
 		<div class="form-group">
 			<label class="control-label">KeyStream</label>
-			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="ksa" class="form-control" id="ksa" rows="4" ng-model="ksa"></textarea>
+			<textarea ng-disabled=true name="ksa" class="form-control" id="ksa" rows="6" ng-model="ksa"></textarea>
 		</div>
 
 		<div class="form-group">
-			<label class="control-label">Resultado</label>
-			<textarea ng-disabled=true name="result" class="form-control" id="result" rows="4" ng-model="result" ></textarea>
+			<div class="row">
+			<div class="col-md-6">
+				<label class="control-label">Resultado Cifrado</label>
+				<textarea ng-disabled=true name="result" class="form-control" id="result" rows="4" ng-model="result" ></textarea>
+			</div>
+			<div class="col-md-6">	
+				<label class="control-label">Resultado Cifrado - Valores</label>
+				<textarea ng-disabled=true name="resultValue" class="form-control" id="resultValue" rows="4" ng-model="resultValue" ></textarea>
+			
+			</div>
+			</div>
 		</div>
 
 	</form>
