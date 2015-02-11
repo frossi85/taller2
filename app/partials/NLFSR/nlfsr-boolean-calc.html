@@ -5,14 +5,15 @@
 </div>
 
 <div>
-	<button class="btn btn-default" ng-click="nlfsrCtrl.addZero()">0</button>
-	<button class="btn btn-default" ng-click="nlfsrCtrl.addOne()">1</button>
-	<button class="btn btn-default" ng-click="nlfsrCtrl.addAND()">AND</button>
-	<button class="btn btn-default" ng-click="nlfsrCtrl.addOR()">OR</button>
-	<button class="btn btn-default" ng-click="nlfsrCtrl.addXOR()">XOR</button>
-	<button class="btn btn-default" ng-click="nlfsrCtrl.addNOT()">NOT</button>
-	<button class="btn btn-default" ng-click="nlfsrCtrl.addBrac()">(</button>
-	<button class="btn btn-default" ng-click="nlfsrCtrl.addBrac2()">)</button>
-	<button class="btn btn-default" ng-click="nlfsrCtrl.erase()">Borrar</button>
-	<button class="btn btn-default" ng-click="nlfsrCtrl.calculate()">Calcular</button>
+	<button class="btn btn-default" ng-click="nlfsrCtrl.boolExpr = nlfsrCtrl.addZero(nlfsrCtrl.boolExpr);" ng-disabled="nlfsrCtrl.isDisableZero">0</button>
+	<button class="btn btn-default" ng-click="nlfsrCtrl.boolExpr = nlfsrCtrl.addOne(nlfsrCtrl.boolExpr);" ng-disabled="nlfsrCtrl.isDisableOne">1</button>
+	<button class="btn btn-default" ng-click="nlfsrCtrl.boolExpr = nlfsrCtrl.addAND(nlfsrCtrl.boolExpr)" ng-disabled="nlfsrCtrl.isDisableAND">AND</button>
+	<button class="btn btn-default" ng-click="nlfsrCtrl.boolExpr = nlfsrCtrl.addOR(nlfsrCtrl.boolExpr)" ng-disabled="nlfsrCtrl.isDisableOR">OR</button>
+	<button class="btn btn-default" ng-click="nlfsrCtrl.boolExpr = nlfsrCtrl.addXOR(nlfsrCtrl.boolExpr)" ng-disabled="nlfsrCtrl.isDisableXOR">XOR</button>
+	<button class="btn btn-default" ng-click="nlfsrCtrl.boolExpr = nlfsrCtrl.addNOT(nlfsrCtrl.boolExpr)" ng-disabled="nlfsrCtrl.isDisableNOT">NOT</button>
+	<button class="btn btn-default" ng-click="nlfsrCtrl.boolExpr = nlfsrCtrl.addBrac(nlfsrCtrl.boolExpr)" ng-disabled="nlfsrCtrl.isDisableBrac">(</button>
+	<button class="btn btn-default" ng-click="nlfsrCtrl.boolExpr = nlfsrCtrl.addBrac2(nlfsrCtrl.boolExpr)"ng-disabled="nlfsrCtrl.isDisableBrac2">)</button>
+	<button class="btn btn-default" ng-click="nlfsrCtrl.boolExpr = nlfsrCtrl.erase(nlfsrCtrl.boolExpr)" ng-disabled="nlfsrCtrl.isDisableErase">Borrar</button>
+	<button class="btn btn-default" ng-click="nlfsrCtrl.boolExpr = nlfsrCtrl.calculate(nlfsrCtrl.boolExpr)" ng-disabled="nlfsrCtrl.isDisableCalculate">Calcular</button>
+
 </div>

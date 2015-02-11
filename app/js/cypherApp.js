@@ -42,7 +42,7 @@
 	   controller: 'PermutationDecryptAutoevaluationCtrl'
 		}).
 		when('/nlfsr', {
-			templateUrl: 'partials/NLFSR/nlfsr-init.html',
+			templateUrl: 'partials/NLFSR/nlfsr-home.html',
 			controller: 'NlfsrCtrl'
 		}).
 		when('/afin', {
