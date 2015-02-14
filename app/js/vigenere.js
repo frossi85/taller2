@@ -39,6 +39,22 @@ define(['angular', 'angular-route'], function(angular) {
 
 			$location.url('/vigenere/decrypt/step-by-step');
 		};
+
+		$scope.encryptDirectSolution = function() {
+			Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.text); 
+			Vigenere.withAutoEvaluation = false;
+			Vigenere.solveIt();
+
+			$location.url('/vigenere/step-by-step');
+		}
+
+		$scope.decryptDirectSolution = function() {
+			Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.text).setDecrypt(); 
+			Vigenere.withAutoEvaluation = false;
+			Vigenere.solveIt();
+
+			$location.url('/vigenere/decrypt/step-by-step');
+		}
 	});
 	
 	app.controller('VigenereCtrl2', function($scope, $location) {
@@ -133,19 +149,13 @@ function VigenereLibrary(key, textToProcess) {
 		},
 		nextStepResult: function() { 
 			var charToProcess = this.text.toLowerCase().charCodeAt(this.currentStep) - 97;
-			var keyChar = this.keyMask.toLowerCase().charCodeAt(this.currentStep ) - 97;
-			
-			console.log("charToProcess: " + charToProcess);
-			console.log("keyChar: " + keyChar);
-			
+			var keyChar = this.keyMask.toLowerCase().charCodeAt(this.currentStep ) - 97;			
 			var previousResult;
 			
 			if(this._isEncrypt == true) {
-				console.log("encrypt");
 				previousResult = charToProcess + keyChar;			
 			}
 			else {
-				console.log("decrypt: " + (charToProcess - keyChar));	
 				previousResult = charToProcess - keyChar;			
 			}
 			if(previousResult < 0)
@@ -165,6 +175,11 @@ function VigenereLibrary(key, textToProcess) {
 		setDecrypt: function () { 
 			this._isEncrypt = false ;
 			return this;
+		},
+		solveIt: function () {
+			while(!this.isFinished()) {
+				this.goForward();
+			}
 		}
 	};
 }
