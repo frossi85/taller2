@@ -1,43 +1,44 @@
-﻿<div ng-controller="VigenereCtrl2 as store">
-	<div ng-show="store.isInitilized()">
+﻿<div ng-controller="VigenereCtrl2">
+	<div ng-show="isInitilized()">
 		<div class="well">
 			<label>Clave</label>
-			<p>{{store.vigenere.key}}</p>
+			<p>{{vigenere.key}}</p>
 
 			<label>Texto a encriptar</label>
-			<p>{{store.vigenere.text}}</p>
+			<p>{{vigenere.text}}</p>
 		</div>
 
 		<h3>Encriptación</h3>
 		
-		<div ng-show="!store.isFinished()">
-			<p>Letra: {{store.vigenere.text[store.vigenere.currentStep]}}</p>
-			<p>Letra encriptadora de la clave: {{store.vigenere.keyMask[store.vigenere.currentStep]}}</p>
-			<p>Posicion: {{store.vigenere.currentStep}}</p>
+		<div ng-show="!isFinished()">
+			<p>Letra: {{vigenere.text[vigenere.currentStep]}}</p>
+			<p>Letra encriptadora de la clave: {{vigenere.keyMask[vigenere.currentStep]}}</p>
+			<p>Posicion: {{vigenere.currentStep}}</p>
 			
-			<div id="vigenereStepForm" ng-show="store.isAutoEvaluation()">
-			  <div class="form-group" class="has-error" ng-class="{ 'has-error' : vigenre.stepAttemp.length > 0 && !store.isValid(vigenre.stepAttemp), 'has-success' : vigenre.stepAttemp.length > 0 && store.isValid(vigenre.stepAttemp) }">
-				<label for="stepAttemp">Letra resultado del paso {{store.vigenere.currentStep}}</label>
+			<div id="vigenereStepForm" ng-show="isAutoEvaluation()">
+			  <div class="form-group" class="has-error" ng-class="{ 'has-error' : vigenere.stepAttemp.length > 0 && !isValid(vigenere.stepAttemp), 'has-success' : vigenere.stepAttemp.length > 0 && isValid(vigenere.stepAttemp) }">
+				<label for="stepAttemp">Letra resultado del paso {{vigenere.currentStep}}</label>
 				<div class="input-group">
-					<input type="text" ng-model="vigenre.stepAttemp" class="form-control" id="stepAttemp">
+					<input type="text" ng-model="vigenere.stepAttemp" class="form-control" id="stepAttemp">
 					<span class="input-group-btn">
-						<button ng-click="store.nextStep()" class="btn btn-default">Avanzar</button>
+						<button ng-click="nextStep()" class="btn btn-default">Avanzar</button>
 					</span>
 				</div><!-- /input-group -->
-				<div class="help-block" ng-show="vigenre.stepAttemp.length > 0 && !store.isValid(vigenre.stepAttemp)">
+				<div class="help-block" ng-show="vigenere.stepAttemp.length > 0 && !isValid(vigenere.stepAttemp)">
 					<p>El resultado de la encriptacion ingresada no es correcta</p>
 					<p>El resultado de la encriptación debe ser una letra sola</p>
 				</div>
-				<p class="help-block" ng-show="vigenre.stepAttemp.length > 0 && store.isValid(vigenre.stepAttemp)">El resultado es correcto</p>
+				<p class="help-block" ng-show="vigenere.stepAttemp.length > 0 && isValid(vigenere.stepAttemp)">El resultado es correcto</p>
 			</div>
 		</div>
-		<div ng-show="!store.isAutoEvaluation()">
-			<button ng-click="store.nextStep()" class="btn btn-default">Avanzar</button>
+		<div ng-show="!isAutoEvaluation()">
+			<button ng-click="nextStep()" class="btn btn-default">Avanzar</button>
 		</div>
 	</div>
 	<div class="alert alert-info">
-		<label ng-show="store.isFinished()">Resultado Final</label>
-		<label ng-show="!store.isFinished()">Resultado Parcial</label>
-		<p>{{store.vigenere.result}}</p>
+		<label ng-show="isFinished()">Resultado Final</label>
+		<label ng-show="!isFinished()">Resultado Parcial</label>
+		<p>{{vigenere.result}}</p>
 	</div>
+	<button class="btn btn-primary" ng-show="isFinished()" ng-click="toEncript()">Desencriptar</button>
 </div>

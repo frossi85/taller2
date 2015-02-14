@@ -10,16 +10,16 @@
 	<li>n = cantidad de letras del alfabeto usado (en este caso 26)</li>
 </ul>
 
-<form name="initializeVigenereForm" ng-controller="VigenereCtrl as vigenereCtrl" ng-submit="initializeVigenereForm.$valid && vigenereCtrl.initializeDecryptProblem()" novalidate>
+<form name="initializeVigenereForm" ng-controller="VigenereCtrl" ng-submit="initializeVigenereForm.$valid && initializeDecryptProblem()" novalidate>
 	<div class="form-group">
 		<label>Autoevaluación</label>
 		<div class="input-group">
 			<div id="radioBtn" class="btn-group">
-				<a class="btn btn-primary btn-sm" ng-class="{ 'active' : vigenereCtrl.vigenere.withAutoEvaluation, 'notActive' : !vigenereCtrl.vigenere.withAutoEvaluation }" ng-click="vigenereCtrl.enableAutoEvaluation()">Si</a>
-				<a class="btn btn-primary btn-sm" ng-class="{ 'active' : !vigenereCtrl.vigenere.withAutoEvaluation, 'notActive' : vigenereCtrl.vigenere.withAutoEvaluation }" ng-click="vigenereCtrl.disableAutoEvaluation()">No</a>
+				<a class="btn btn-primary btn-sm" ng-class="{ 'active' : vigenere.withAutoEvaluation, 'notActive' : !vigenere.withAutoEvaluation }" ng-click="enableAutoEvaluation()">Si</a>
+				<a class="btn btn-primary btn-sm" ng-class="{ 'active' : !vigenere.withAutoEvaluation, 'notActive' : vigenere.withAutoEvaluation }" ng-click="disableAutoEvaluation()">No</a>
 			</div>
 		</div>
-		<input type="hidden" id="withAutoEvaluation" ng-model="vigenereCtrl.vigenere.withAutoEvaluation"/>
+		<input type="hidden" id="withAutoEvaluation" ng-model="vigenere.withAutoEvaluation"/>
 	</div>
 	<div class="form-group">
 		<label for="key">Clave</label>

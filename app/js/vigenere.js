@@ -6,43 +6,43 @@ define(['angular', 'angular-route'], function(angular) {
 	});
 	
 	app.controller('VigenereCtrl', function($scope, $location) {
-		this.vigenere = { withAutoEvaluation: true };
+		$scope.vigenere = function() {
+			var vigenere;
+			try {
+				vigenere = Vigenere;
+			}
+			catch(e) {
+				vigenere = { withAutoEvaluation: true };
+			}
+			console.log(vigenere);
+			return vigenere;
+		}();
 		
-		this.enableAutoEvaluation = function () {
-			console.log("enableAutoEvaluation");
-			this.vigenere.withAutoEvaluation = true;
+		$scope.enableAutoEvaluation = function () {
+			$scope.vigenere.withAutoEvaluation = true;
 		}
 		
-		this.disableAutoEvaluation = function () {
-			console.log("disableAutoEvaluation");
-			this.vigenere.withAutoEvaluation = false;
+		$scope.disableAutoEvaluation = function () {
+			$scope.vigenere.withAutoEvaluation = false;
 		}
 		
-		this.initializeProblem = function() {
+		$scope.initializeProblem = function() {
 			Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.text);
-			Vigenere.withAutoEvaluation = this.vigenere.withAutoEvaluation;
-
-			console.log("sds");
-			console.log(Vigenere);
+			Vigenere.withAutoEvaluation = $scope.vigenere.withAutoEvaluation;
 
 			$location.url('/vigenere/step-by-step');
-			
-			//this.vigenere = {}; //Esto borra el formulario, lo resetea. Deberia hacerse al cambiar de algoritmo o reiniciar la ejecucion
 		};
 		
-		this.initializeDecryptProblem = function() {
+		$scope.initializeDecryptProblem = function() {
 			Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.text).setDecrypt(); 
-			Vigenere.withAutoEvaluation = this.vigenere.withAutoEvaluation;
-
-			console.log("sds");
-			console.log(Vigenere);
+			Vigenere.withAutoEvaluation = $scope.vigenere.withAutoEvaluation;
 
 			$location.url('/vigenere/decrypt/step-by-step');
 		};
 	});
 	
 	app.controller('VigenereCtrl2', function($scope, $location) {
-		this.vigenere = function() {
+		$scope.vigenere = function() {
 			var vigenere;
 			
 			try {
@@ -54,12 +54,12 @@ define(['angular', 'angular-route'], function(angular) {
 			return vigenere;
 		}();
 		
-		this.isAutoEvaluation = function() {
-			return typeof this.vigenere != undefined && this.vigenere.withAutoEvaluation;
+		$scope.isAutoEvaluation = function() {
+			return typeof $scope.vigenere != undefined && $scope.vigenere.withAutoEvaluation;
 		};
 		
-		this.isInitilized = function() {
-			var isInitialized = !(typeof this.vigenere == undefined || this.vigenere == null);
+		$scope.isInitilized = function() {
+			var isInitialized = !(typeof $scope.vigenere == undefined || $scope.vigenere == null);
 			if(!isInitialized) {
 				$location.url('/vigenere');
 				return false;
@@ -67,27 +67,43 @@ define(['angular', 'angular-route'], function(angular) {
 			return true;
 		}
 		
-		this.isValid = function(encriptedChar) {
-			return typeof this.vigenere != undefined && this.vigenere.nextStepResult() == encriptedChar;
+		$scope.isValid = function(encriptedChar) {
+			return typeof $scope.vigenere != undefined && $scope.vigenere.nextStepResult() == encriptedChar;
 		};
 		
-		this.nextStep = function() {
-			if(typeof this.vigenere != undefined) {		
-				if(this.vigenere.nextStepResult() == $('#stepAttemp').val() || !this.vigenere.withAutoEvaluation) {
-					this.vigenere.goForward();		
+		$scope.nextStep = function() {
+			if(typeof $scope.vigenere != undefined) {		
+				if($scope.vigenere.nextStepResult() == $('#stepAttemp').val() || !$scope.vigenere.withAutoEvaluation) {
+					$scope.vigenere.goForward();		
 				}
-				this.vigenere.stepAttemp = "";
+				$scope.vigenere.stepAttemp = "";
 				$('#stepAttemp').val("");
-				if(this.vigenere._isEncrypt == true)
+				if($scope.vigenere._isEncrypt == true)
 					$location.url('/vigenere/step-by-step');
 				else
 					$location.url('/vigenere/decrypt/step-by-step');
 			}
 		};
 		
-		this.isFinished = function () {
-			return typeof this.vigenere != undefined && this.vigenere.isFinished();
+		$scope.isFinished = function () {
+			return typeof $scope.vigenere != undefined && $scope.vigenere.isFinished();
 		};
+
+		$scope.toEncript = function() {
+			if(typeof $scope.vigenere != undefined) {	
+				Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.result).setEncrypt();
+				Vigenere.withAutoEvaluation = $scope.vigenere.withAutoEvaluation;
+				$location.url('/vigenere');
+			}
+		}
+
+		$scope.toDecript = function() {
+			if(typeof $scope.vigenere != undefined) {	
+				Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.result).setDecrypt();
+				Vigenere.withAutoEvaluation = $scope.vigenere.withAutoEvaluation;
+				$location.url('/vigenere/decrypt');
+			}
+		}
 	});
 	
 	app.directive('vigenereCommon', function() {
