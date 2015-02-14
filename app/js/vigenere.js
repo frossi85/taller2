@@ -9,16 +9,22 @@ define(['angular', 'angular-route'], function(angular) {
 		this.vigenere = { withAutoEvaluation: true };
 		
 		this.enableAutoEvaluation = function () {
+			console.log("enableAutoEvaluation");
 			this.vigenere.withAutoEvaluation = true;
 		}
 		
 		this.disableAutoEvaluation = function () {
+			console.log("disableAutoEvaluation");
 			this.vigenere.withAutoEvaluation = false;
 		}
 		
 		this.initializeProblem = function() {
 			Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.text);
-			Vigenere.withAutoEvaluation = $scope.vigenere.withAutoEvaluation;
+			Vigenere.withAutoEvaluation = this.vigenere.withAutoEvaluation;
+
+			console.log("sds");
+			console.log(Vigenere);
+
 			$location.url('/vigenere/step-by-step');
 			
 			//this.vigenere = {}; //Esto borra el formulario, lo resetea. Deberia hacerse al cambiar de algoritmo o reiniciar la ejecucion
@@ -26,7 +32,11 @@ define(['angular', 'angular-route'], function(angular) {
 		
 		this.initializeDecryptProblem = function() {
 			Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.text).setDecrypt(); 
-			Vigenere.withAutoEvaluation = $scope.vigenere.withAutoEvaluation;
+			Vigenere.withAutoEvaluation = this.vigenere.withAutoEvaluation;
+
+			console.log("sds");
+			console.log(Vigenere);
+
 			$location.url('/vigenere/decrypt/step-by-step');
 		};
 	});
