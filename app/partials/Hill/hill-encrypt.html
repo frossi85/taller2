@@ -10,7 +10,7 @@
 	</ul>
 	</p>
 
-	<div ng-show="!encCtrl._withAutoEvaluation" class="container-fluid animate-show">
+	<div ng-show="!evaluacion" class="container-fluid animate-show">
 	<div class="row">
 	<div class="col-md-6">
 	<h4>Variables</h4>
@@ -52,18 +52,18 @@
 			<label>Modo Autoevaluación</label>
 			<div class="input-group">
 				<div id="radioBtn" class="btn-group">
-					<a class="btn btn-primary btn-sm" ng-disabled="encCtrl.start" ng-class="{ 'active' : encCtrl._withAutoEvaluation, 'notActive' : !encCtrl._withAutoEvaluation }" ng-click="encCtrl.auto(true)">Si</a>
-					<a class="btn btn-primary btn-sm" ng-disabled="encCtrl.start" ng-class="{ 'active' : !encCtrl._withAutoEvaluation, 'notActive' : encCtrl._withAutoEvaluation }" ng-click="encCtrl.auto(false)">No</a>
+					<a class="btn btn-primary btn-sm" ng-disabled="start" ng-class="{ 'active' : evaluacion, 'notActive' : !evaluacion }" ng-click="encCtrl.auto(true)">Si</a>
+					<a class="btn btn-primary btn-sm" ng-disabled="start" ng-class="{ 'active' : !evaluacion, 'notActive' : evaluacion }" ng-click="encCtrl.auto(false)">No</a>
 				</div>
 			</div>
 		</div>
 
 		<div class="form-group" ng-class="{'has-error': hillForm.key.$invalid}">
 			<label class="control-label" for="key">Clave</label>
-			<input name="key" type="text" class="form-control" ng-model="key" id="key" placeholder="Ingresar clave" ng-pattern="/^[a-z]*$/" ng-minlength="4" ng-maxlength="4" required>
+			<input ng-disabled="start" name="key" type="text" class="form-control" ng-model="key" id="key" placeholder="Ingresar clave" ng-pattern="/^[a-z]*$/" ng-minlength="clave_length*clave_length" ng-maxlength="clave_length*clave_length" required>
 			<p class="help-block">
 				<strong ng-show="hillForm.key.$error.required">El campo debe estar completado.<br/></strong>
-				<strong ng-show="(hillForm.key.$error.minlength || hillForm.key.$error.maxlength)">La clave debe tener 4 caracteres.<br/></strong>
+				<strong ng-show="(hillForm.key.$error.minlength || hillForm.key.$error.maxlength)">La clave debe tener {{ clave_length * clave_length }} caracteres.<br/></strong>
 				<strong ng-show="hillForm.key.$error.pattern">El texto ingresado contiene caracteres inválidos.<br/></strong>
 				Escriba un texto que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin espacios, saltos de linea o caracteres especiales
 			</p>
@@ -71,17 +71,18 @@
 
 		<div class="form-group" ng-class="{'has-error': hillForm.plaintext.$invalid}">
 			<label class="control-label" for="plaintext">Texto a cifrar</label>
-			<textarea name="plaintext" class="form-control" id="plaintext" rows="3" ng-model="plaintext" ng-pattern="/^[a-z]*$/" required></textarea>
+			<textarea hill-multiple="2" ng-disabled="start" name="plaintext" class="form-control" id="plaintext" rows="3" ng-model="plaintext" ng-pattern="/^[a-z]*$/" required></textarea>
 			<p class="help-block">
 				<strong ng-show="hillForm.plaintext.$error.required">El campo debe estar completado.<br/></strong>
 				<strong ng-show="hillForm.plaintext.$error.pattern">El texto ingresado contiene caracteres inválidos.<br/></strong>
+				<strong ng-show="hillForm.plaintext.$error.hillMultiple">La longitud del texto debe ser multiplo de {{clave_length}}.<br/></strong>
 				Escriba un texto que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin espacios, saltos de linea o caracteres especiales
 			</p>
 		</div>
 
-		<input class="btn btn-default" ng-disabled="!hillForm.$valid" ng-show="!encCtrl.start" type="submit" value="Empezar"/>
-		<input class="btn btn-default" ng-show="encCtrl.start" type="button" ng-click="encCtrl.next()" value="Siguiente"/>
-		<input class="btn btn-default" ng-show="encCtrl.start" type="button" ng-click="encCtrl.finish()" value="Terminar"/>
+		<input class="btn btn-default" ng-disabled="!hillForm.$valid" ng-show="!start" type="submit" value="Empezar"/>
+		<input class="btn btn-default" ng-show="start" type="button" ng-click="encCtrl.next()" value="Siguiente"/>
+		<input class="btn btn-default" ng-show="start" type="button" ng-click="encCtrl.finish()" value="Terminar"/>
 
 		<div>&nbsp;</div>
 		<table>
@@ -89,78 +90,52 @@
 				<td>
 					<div class="form-group">
 						<label class="control-label" for="key">Clave</label>
-								<table>
-								  <tr>
-								  	<td>
-											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a0" id="key">
-								  	</td>
-								  	<td>
-											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a1" id="key">
-								  	</td>
-							  	</tr>
-								  <tr>
-								  	<td>
-											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a2" id="key">
-								  	</td>
-								  	<td>
-											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a3" id="key">
-								  	</td>
-							  	</tr>
-						  	</table>
+						<table>
+						  <tr ng-repeat="row in clave track by $index">
+						  	<td ng-repeat="col in row track by $index">
+									<input ng-disabled="!evaluacion" name="clave[{{$parent.$index}}][{{$index}}]" type="text" class="form-control" ng-model="clave[$parent.$index][$index]">
+						  	</td>
+					  	</tr>
+				  	</table>
 			  		</div>
   				</td>
   				<td style="position:relative; bottom: -8px;">&nbsp;*&nbsp;</td>
   				<td>
 						<div class="form-group">
 							<label class="control-label">Vector</label>
-								<table>
-								  <tr>
-								  	<td>
-											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a11" id="key">
-								  	</td>
-							  	</tr>
-								  <tr>
-								  	<td>
-											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a21" id="key">
-								  	</td>
-							  	</tr>
-						  	</table>
+							<table>
+							  <tr ng-repeat="row in vector track by $index">
+							  	<td>
+										<input ng-disabled="!evaluacion" name="vector[{{$index}}]" type="text" class="form-control" ng-model="vector[$index]">
+							  	</td>
+						  	</tr>
+					  	</table>
 			  		</div>
   				</td>
   				<td style="position:relative; bottom: -6px;">&nbsp;=&nbsp;</td>
 					<td>
 						<div class="form-group">
 							<label class="control-label">Parcial</label>
-								<table>
-								  <tr>
-								  	<td>
-											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a11" id="key">
-								  	</td>
-							  	</tr>
-								  <tr>
-								  	<td>
-											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a21" id="key">
-								  	</td>
-							  	</tr>
-						  	</table>
+							<table>
+							  <tr ng-repeat="row in parcial track by $index">
+							  	<td>
+										<input ng-disabled="!evaluacion" name="parcial[{{$index}}]" type="text" class="form-control" ng-model="parcial[$index]">
+							  	</td>
+						  	</tr>
+					  	</table>
 			  		</div>
   				</td>
   				<td style="position:relative; bottom: -6px;">&nbsp;mod 26&nbsp;</td>
 					<td>
 						<div class="form-group">
 							<label class="control-label">&nbsp;</label>
-								<table>
-								  <tr>
-								  	<td>
-											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a11" id="key">
-								  	</td>
-							  	</tr>
-								  <tr>
-								  	<td>
-											<input ng-disabled="!encCtrl._withAutoEvaluation" name="clave11" type="text" class="form-control" ng-model="hill.clave.a21" id="key">
-								  	</td>
-							  	</tr>
-						  	</table>
+							<table>
+							  <tr ng-repeat="row in cipher track by $index">
+							  	<td>
+										<input ng-disabled="!evaluacion" name="cipher[{{$index}}]" type="text" class="form-control" ng-model="cipher[$index]">
+							  	</td>
+						  	</tr>
+					  	</table>
 			  		</div>
   				</td>
   			</tr>
@@ -168,7 +143,7 @@
 
 		<div class="form-group">
 			<label class="control-label">Resultado</label>
-			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="result" class="form-control" id="result" rows="3" ng-model="result" ng-pattern="/^[a-z]*$/"></textarea>
+			<textarea ng-disabled="!evaluacion" name="result" class="form-control" id="result" rows="3" ng-model="result" ng-pattern="/^[a-z]*$/"></textarea>
 		</div>
 
 	</form>
