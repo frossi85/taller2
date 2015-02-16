@@ -82,9 +82,14 @@
 
 		<input class="btn btn-default" ng-disabled="!hillForm.$valid" ng-show="!start" type="submit" value="Empezar"/>
 		<input class="btn btn-default" ng-show="start" type="button" ng-click="encCtrl.next()" value="Siguiente"/>
-		<input class="btn btn-default" ng-show="start" type="button" ng-click="encCtrl.finish()" value="Terminar"/>
+		<input class="btn btn-default" ng-show="start" type="button" ng-click="encCtrl.finish()" value="{{ evaluacion ? 'Salir de la evalución' : 'Terminar' }}"/>
 
 		<div>&nbsp;</div>
+
+		<div class="alert alert-danger" ng-show="evaluacion && error" role="alert">
+			{{ error }}
+		</div>
+
 		<table>
 			<tr>
 				<td>
@@ -146,5 +151,52 @@
 			<textarea ng-disabled="!evaluacion" name="result" class="form-control" id="result" rows="3" ng-model="result" ng-pattern="/^[a-z]*$/"></textarea>
 		</div>
 
+		<div ng-show="finish" class="alert alert-success" role="alert">El algoritmo ha finalzado correctamente!</div>
+
 	</form>
-</div>
+
+	<div ng-show="evaluacion" class="form-group animate-show">
+		<label class="control-label">Herramientas</label>
+		<div class="row">
+			<div class="col-sm-3">
+				Código equivalente al caracter
+			</div>
+			<div class="col-sm-1">
+				<input type="text" class="form-control" ng-model="chr" ng-pattern="/^[a-z]*$/">
+			</div>
+			<div class="col-sm-1">
+			=
+			</div>
+			<div class="col-sm-1">
+				<input type="text" class="form-control" value="{{ chr ? encCtrl.toCode(chr, 0) : '' }}">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-3">
+				Caracter equivalente al código
+			</div>
+			<div class="col-sm-1">
+				<input type="number" class="form-control" ng-model="code" min="0" max="25"/>
+			</div>
+			<div class="col-sm-1">
+			=
+			</div>
+			<div class="col-sm-1">
+				<input type="text" class="form-control" value="{{ code >= 0 ? encCtrl.fromCode(code) : '' }}">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-3">
+				Módulo 26 de
+			</div>
+			<div class="col-sm-1">
+				<input type="number" class="form-control" ng-model="mod"/>
+			</div>
+			<div class="col-sm-1">
+			=
+			</div>
+			<div class="col-sm-1">
+				<input type="text" class="form-control" value="{{ mod ? mod % 26 : '' }}">
+			</div>
+		</div>
+	</div>
