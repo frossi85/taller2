@@ -8,6 +8,7 @@ requirejs.config({
   baseUrl: './js',
 
   paths: {
+    'mathutils': 'mathutils',
     'bootstrap': '../lib/bootstrap.min',
     'jquery': '../lib/jquery.min',
     'angular': '../lib/angular.min',
@@ -27,6 +28,10 @@ requirejs.config({
 
     'angular-animate': {
       deps: ['angular']
+    },
+
+    'hill' : {
+      deps: ['mathutils']
     }
 
   }

@@ -2,13 +2,13 @@
 <p>Para el cifrado se utiliza el abecedario inglés, el cual solo incluye letras de la 'a' a la 'z' sin incluir la 'ñ'. Los espacios, vocales tildadas, mayúsculas, dígitos, símbolos y retornos de linea no están permitidos. De esta manera tenemos un alfabeto de 26 caracteres.</p>
 <p>Para cifrar el mensaje escrito en el alfabeto antes mencionado, se necesita una matriz de cifrado que debe cumplir las siguientes condiciones:<br>
 <ul>
-	<li>La matriz debe ser de 2x2 o 3x3, podría ser más grande pero complica los cálculos.</li>
-	<li>La matriz debe estar formada por números naturales</li>
-	<li>La matriz debe ser inversible en módulo 26. Es decir <em>det(K) mod 26 = 1</em></li>
+  <li>La matriz debe ser de 2x2 o 3x3, podría ser más grande pero complica los cálculos.</li>
+  <li>La matriz debe estar formada por números naturales</li>
+  <li>La matriz debe ser inversible en módulo 26. Es decir <em>det(K) mod 26 = 1</em></li>
 </ul>
 </p>
 
 <div ng-controller="HillCtrl as homeCtrl">
-	<button class="btn btn-primary" ng-click="homeCtrl.toEncrypt()">Ir a Cifrado</button>
-	<button class="btn btn-primary" ng-click="homeCtrl.toDecrypt()">Ir a Descifrado</button>
+  <button class="btn btn-primary" ng-click="homeCtrl.toEncrypt()">Ir a Cifrado</button>
+  <button class="btn btn-primary" ng-click="homeCtrl.toDecrypt()">Ir a Descifrado</button>
 </div>
