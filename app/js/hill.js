@@ -1,5 +1,6 @@
 define(['angular', 'angular-route', 'angular-animate'], function(angular) {
   var app = angular.module('hill', ['ngAnimate']).constant('HILL_CLAVE', 2);
+
   app.factory('hillService', function() {
     return {
       toCode: function(string, pos) {
@@ -20,7 +21,7 @@ define(['angular', 'angular-route', 'angular-animate'], function(angular) {
       link: function(scope, elm, attrs, ctrl) {
         ctrl.$validators.hillMultiple = function(modelValue, viewValue) {
           var valid = true;;
-          if (!ctrl.$valid) {
+          if (!ctrl.$valid && !ctrl.$error.hillMultiple) {
             return valid;
           }
           if (viewValue.length % scope.clave_length != 0) {
