@@ -39,8 +39,9 @@ define(['angular', 'angular-route'], function(angular) {
 
 
 	app.controller('AfinEncryptCtrl', function($scope, $location, Data) {
+		
 		this.z26 = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
-		this._withAutoEvaluation = false;
+
 		this.start = false;
 		this.step = 0;
 		this.end = false;
@@ -64,7 +65,13 @@ define(['angular', 'angular-route'], function(angular) {
 		$scope.totalError = 0;
 		$scope.totalOk = 0;
 
-		this._withAutoEvaluation = Data._withAutoEvaluation
+		if( typeof(Data._withAutoEvaluation) == 'undefined'){
+			this._withAutoEvaluation = false;
+		}
+		else{
+			this._withAutoEvaluation = Data._withAutoEvaluation;
+		}
+		
 
 		this.init = function() {
 
@@ -124,7 +131,7 @@ define(['angular', 'angular-route'], function(angular) {
 		}
 
 		this.finish = function() {
-
+		
 			if(this._withAutoEvaluation == false){
 				this.finishStep();
 			}
@@ -194,14 +201,31 @@ define(['angular', 'angular-route'], function(angular) {
 				}				
 			}
 
-			if($scope.parcial != result || $scope.parcial == ''){
-				$scope.parcialError = true;
+			if(($scope.parcial != result) || ($scope.parcial == '' && result != "")){
+
+				temp = $scope.parcial.toString().replace(/\s+/g, '');
+				result = result.toString().replace(/\s+/g, '');
+				
+				if(temp != result){
+					$scope.parcialError = true;
+				}
+				else{
+					$scope.parcialError = false;
+					$scope.result += result;
+					$scope.hideParcial = true;
+					$scope.descifrar = true;
+					this.step = 0;
+
+					this.start = false;
+					this.end = true;
+				}
 			}
 			else{
 				$scope.parcialError = false;
 				$scope.result += result;
 				$scope.hideParcial = true;
 				$scope.descifrar = true;
+				this.step = 0;
 
 				this.start = false;
 				this.end = true;
@@ -221,6 +245,7 @@ define(['angular', 'angular-route'], function(angular) {
 			this.char = $scope.plaintext.charAt(this.step);			
 			var A= parseInt($scope.keyA);
 			var B= parseInt($scope.keyB);
+
 
 			if(this.char != " "){
 				M = this.getPos(this.char);
@@ -312,7 +337,7 @@ define(['angular', 'angular-route'], function(angular) {
 	app.controller('AfinDecryptCtrl', function($scope, $location, Data) {
 
 		this.z26 = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
-		this._withAutoEvaluation = false;
+		
 		this.start = false;
 		this.step = 0;
 		this.end = false;
@@ -329,7 +354,6 @@ define(['angular', 'angular-route'], function(angular) {
 		$scope.keyA = Data.keyA;
 		$scope.keyB = Data.keyB;
 		$scope.plaintext = Data.plaintext;
-		console.log("inicio " + Data._withAutoEvaluation);
 		
 		$scope.parcialError = false;
 
@@ -337,7 +361,12 @@ define(['angular', 'angular-route'], function(angular) {
 		$scope.totalError = 0;
 		$scope.totalOk = 0;
 
-		this._withAutoEvaluation = Data._withAutoEvaluation
+		if( typeof(Data._withAutoEvaluation) == 'undefined'){
+			this._withAutoEvaluation = false;
+		}
+		else{
+			this._withAutoEvaluation = Data._withAutoEvaluation;
+		}
 
 		this.init = function() {
 
@@ -361,7 +390,6 @@ define(['angular', 'angular-route'], function(angular) {
 
 		this.auto = function(auto) {
 
-					console.log("inicio " + Data._withAutoEvaluation);
 			this._withAutoEvaluation = auto;
 			this.reset();
 		}
@@ -404,6 +432,8 @@ define(['angular', 'angular-route'], function(angular) {
 		this.finishStep = function() {
 			var result = '';
 
+			this.invKeyA = this.inversoMulti($scope.keyA);
+
 			for(j = this.step; j < $scope.plaintext.length; j++ ){
 	
 				this.char = $scope.plaintext.charAt(j);			
@@ -437,6 +467,8 @@ define(['angular', 'angular-route'], function(angular) {
 
 		this.finishStepEval = function() {
 			var result = '';
+			
+			this.invKeyA = this.inversoMulti($scope.keyA);
 
 			for(j = this.step; j < $scope.plaintext.length; j++ ){
 	
@@ -459,10 +491,27 @@ define(['angular', 'angular-route'], function(angular) {
 				else{
 					result = parcial;
 				}				
+			
 			}
 
-			if($scope.parcial != result || $scope.parcial == ''){
-				$scope.parcialError = true;
+			if(($scope.parcial != result) || ($scope.parcial == '' && result != "")){
+
+				temp = $scope.parcial.toString().replace(/\s+/g, '');
+				result = result.toString().replace(/\s+/g, '');
+				
+				if(temp != result){
+					$scope.parcialError = true;
+				}
+				else{
+					$scope.parcialError = false;
+					$scope.result += result;
+					$scope.hideParcial = true;
+					$scope.cifrar = true;
+					this.step = 0;
+
+					this.start = false;
+					this.end = true;
+				}
 			}
 			else{
 				$scope.parcialError = false;
@@ -486,12 +535,7 @@ define(['angular', 'angular-route'], function(angular) {
 		
 		this.stepDeCifrado = function(){
 
-			console.log("constante A " + $scope.keyA);
-
 			this.invKeyA = this.inversoMulti($scope.keyA);
-
-			
-			console.log("inversa de A " + this.invKeyA);
 
 			this.char = $scope.plaintext.charAt(this.step);	
 			var B= parseInt($scope.keyB);

@@ -53,8 +53,8 @@
 		<div class="col-md-6">
 		<div class="form-group" ng-class="{'has-error': afinForm.keyB.$invalid}">
 			<label class="control-label" for="keyA">Constante de Cifrado - A</label>
-			<div ng-init="keyA" id="keyA" input name="keyA" type="text" ng-model="keyA" required >
-	    			<select ng-model="keyA">
+			<div ng-init="keyA" id="keyA" input name="keyA" type="text" ng-model="keyA" required  >
+	    			<select ng-model="keyA" ng-disabled="encCtrl.start">
       					<option value="1">1</option>
       					<option value="3">3</option>
 				        <option value="5">5</option>
@@ -79,7 +79,7 @@
 		<div class="form-group" ng-class="{'has-error': afinForm.keyB.$invalid}">
 			<label class="control-label" for="keyB">Clave - B</label>
 			<div ng-init="keyB" id="keyB" input name="keyB" type="text" ng-model="keyB" required >
-	    			<select ng-model="keyB">
+	    			<select ng-model="keyB" ng-disabled="encCtrl.start">
 					<option value="0">0</option>
 					<option value="1">1</option>
       					<option value="2">2</option>
@@ -118,11 +118,11 @@
 
 		<div class="form-group" ng-class="{'has-error': afinForm.plaintext.$invalid}">
 			<label class="control-label" for="plaintext">Texto a cifrar</label>
-			<textarea name="plaintext" class="form-control" id="plaintext" rows="3" ng-model="plaintext" placeholder="Ingresar Texto a cifrar" ng-pattern="/^([a-z]*)$/" required ng-disabled="encCtrl.start"></textarea>
+			<textarea name="plaintext" class="form-control" id="plaintext" rows="3" ng-model="plaintext" placeholder="Ingresar Texto a cifrar" ng-pattern="/^([a-z]*)|([ ]*)$/" required ng-disabled="encCtrl.start"></textarea>
 			<p class="help-block">
 				<strong ng-show="afinForm.plaintext.$error.required">El campo debe estar completado.<br/></strong>
 				<strong ng-show="afinForm.plaintext.$error.pattern">El texto ingresado contiene caracteres inválidos.<br/></strong>
-				Escriba un texto que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin espacios , ni saltos de linea o caracteres especiales
+				Escriba un texto que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin saltos de linea o caracteres especiales
 			</p>
 		</div>
 
@@ -136,7 +136,7 @@
 		
 		<div class="form-group">
 			<label class="control-label" ng-hide = "hideParcial">Parcial</label>
-			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="parcial" ng-hide = "hideParcial" class="form-control" id="parcial" rows="3" ng-model="parcial" ng-pattern="/^([a-z]*)$/"></textarea>
+			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="parcial" ng-hide = "hideParcial" class="form-control" id="parcial" rows="3" ng-model="parcial" ng-pattern="/^([a-z]*)|([ ]*)$/"></textarea>
 			<p ng-show="parcialError"><b>El valor ingresado es incorrecto.</b></p>
 		</div>
 

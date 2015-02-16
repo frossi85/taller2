@@ -54,7 +54,7 @@
 		<div class="form-group" ng-class="{'has-error': afinForm.keyB.$invalid}">
 			<label class="control-label" for="keyA">Constante de Cifrado - A</label>
 			<div ng-init="keyA" id="keyA" input name="keyA" type="text" ng-model="keyA" required >
-	    			<select ng-model="keyA" >
+	    			<select ng-model="keyA" ng-disabled="encCtrl.start">
       					<option value="1">1</option>
       					<option value="3">3</option>
 				        <option value="5">5</option>
@@ -79,7 +79,7 @@
 		<div class="form-group" ng-class="{'has-error': afinForm.keyB.$invalid}">
 			<label class="control-label" for="keyB">Clave - B</label>
 			<div ng-init="keyB" id="keyB" input name="keyB" type="text" ng-model="keyB" required >
-	    			<select ng-model="keyB">
+	    			<select ng-model="keyB" ng-disabled="encCtrl.start">
 					<option value="0">0</option>
 					<option value="1">1</option>
       					<option value="2">2</option>
