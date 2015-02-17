@@ -57,6 +57,9 @@ define(['angular', 'angular-route'], function(angular) {
 		$scope.resultValue = '';
 		$scope.plaintextValue = '';
 
+		$scope.hideResult = true;
+		$scope.hideKeyStream = true;
+
 		this.init = function() {
 	
 			$scope.parcial= '';
@@ -67,6 +70,9 @@ define(['angular', 'angular-route'], function(angular) {
 			$scope.showPGRA = false;
 			$scope.showKSA = true;
 			$scope.parcialError = false;
+
+			$scope.hideResult = false;
+			$scope.hideKeyStream = false;
 		
 			this.s = [];
 			this.ksa = false;
@@ -119,6 +125,10 @@ define(['angular', 'angular-route'], function(angular) {
 			$scope.parcialError = false;
 			$scope.resultValue = '';
 			$scope.plaintextValue = '';
+
+			
+			$scope.hideResult = true;
+			$scope.hideKeyStream = true;
 			
 
 			this.i = 0;
@@ -507,6 +517,9 @@ define(['angular', 'angular-route'], function(angular) {
 			$scope.descifrar = false;
 			$scope.resultValue = '';
 			$scope.plaintextValue = '';
+
+			$scope.hideResult = true;
+			$scope.hideKeyStream = true;
 		}
 	});
 });

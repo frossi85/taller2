@@ -65,6 +65,8 @@ define(['angular', 'angular-route'], function(angular) {
 		$scope.totalError = 0;
 		$scope.totalOk = 0;
 
+		$scope.showStatus = false;
+
 		if( typeof(Data._withAutoEvaluation) == 'undefined'){
 			this._withAutoEvaluation = false;
 		}
@@ -87,6 +89,7 @@ define(['angular', 'angular-route'], function(angular) {
 			this.end = false;
 			this.char = '';
 			this.M = 0;
+			$scope.showStatus = false;
 
 			if(this._withAutoEvaluation == false){
 				this.stepCifrado();
@@ -118,6 +121,7 @@ define(['angular', 'angular-route'], function(angular) {
 			$scope.total = 0;
 			$scope.totalError = 0;
 			$scope.totalOk = 0;
+			$scope.showStatus = false;
 		}
 
 		this.next = function() {
@@ -172,6 +176,7 @@ define(['angular', 'angular-route'], function(angular) {
 
 			this.start = false;
 			this.end = true;
+			$scope.showStatus = true;
 
 		}
 
@@ -208,6 +213,7 @@ define(['angular', 'angular-route'], function(angular) {
 				
 				if(temp != result){
 					$scope.parcialError = true;
+					$scope.totalError++;
 				}
 				else{
 					$scope.parcialError = false;
@@ -218,6 +224,7 @@ define(['angular', 'angular-route'], function(angular) {
 
 					this.start = false;
 					this.end = true;
+					$scope.showStatus = true;
 				}
 			}
 			else{
@@ -229,6 +236,7 @@ define(['angular', 'angular-route'], function(angular) {
 
 				this.start = false;
 				this.end = true;
+				$scope.showStatus = true;
 			}
 
 		}
@@ -361,6 +369,8 @@ define(['angular', 'angular-route'], function(angular) {
 		$scope.totalError = 0;
 		$scope.totalOk = 0;
 
+		$scope.showStatus = false;
+
 		if( typeof(Data._withAutoEvaluation) == 'undefined'){
 			this._withAutoEvaluation = false;
 		}
@@ -382,6 +392,8 @@ define(['angular', 'angular-route'], function(angular) {
 			this.end = false;
 			this.char = '';
 			this.M = 0;
+
+			$scope.showStatus = false;
 
 			if(this._withAutoEvaluation == false){
 				this.stepDeCifrado();
@@ -407,6 +419,7 @@ define(['angular', 'angular-route'], function(angular) {
 			$scope.total = 0;
 			$scope.totalError = 0;
 			$scope.totalOk = 0;
+			$scope.showStatus = false;
 		}
 
 		this.next = function() {
@@ -463,6 +476,7 @@ define(['angular', 'angular-route'], function(angular) {
 
 			this.start = false;
 			this.end = true;
+			$scope.showStatus = true;
 		}
 
 		this.finishStepEval = function() {
@@ -511,6 +525,7 @@ define(['angular', 'angular-route'], function(angular) {
 
 					this.start = false;
 					this.end = true;
+					$scope.showStatus = true;
 				}
 			}
 			else{
@@ -521,6 +536,7 @@ define(['angular', 'angular-route'], function(angular) {
 
 				this.start = false;
 				this.end = true;
+				$scope.showStatus = true;
 			}
 		}
 

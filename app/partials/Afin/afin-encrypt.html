@@ -137,12 +137,15 @@
 		<div class="form-group">
 			<label class="control-label" ng-hide = "hideParcial">Parcial</label>
 			<textarea ng-disabled="!encCtrl._withAutoEvaluation" name="parcial" ng-hide = "hideParcial" class="form-control" id="parcial" rows="3" ng-model="parcial" ng-pattern="/^([a-z]*)|([ ]*)$/"></textarea>
+			<p ng-hide="hideParcial">Valor obtenido en el paso actual del algoritmo</p>
 			<p ng-show="parcialError"><b>El valor ingresado es incorrecto.</b></p>
 		</div>
 
 		<div class="form-group">
 			<label class="control-label" ng-hide = "hideResult">Resultado</label>
 			<textarea ng-disabled=true name="result" class="form-control" ng-hide = "hideResult" id="result" rows="3" ng-model="result" ></textarea>
+			<p ng-hide="hideResult">Valor del resultado actual del proceso de cifrado</p>
+			<p ng-show="showStatus">Fin del cifrado del texto ingresado. Seleccione "Empezar" para volver a realizar el proceso o "Descifrar Resultado" para realizar el proceso inverso con el resultado obtenido</p>
 		</div>
 
 

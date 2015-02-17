@@ -100,6 +100,7 @@
 			<div class="col-md-6">
 				<label class="control-label" for="plaintext">Texto a cifrar - Valores</label>
 				<textarea name="plaintextValue" class="form-control" id="plaintextValue" rows="3" ng-model="plaintextValue" ng-disabled= true></textarea>
+				<p>Visualización de los valores en el alfabeto para los caracteres del texto ingresado.</p>
 			</div>
 			</div>			
 		</div>
@@ -120,22 +121,26 @@
 		</div>
 
 		<div class="form-group">
-			<label class="control-label">KeyStream</label>
-			<textarea ng-disabled=true name="ksa" class="form-control" id="ksa" rows="6" ng-model="ksa"></textarea>
+			<label class="control-label" ng-hide = "hideKeyStream">KeyStream</label>
+			<textarea ng-disabled=true name="ksa" class="form-control" ng-hide = "hideKeyStream" id="ksa" rows="6" ng-model="ksa"></textarea>
+			<p ng-hide="hideKeyStream">Valor del resultado final del proceso de obtención del KeyStream para el cifrado</p>
 		</div>
 
 		<div class="form-group">
 			<div class="row">
 			<div class="col-md-6">
-				<label class="control-label">Resultado Cifrado</label>
-				<textarea ng-disabled=true name="result" class="form-control" id="result" rows="4" ng-model="result" ></textarea>
+				<label class="control-label" ng-hide = "hideResult">Resultado Cifrado</label>
+				<textarea ng-disabled=true name="result" class="form-control" ng-hide = "hideResult" id="result" rows="4" ng-model="result" ></textarea>
+				<p ng-hide="hideResult">Valor del resultado actual del proceso de cifrado</p>
 			</div>
 			<div class="col-md-6">	
-				<label class="control-label">Resultado Cifrado - Valores</label>
-				<textarea ng-disabled=true name="resultValue" class="form-control" id="resultValue" rows="4" ng-model="resultValue" ></textarea>
-			
+				<label class="control-label" ng-hide = "hideResult">Resultado Cifrado - Valores</label>
+				<textarea ng-disabled=true name="resultValue" class="form-control" ng-hide = "hideResult" id="resultValue" rows="4" ng-model="resultValue" ></textarea>
+				<p ng-hide="hideResult">Visualización de los valores en el alfabeto para los caracteres del resultado</p>
 			</div>
 			</div>
+
+			<p ng-show="showStatus">Fin del cifrado del texto ingresado. Seleccione "Empezar" para volver a realizar el proceso o "Descifrar Resultado" para realizar el proceso inverso con el resultado obtenido</p>
 		</div>
 
 	</form>
