@@ -2,7 +2,7 @@
 
 <div ng-controller="NlfsrCtrl as nlfsrCtrl">
 
-	<form name="parametros" ng-submit="parametros.$valid && nlfsrCtrl.initializeProblem()" novalidate ng-hide="nlfsrCtrl.isInitialized()">
+	<form name="parametros" ng-submit="parametros.$valid && nlfsrCtrl.isFunctionOk(nlfsr.function) &&nlfsrCtrl.initializeProblem()" novalidate ng-show="!nlfsrCtrl.isInitialized()">
 
 		<intro></intro>
 
@@ -18,7 +18,7 @@
 
 		<h2>Parametros iniciales</h2>
 
-		<div class="form-group" ng-class="{'has-error': parametros.key.$invalid, 'has-success': parametros.key.$invalid } ">
+		<div class="form-group" ng-class="{'has-error': parametros.key.$invalid, 'has-success': parametros.key.$valid } ">
 		<label class="control-label" for="key">Clave</label>
 			<input name="key" type="text" class="form-control" ng-model="nlfsr.key" id="key" placeholder="Ingresar clave binaria" ng-pattern="/^[0,1]*$/" required>
 			<p class="help-block">
@@ -28,18 +28,18 @@
 			</p>
 		</div>
 
-		<div class="form-group" ng-class="{'has-error': !nlfsrCtrl.isFunctionOk(nlfsr.function)}">
+		<div class="form-group" ng-class="{'has-error': !nlfsrCtrl.isFunctionOk(nlfsr.function), 'has-success': nlfsrCtrl.isFunctionOk(nlfsr.function)}">
 			<label class="control-label" for="funcion">Función de realimentación</label>
 			<input name= "funcion" type="text" class="form-control" ng-model="nlfsr.function" ng-init="nlfsr.function=''" id="funcion"  required readonly="true">
 
-			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.addAn(nlfsr.function);" ng-disabled="nlfsrCtrl.isDisableAn">An</button>
-			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.addAND(nlfsr.function)" ng-disabled="nlfsrCtrl.isDisableAND">AND</button>
-			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.addOR(nlfsr.function)" ng-disabled="nlfsrCtrl.isDisableOR">OR</button>
-			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.addXOR(nlfsr.function)" ng-disabled="nlfsrCtrl.isDisableXOR">XOR</button>
-			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.addNOT(nlfsr.function)" ng-disabled="nlfsrCtrl.isDisableNOT">NOT</button>
-			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.addBrac(nlfsr.function)" ng-disabled="nlfsrCtrl.isDisableBrac">(</button>
-			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.addBrac2(nlfsr.function)"ng-disabled="nlfsrCtrl.isDisableBrac2">)</button>
-			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.erase(nlfsr.function)" ng-disabled="nlfsrCtrl.isDisableErase">Borrar</button>
+			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.calcCtrl.addAn(nlfsr.function);" ng-disabled="nlfsrCtrl.calcCtrl.isDisableAn">An</button>
+			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.calcCtrl.addAND(nlfsr.function)" ng-disabled="nlfsrCtrl.calcCtrl.isDisableAND">AND</button>
+			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.calcCtrl.addOR(nlfsr.function)" ng-disabled="nlfsrCtrl.calcCtrl.isDisableOR">OR</button>
+			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.calcCtrl.addXOR(nlfsr.function)" ng-disabled="nlfsrCtrl.calcCtrl.isDisableXOR">XOR</button>
+			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.calcCtrl.addNOT(nlfsr.function)" ng-disabled="nlfsrCtrl.calcCtrl.isDisableNOT">NOT</button>
+			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.calcCtrl.addBrac(nlfsr.function)" ng-disabled="nlfsrCtrl.calcCtrl.isDisableBrac">(</button>
+			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.calcCtrl.addBrac2(nlfsr.function)"ng-disabled="nlfsrCtrl.calcCtrl.isDisableBrac2">)</button>
+			<button class="btn btn-default" ng-click="nlfsr.function = nlfsrCtrl.calcCtrl.erase(nlfsr.function)" ng-disabled="nlfsrCtrl.calcCtrl.isDisableErase">Borrar</button>
 
 			<p class="help-block">
 				<strong ng-show="!nlfsrCtrl.isFunctionOk(nlfsr.function)">El campo debe estar completado.<br/></strong>
@@ -47,41 +47,34 @@
 			</p>
 		</div>
 	
-		<div class="form-group" ng-class="{'has-error': parametros.text.$invalid, 'has-success': parametros.key.$invalid}">
+		<div class="form-group" ng-class="{'has-error': parametros.text.$invalid, 'has-success': parametros.key.$valid}">
 			<label class="control-label" for="text">Texto a encriptar</label>
 			<textarea name="text" class="form-control" id="text" rows="5" ng-model="nlfsr.text" ng-pattern="/^[a-zA-Z]*$/" required></textarea>
 			<p class="help-block">
 				<strong ng-show="parametros.text.$error.required">El campo debe estar completado.<br/></strong>
 				<strong ng-show="parametros.key.$error.pattern">El texto ingresado debe contener sólo carácteres alfabeticos<br/></strong>
-
 				Escriba el texto a ser encriptado.
 			</p>
 		</div>
 	
-		<input ng-class="{ 'btn btn-success' : parametros.$valid, 'btn btn-danger' : !parametros.$valid }" ng-disabled="!parametros.$valid " type="submit" value="Empezar"/>
-			
+		<button ng-class="{ 'btn btn-success' : (parametros.$valid && nlfsrCtrl.isFunctionOk(nlfsr.function)) , 'btn btn-danger' : !(parametros.$valid && nlfsrCtrl.isFunctionOk(nlfsr.function)) }" type="submit">Inicializar</button>
 	</form>
 
 
 
 	<div class="form-group" ng-show="nlfsrCtrl.isInitialized()">
 
-		<label>Función</label>
+		
 		<div class="well">
+			<label>Función</label>
 			<p>{{nlfsrCtrl.nlfsr._function}}</p>
-		</div>
-
-		<label>Registro Actual</label>
-		<div class="well">
+			<label>Registro Actual</label>
 			<p>{{nlfsrCtrl.nlfsr._register}}</p>
-		</div>
-
-		<label>Secuencia encriptadora</label>
-		<div class="well">
+			<label>Secuencia encriptadora</label>
 			<p>{{nlfsrCtrl.nlfsr._bstream}}</p>
 		</div>
 
-		<form name="opcion" ng-submit="opcion.$valid && nlfsrCtrl.initializeProblem()" novalidate ng-show="nlfsrCtrl.withAutoEvaluation">
+		<form class="form-inline" name="opcion" ng-submit="opcion.$valid && nlfsrCtrl.initializeProblem()" novalidate ng-show="nlfsrCtrl.withAutoEvaluation">
 	
 			<div class="form-group" ng-class="{'has-error': opcion.bit.$invalid, 'has-success': opcion.bit.$invalid } ">
 			<label class="control-label" for="bit">Clave</label>
@@ -97,7 +90,7 @@
 		<button class="btn btn-primary" ng-click="nlfsrCtrl.siguiente(nlfsr.bit)" ng-disabled="nlfsrCtrl.hasFinished()">Adelante</button>
 		<button class="btn btn-success" ng-click="nlfsrCtrl.nlfsr.ejecutar()" ng-disabled="nlfsrCtrl.hasFinished()" ng-hide="nlfsrCtrl.withAutoEvaluation">Ejecutar</button>
 		<button class="btn btn-primary" ng-click="nlfsrCtrl.toggleResult()" ng-disabled="!nlfsrCtrl.hasFinished()">Ver mensaje y su encriptación</button>
-		<button class="btn btn-info" ng-click="nlfsrCtrl.toggleCalc()" ng-disabled="nlfsrCtrl.hasFinished()" ng-show="nlfsrCtrl.withAutoEvaluation">Calculadora binaria</button>
+		<button class="btn btn-info" ng-click="nlfsrCtrl.toggleCalc()" ng-show="nlfsrCtrl.withAutoEvaluation && !nlfsrCtrl.hasFinished()">Calculadora binaria</button>
 		<button class="btn btn-primary" ng-show="nlfsrCtrl.hasFinished()" ng-click="nlfsrCtrl.returnHome()">Salir</button>
 
 	</div>
@@ -105,8 +98,8 @@
 	<boolean-Calc ng-show="nlfsrCtrl.isEnableCalc"></boolean-Calc>
 
 	<div class="well" ng-show="nlfsrCtrl.isEnableResult">
-		<label>Mensaje</label>
-		<p>{{nlfsrCtrl.nlfsr._text}}</p>
+		<label>Mensaje en binario</label>
+		<p>{{nlfsrCtrl.nlfsr.textToBinary()}}</p>
 		<label>Secuencia pseudo-aleatoria de bits</label>
 		<p>{{nlfsrCtrl.nlfsr._bstream}}</p>
 		<label>Mensaje encriptado</label>

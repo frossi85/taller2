@@ -1,6 +1,10 @@
 define(['angular', 'angular-route'], function(angular) {
 	var app = angular.module('nlfsr', []);
 
+	app.factory("Nlfsr",function() {
+		return {};
+	});
+
 	app.directive('booleanCalc', function() {
 		return {
 			restrict: 'E',
@@ -15,34 +19,24 @@ define(['angular', 'angular-route'], function(angular) {
 		};
 	});
 
-	app.directive('param', function() {
-		return {
-			restrict: 'E',
-			templateUrl: 'partials/NLFSR/nlfsr-param.html',
-		};
-	});
-
-
  
 	app.controller('NlfsrCtrl', function($scope, $location) {
+		this.nlfsr = function() {
+			var nlfsr;
+			try {
+				nlfsr = Nlfsr;
+			}
+			catch(e) {
+				$location.url('/nlfsr');
+			}
+			return nlfsr;
+		}();
 
-		this.nlfsr;
+
+		this.calcCtrl = CalcController();
 		this.withAutoEvaluation = false;
 		this.isEnableCalc = false;
 		this.isEnableResult = false;
-		this.isDisableAn = true;
-		this.isDisableZero = true;
-		this.isDisableOne = true;
-		this.isDisableAND = true;
-		this.isDisableOR = true;
-		this.isDisableXOR = true;
-		this.isDisableNOT = true;
-		this.isDisableBrac = false;
-		this.isDisableBrac2 = true;
-		this.isDisableErase = true;
-		this.isDisableCalculate = true;
-		this.numBrac = 0;
-		this.bin = [false];
 		this.boolExpr = "";
 
 		this.returnHome = function() {
@@ -50,22 +44,38 @@ define(['angular', 'angular-route'], function(angular) {
 		};
 
 		this.initializeProblem = function() {
-			this.nlfsr = NLFSRLibrary($scope.nlfsr.key, $scope.nlfsr.function, $scope.nlfsr.text);
+			if  (this.checkParam($scope.nlfsr.key.length, $scope.nlfsr.function)){
+				Nlfsr = NLFSRLibrary($scope.nlfsr.key, $scope.nlfsr.function, $scope.nlfsr.text);
+				this.nlfsr = Nlfsr;
+			}
+			else{
+				alert("Hay mas variables An que el número máximo permitido por la clave: " + $scope.nlfsr.key.length);
+				return false;
+			}
 		};
 
+		this.checkParam = function(n, funcion) {
+			for(i = 9; i > n; i--){
+				if (funcion.indexOf(i) != -1)
+					return false;
+			}
+			return true;
+		}
+
+		//Chequea que la expresion ingresada no sea nula
+
 		this.isFunctionOk = function(unaFuncion) {
-			return ((unaFuncion != "") && (this.numBrac == 0))
+			return ((unaFuncion != "") && (this.calcCtrl.numBrac == 0))
 		}
 
 		this.isInitialized = function() {
 			return !(this.nlfsr == undefined || this.nlfsr == null);
-		};
+		}
 
 		this.siguiente = function(opcion) {
 			if (!this.withAutoEvaluation)
 				this.nlfsr.stepForward();
 			else {
-				console.log(opcion);
 				if (this.nlfsr.applyFunction(this.nlfsr._register, this.nlfsr._function) == Number(opcion)){
 					this.nlfsr.stepForward();
 				}
@@ -81,27 +91,14 @@ define(['angular', 'angular-route'], function(angular) {
 		};
 
 		this.hasFinished = function() {
-			if (this.nlfsr == undefined)
+			if (!this.isInitialized())
 				return false;
 			return (this.nlfsr._bstream.length == (this.nlfsr._text.length * 8));			
 		};
 
 		this.toggleCalc = function() {
+			this.calcCtrl.reset();
 			this.isEnableCalc = !this.isEnableCalc;
-			this.isDisableAn = true;
-			this.isDisableZero = true;
-			this.isDisableOne = true;
-			this.isDisableAND = true;
-			this.isDisableOR = true;
-			this.isDisableXOR = true;
-			this.isDisableNOT = true;
-			this.isDisableBrac = false;
-			this.isDisableBrac2 = true;
-			this.isDisableErase = true;
-			this.isDisableCalculate = true;
-			this.numBrac = 0;
-			this.bin[numBrac] = false;
-
 		};
 
 		this.toggleResult = function() {
@@ -109,165 +106,6 @@ define(['angular', 'angular-route'], function(angular) {
 		};
 
 
-		this.addAn = function(expr) {
-			if (expr.charAt(expr.length - 2) == "A")
-				expr = expr.slice(0, expr.length - 1) + (Number(expr.slice(expr.length - 1)) + 1);	
-			else
-				expr = expr + "A0";
-			
-			this.isDisableBrac = true;
-			this.isDisableBrac2 = false;
-			if (this.bin[this.numBrac] == false){
-				this.isDisableAND = false;
-				this.isDisableOR = false;
-				this.isDisableXOR = false;
-				this.isDisableNOT = false;
-			}
-
-
-			
-			return expr;
-		}
-
-		this.addZero = function(expr) {
-			expr = expr + "0";
-			this.isDisableZero = true;
-			this.isDisableOne = true;
-			this.isDisableBrac = true;
-			this.isDisableBrac2 = false;
-			if (this.bin[this.numBrac] == false){
-				this.isDisableAND = false;
-				this.isDisableOR = false;
-				this.isDisableXOR = false;
-				this.isDisableNOT = false;
-			}
-			return expr;
-		}
-
-		this.addOne = function(expr) {
-			expr = expr + "1";
-			this.isDisableZero = true;
-			this.isDisableOne = true;
-			this.isDisableBrac = true;
-			this.isDisableBrac2 = false;
-			if (this.bin[this.numBrac] == false){
-				this.isDisableAND = false;
-				this.isDisableOR = false;
-				this.isDisableXOR = false;
-				this.isDisableNOT = false;
-			}
-
-			return expr;
-		}
-
-		this.addAND = function(expr) {
-			expr = expr + "AND";
-			this.isDisableAn = false;
-			this.isDisableZero = false;
-			this.isDisableOne = false;
-			this.isDisableBrac = false;
-			this.isDisableAND = true;
-			this.isDisableOR = true;
-			this.isDisableXOR = true;
-			this.isDisableNOT = true;
-			this.isDisableBrac2 = true;
-			this.bin[this.numBrac] = true;
-			return expr;
-		}
-		this.addOR = function(expr) {
-			expr = expr + "OR";
-			this.isDisableAn = false;
-			this.isDisableZero = false;
-			this.isDisableOne = false;
-			this.isDisableBrac = false;
-			this.isDisableAND = true;
-			this.isDisableOR = true;
-			this.isDisableXOR = true;
-			this.isDisableNOT = true;
-			this.isDisableBrac2 = true;
-			this.bin[this.numBrac] = true;
-			return expr;
-		}
-		this.addXOR = function(expr) {
-			expr = expr + "XOR";
-			this.isDisableAn = false;
-			this.isDisableZero = false;
-			this.isDisableOne = false;
-			this.isDisableBrac = false;
-			this.isDisableAND = true;
-			this.isDisableOR = true;
-			this.isDisableXOR = true;
-			this.isDisableNOT = true;
-			this.isDisableBrac2 = true;
-			this.bin[this.numBrac] = true;
-			return expr;
-		}
-		this.addNOT = function(expr) {
-			expr = expr + "NOT";
-			this.isDisableAn = false;
-			this.isDisableZero = false;
-			this.isDisableOne = false;
-			this.isDisableBrac = false;
-			this.isDisableAND = true;
-			this.isDisableOR = true;
-			this.isDisableXOR = true;
-			this.isDisableNOT = true;
-			this.isDisableBrac2 = true;
-			this.bin[this.numBrac] = true;
-			return expr;
-		}
-		this.addBrac = function(expr) {
-			expr = expr + "(";
-			this.isDisableAn = false;
-			this.isDisableZero = false;
-			this.isDisableOne = false;
-			this.numBrac++;
-			this.bin[this.numBrac] = false;
-			this.isDisableErase = false;
-			this.isDisableNOT = false;
-			return expr;
-		}
-		this.addBrac2 = function(expr) {
-			expr = expr + ")";
-			this.bin[this.numBrac] = false;
-			this.numBrac--;
-			this.isDisableAn = true;
-			this.isDisableZero = true;
-			this.isDisableOne = true;
-
-	
-			if (this.numBrac == 0){
-				this.isDisableBrac = true;
-				this.isDisableBrac2 = true;
-				this.isDisableAND = true;
-				this.isDisableOR = true;
-				this.isDisableXOR = true;
-				this.isDisableNOT = true;
-				this.isDisableCalculate = false;
-				return expr;
-			}
-
-			if (!(this.bin[this.numBrac])) {
-				this.isDisableAND = false;
-				this.isDisableOR = false;
-				this.isDisableXOR = false;
-			}
-
-			return expr;
-		}
-		this.erase = function(expr) {
-			for(i = this.numBrac; i > 0; i--)
-				this.bin[i] = false;
-			expr = "";
-			this.isDisableErase = true;
-			this.isDisableBrac = false;
-			return expr;
-		}
-		this.calculate = function(expr) {
-			expr = expr + " = " + this.nlfsr.bc("", expr);
-			this.isDisableCalculate = true;
-			return expr;
-		}
 	});
 });
 
@@ -323,8 +161,9 @@ function NLFSRLibrary(key, funcion, textToProcess) {
 		applyFunction: function(reg, funcion) {
 			//Reemplazo las Ai en la funcion por el valor i del registro
 			for(var i = 0; i < reg.length; i++){
-				funcion = funcion.replace("A" + i, reg.charAt(i));
+				funcion = funcion.split("A" + i).join(reg.charAt(i));
 			}
+			console.log(funcion);
 			return this.bc(reg, funcion);
 			
 		},
@@ -347,13 +186,231 @@ function NLFSRLibrary(key, funcion, textToProcess) {
 			}
 		},
 
+		textToBinary: function() {
+			ret = "";
+			for(i = 0; i < this._text.length; i++){
+				car = (this._text.charCodeAt(i)).toString(2);
+				if (car.length == 7)
+					car = "0" + car;
+				ret +=  car;
+			}
+			return ret;
+		},
+
 		encriptar: function() {
 			ret = "";
 			for(i = 0; i < this._text.length; i++){
-				ret += (this._text[i]).charCodeAt(0) ^ this._bstream.slice(i*8, i*8 + 7);
+				car = (this._text.charCodeAt(i) ^ parseInt((this._bstream.slice(i*8, i*8 + 8)),2)).toString(2);
+				limit = car.length;
+				for(j = 8; j > limit; j--){
+					car = "0" + car;
+				}
+				ret += car;
 			}
-			console.log((this._text).charCodeAt());
 			return ret;
 		},
+	}
+}
+
+function CalcController() {
+	return {
+		calc: NLFSRLibrary("", "", ""),
+		isDisableAn: true,
+		isDisableZero: true,
+		isDisableOne: true,
+		isDisableAND: true,
+		isDisableOR: true,
+		isDisableXOR: true,
+		isDisableNOT: true,
+		isDisableBrac: false,
+		isDisableBrac2: true,
+		isDisableErase: true,
+		isDisableCalculate: true,
+		numBrac: 0,
+		bin: [false],
+
+		addAn: function(expr) {
+			if (expr.charAt(expr.length - 2) == "A"){
+				if (expr[expr.length - 1] != "9")
+					expr = expr.slice(0, expr.length - 1) + (Number(expr.slice(expr.length - 1)) + 1);
+				else
+					expr = expr.slice(0, expr.length - 1) + 0;
+			}
+			else
+				expr = expr + "A0";
+			
+			this.isDisableBrac = true;
+			this.isDisableBrac2 = false;
+			if (this.bin[this.numBrac] == false){
+				this.isDisableAND = false;
+				this.isDisableOR = false;
+				this.isDisableXOR = false;
+				this.isDisableNOT = false;
+			}
+			
+			return expr;
+		},
+
+		addZero: function(expr) {
+			expr = expr + "0";
+			this.isDisableZero = true;
+			this.isDisableOne = true;
+			this.isDisableBrac = true;
+			this.isDisableBrac2 = false;
+			if (this.bin[this.numBrac] == false){
+				this.isDisableAND = false;
+				this.isDisableOR = false;
+				this.isDisableXOR = false;
+				this.isDisableNOT = false;
+			}
+			return expr;
+		},
+
+		addOne: function(expr) {
+			expr = expr + "1";
+			this.isDisableZero = true;
+			this.isDisableOne = true;
+			this.isDisableBrac = true;
+			this.isDisableBrac2 = false;
+			if (this.bin[this.numBrac] == false){
+				this.isDisableAND = false;
+				this.isDisableOR = false;
+				this.isDisableXOR = false;
+				this.isDisableNOT = false;
+			}
+
+			return expr;
+		},
+
+		addAND: function(expr) {
+			expr = expr + "AND";
+			this.isDisableAn = false;
+			this.isDisableZero = false;
+			this.isDisableOne = false;
+			this.isDisableBrac = false;
+			this.isDisableAND = true;
+			this.isDisableOR = true;
+			this.isDisableXOR = true;
+			this.isDisableNOT = true;
+			this.isDisableBrac2 = true;
+			this.bin[this.numBrac] = true;
+			return expr;
+		},
+
+		addOR: function(expr) {
+			expr = expr + "OR";
+			this.isDisableAn = false;
+			this.isDisableZero = false;
+			this.isDisableOne = false;
+			this.isDisableBrac = false;
+			this.isDisableAND = true;
+			this.isDisableOR = true;
+			this.isDisableXOR = true;
+			this.isDisableNOT = true;
+			this.isDisableBrac2 = true;
+			this.bin[this.numBrac] = true;
+			return expr;
+		},
+
+		addXOR: function(expr) {
+			expr = expr + "XOR";
+			this.isDisableAn = false;
+			this.isDisableZero = false;
+			this.isDisableOne = false;
+			this.isDisableBrac = false;
+			this.isDisableAND = true;
+			this.isDisableOR = true;
+			this.isDisableXOR = true;
+			this.isDisableNOT = true;
+			this.isDisableBrac2 = true;
+			this.bin[this.numBrac] = true;
+			return expr;
+		},
+
+		addNOT: function(expr) {
+			expr = expr + "NOT";
+			this.isDisableAn = false;
+			this.isDisableZero = false;
+			this.isDisableOne = false;
+			this.isDisableBrac = false;
+			this.isDisableAND = true;
+			this.isDisableOR = true;
+			this.isDisableXOR = true;
+			this.isDisableNOT = true;
+			this.isDisableBrac2 = true;
+			this.bin[this.numBrac] = true;
+			return expr;
+		},
+
+		addBrac: function(expr) {
+			expr = expr + "(";
+			this.isDisableAn = false;
+			this.isDisableZero = false;
+			this.isDisableOne = false;
+			this.numBrac++;
+			this.bin[this.numBrac] = false;
+			this.isDisableErase = false;
+			this.isDisableNOT = false;
+			return expr;
+		},
+
+		addBrac2: function(expr) {
+			expr = expr + ")";
+			this.bin[this.numBrac] = false;
+			this.numBrac--;
+			this.isDisableAn = true;
+			this.isDisableZero = true;
+			this.isDisableOne = true;
+
+	
+			if (this.numBrac == 0){
+				this.isDisableBrac = true;
+				this.isDisableBrac2 = true;
+				this.isDisableAND = true;
+				this.isDisableOR = true;
+				this.isDisableXOR = true;
+				this.isDisableNOT = true;
+				this.isDisableCalculate = false;
+				return expr;
+			}
+
+			if (!(this.bin[this.numBrac])) {
+				this.isDisableAND = false;
+				this.isDisableOR = false;
+				this.isDisableXOR = false;
+			}
+
+			return expr;
+		},
+
+		erase: function(expr) {
+			expr = "";
+			this.reset();
+			this.isDisableErase = true;
+			return expr;
+		},
+
+		calculate: function(expr) {
+			expr = expr + " = " + this.calc.bc("", expr);
+			this.isDisableCalculate = true;
+			return expr;
+		},
+
+		reset: function() {
+			this.isDisableAn = true;
+			this.isDisableZero = true;
+			this.isDisableOne = true;
+			this.isDisableAND = true;
+			this.isDisableOR = true;
+			this.isDisableXOR = true;
+			this.isDisableNOT = true;
+			this.isDisableBrac = false;
+			this.isDisableBrac2 = true;
+			this.isDisableErase = true;
+			this.isDisableCalculate = true;
+			for(i = this.numBrac; i > 0; i--)
+				this.bin[i] = false;
+			this.numBrac = 0;
+		}
 	}
 }
