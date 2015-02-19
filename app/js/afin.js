@@ -91,6 +91,18 @@ define(['angular', 'angular-route'], function(angular) {
 			this.M = 0;
 			$scope.showStatus = false;
 
+			var aux = '';
+			for(var i = 0; i < $scope.plaintext.length; i++) {
+   				if(aux != ''){
+					aux +=$scope.plaintext[i].toLowerCase(); 
+				}
+    		    		else{
+					aux =$scope.plaintext[i].toLowerCase(); 
+				}
+			}	
+
+			$scope.plaintext = aux;
+
 			if(this._withAutoEvaluation == false){
 				this.stepCifrado();
 			}
@@ -394,6 +406,16 @@ define(['angular', 'angular-route'], function(angular) {
 			this.M = 0;
 
 			$scope.showStatus = false;
+
+			var aux = '';
+			for(var i = 0; i < $scope.plaintext.length; i++) {
+   				if(aux != ''){
+					aux +=$scope.plaintext[i].toLowerCase(); 
+				}
+    		    		else{
+					aux =$scope.plaintext[i].toLowerCase(); 
+				}
+			}
 
 			if(this._withAutoEvaluation == false){
 				this.stepDeCifrado();
