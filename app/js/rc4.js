@@ -70,6 +70,8 @@ define(['angular', 'angular-route'], function(angular) {
 			$scope.showPGRA = false;
 			$scope.showKSA = true;
 			$scope.parcialError = false;
+			$scope.resultValue = '';
+			$scope.plaintextValue = '';
 
 			$scope.hideResult = false;
 			$scope.hideKeyStream = false;
