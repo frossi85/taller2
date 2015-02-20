@@ -6,9 +6,11 @@
 	<li>Una clave alfabética en el abecedario mencionado, con la restricción adicional de <b>no repetir</b> caracteres en la clave</li>
 	<li>Una clave numérica, <b>únicamente de dígitos</b> (0 a 9), <b>sin repetir</b> ningún dígito. Estas condiciones llevan a que la longitud de la clave sea <b>como máximo</b> de 10 dígitos</li>
 </ul>
-</p>
+</p><br>
 
 <div ng-controller="PermutationHomeCtrl as homeCtrl">
+	<button class="btn btn-primary" ng-hide="homeCtrl.isUnderstood()" ng-click="homeCtrl.setUnderstood()">Entendido!</button>
+	<div ng-show="homeCtrl.isUnderstood()">
 		<div class="form-group">
 			<label>Algoritmo</label>
 			<div class="input-group">
@@ -28,6 +30,7 @@
 			</div>
 		</div>
 	
-	<encrypt-form ng-show="homeCtrl._isEncrypt"></encrypt-form>
-	<decrypt-form ng-hide="homeCtrl._isEncrypt"></decrypt-form>
+		<encrypt-form ng-show="homeCtrl._isEncrypt"></encrypt-form>
+		<decrypt-form ng-hide="homeCtrl._isEncrypt"></decrypt-form>
+	</div>
 </div>

@@ -58,6 +58,15 @@ define(['angular', 'angular-route'], function(angular) {
 	app.controller('PermutationHomeCtrl', function($scope, $location) {
 		this._withAutoEvaluation = false;
 		this._isEncrypt = true;
+		this._isUnderstood = false;
+		
+		this.isUnderstood = function() {
+			return this._isUnderstood;
+		};
+		
+		this.setUnderstood = function() {
+			this._isUnderstood = true;
+		};
 
 		this.initializeProblem = function() {
 			if(this._isEncrypt) {

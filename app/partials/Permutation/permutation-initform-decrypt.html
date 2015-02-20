@@ -15,7 +15,7 @@
 			<strong ng-show="initDecForm.ciphertext.$error.required">El campo debe ser completado<br/></strong>
 			<strong ng-show="initDecForm.ciphertext.$error.cipherSizeValidation">El criptograma debe tener una cantidad de caracteres múltiplo de {{permutation.key.length}}. Puede rellenar con caracter de padding ('$')<br/></strong>
 			<strong ng-show="initDecForm.ciphertext.$error.pattern">El criptograma ingresado contiene caracteres inválidos<br/></strong>
-			Escriba un criptograma que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin espacios, saltos de linea o caracteres especiales (excepto el caracter de padding '$')
+			Escriba un criptograma que contenga caracteres del alfabeto inglés. Es decir de la 'a' a la 'z', sin espacios, mayúsculas, saltos de linea o caracteres especiales (excepto el caracter de padding '$')
 		</p>
 	</div>
 	<button ng-class="{ 'btn btn-success' : initDecForm.$valid, 'btn btn-danger' : !initDecForm.$valid }" type="submit">Inicializar</button>
