@@ -30,8 +30,8 @@
 		<label for="text">Texto a desencriptar</label>
 		<textarea class="form-control" id="text" rows="5" ng-model="vigenere.text" ng-pattern="/^[a-zA-Z]*$/" required></textarea>
 	</div>
-
-	<button type="submit" class="btn btn-default">Empezar</button>
+	<input class="btn btn-default" ng-disabled="!initializeVigenereForm.$valid" ng-show="!start" type="submit" value="Empezar">
+	<button class="btn btn-primary" ng-disabled="!initializeVigenereForm.$valid" ng-click="decryptDirectSolution()">Resolución directa</button>
 </form>
-<button type="submit" class="btn btn-primary" ng-click="decryptDirectSolution()">Resolución directa</button>
+
 

@@ -1,4 +1,6 @@
-﻿<div ng-controller="VigenereCtrl2">
+﻿<h1 class="ng-scope">Vigenere - Método de Descifrado</h1>
+
+<div ng-controller="VigenereCtrl2">
 	<div ng-show="isInitilized()">
 		<div class="well">
 			<label>Clave</label>
@@ -8,7 +10,7 @@
 			<p>{{vigenere.text}}</p>
 		</div>
 
-		<h3>Encriptación</h3>
+		<h3>Desifrado</h3>
 		
 		<div ng-show="!isFinished()">
 			<p>Letra: {{vigenere.text[vigenere.currentStep]}}</p>
