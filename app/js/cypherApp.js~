@@ -5,16 +5,20 @@
 		$routeProvider.when('/', {
 			templateUrl: 'partials/home.html'
 		}).
+		when('/vigenere-home', {
+			templateUrl: 'partials/Vigenere/vigenere-home.html',
+	   controller: 'VigenereCtrl'
+		}).
 		when('/vigenere', {
-			templateUrl: 'partials/Vigenere/vigenere-init.html',
+			templateUrl: 'partials/Vigenere/vigenere-encrypt.html',
 	   controller: 'VigenereCtrl'
 		}).
 		when('/vigenere/step-by-step', {
-			templateUrl: 'partials/Vigenere/vigenere-step-by-step.html',
+			templateUrl: 'partials/Vigenere/vigenere-encrypt-step-by-step.html',
 	   controller: 'VigenereCtrl2'
 		}).
 		when('/vigenere/decrypt', {
-			templateUrl: 'partials/Vigenere/vigenere-decrypt-init.html',
+			templateUrl: 'partials/Vigenere/vigenere-decrypt.html',
 	   controller: 'VigenereCtrl'
 		}).
 		when('/vigenere/decrypt/step-by-step', {

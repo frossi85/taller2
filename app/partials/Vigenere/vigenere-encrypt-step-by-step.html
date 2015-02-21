@@ -1,4 +1,5 @@
-﻿<div ng-controller="VigenereCtrl2">
+﻿
+<div ng-controller="VigenereCtrl2">
 	<div ng-show="isInitilized()">
 		<div class="well">
 			<label>Clave</label>
@@ -40,5 +41,5 @@
 		<label ng-show="!isFinished()">Resultado Parcial</label>
 		<p>{{vigenere.result}}</p>
 	</div>
-	<button class="btn btn-primary" ng-show="isFinished()" ng-click="toEncript()">Cifrar</button>
+	<button class="btn btn-primary" ng-show="isFinished()" ng-click="toDecript()">Desifrar</button>
 </div>

@@ -92,7 +92,7 @@ define(['angular', 'angular-route'], function(angular) {
 				$scope.vigenere.stepAttemp = "";
 				$('#stepAttemp').val("");
 				if($scope.vigenere._isEncrypt == true)
-					$location.url('/vigenere/encript/step-by-step');
+					$location.url('/vigenere/encrypt/step-by-step');
 				else
 					$location.url('/vigenere/decrypt/step-by-step');
 			}
@@ -106,7 +106,7 @@ define(['angular', 'angular-route'], function(angular) {
 			if(typeof $scope.vigenere != undefined) {	
 				Vigenere = VigenereLibrary($scope.vigenere.key, $scope.vigenere.result).setEncrypt();
 				Vigenere.withAutoEvaluation = $scope.vigenere.withAutoEvaluation;
-				$location.url('/vigenere/encript');
+				$location.url('/vigenere/encrypt');
 			}
 		}
 
