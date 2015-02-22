@@ -1,4 +1,13 @@
-<form name="initDecForm" ng-submit="initDecForm.$valid && homeCtrl.initializeProblem()" novalidate>
+<form name="initDecForm" ng-submit="initDecForm.$valid && decCtrl.initializeProblem()" novalidate>
+	<div class="form-group">
+		<label>Modo Autoevaluación</label>
+		<div class="input-group">
+			<div id="radioBtn" class="btn-group">
+				<a class="btn btn-primary btn-sm" ng-class="{ 'active' : decCtrl._withAutoEvaluation, 'notActive' : !decCtrl._withAutoEvaluation }" ng-click="decCtrl._withAutoEvaluation = true">Si</a>
+				<a class="btn btn-primary btn-sm" ng-class="{ 'active' : !decCtrl._withAutoEvaluation, 'notActive' : decCtrl._withAutoEvaluation }" ng-click="decCtrl._withAutoEvaluation = false">No</a>
+			</div>
+		</div>
+	</div>
 	<div class="form-group" ng-class="{ 'has-error': initDecForm.key.$invalid, 'has-success': initDecForm.key.$valid }">
 		<label class="control-label" for="key">Clave</label>
 		<input name="key" type="text" class="form-control" ng-model="permutation.key" id="key" placeholder="Ingresar clave" key-validation required>

@@ -62,6 +62,6 @@
 	<div>
 		<button class="btn btn-primary" ng-hide="encCtrl.hasFinished()" ng-click="encCtrl.nextStep()">Siguiente Paso</button>
 		<button class="btn btn-info" ng-show="encCtrl.hasFinished()" ng-click="encCtrl.goToDecrypt()">Descifrar Resultado</button>
-		<button class="btn btn-primary" ng-show="encCtrl.hasFinished()" ng-click="encCtrl.returnHome()">Salir</button>
+		<button class="btn btn-primary" ng-click="encCtrl.returnHome()">Salir</button>
 	</div>
 </div>
