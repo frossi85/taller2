@@ -1,6 +1,8 @@
 ﻿<h1 class="ng-scope">Vigenere - Método de Cifrado</h1>
 
 <div ng-controller="VigenereCtrl2">
+	<encript-description></encript-description>
+
 	<div ng-show="isInitilized()">
 		<div class="well">
 			<label>Clave</label>
@@ -33,7 +35,7 @@
 				<p class="help-block" ng-show="vigenere.stepAttemp.length > 0 && isValid(vigenere.stepAttemp)">El resultado es correcto</p>
 			</div>
 		</div>
-		<div ng-show="!isAutoEvaluation()">
+		<div ng-show="!isAutoEvaluation()" style="margin-bottom: 20px;">
 			<button ng-click="nextStep()" class="btn btn-default">Avanzar</button>
 		</div>
 	</div>

@@ -118,6 +118,20 @@ define(['angular', 'angular-route'], function(angular) {
 			}
 		}
 	});
+
+	app.directive('encriptDescription', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'partials/Vigenere/encrypt-description.html'
+		};
+	});
+
+	app.directive('decriptDescription', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'partials/Vigenere/decrypt-description.html'
+		};
+	});
 });
 
 function VigenereLibrary(key, textToProcess) {
