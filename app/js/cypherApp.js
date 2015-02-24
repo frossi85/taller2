@@ -7,23 +7,23 @@
 		}).
 		when('/vigenere/home', {
 			templateUrl: 'partials/Vigenere/vigenere-home.html',
-	   controller: 'VigenereCtrl'
+	   controller: 'VigenereInitialCtrl'
 		}).
 		when('/vigenere/encript', {
 			templateUrl: 'partials/Vigenere/vigenere-encrypt.html',
-	   controller: 'VigenereCtrl'
+	   controller: 'VigenereInitialCtrl'
 		}).
 		when('/vigenere/encript/step-by-step', {
 			templateUrl: 'partials/Vigenere/vigenere-encrypt-step-by-step.html',
-	   controller: 'VigenereCtrl2'
+	   controller: 'VigenereResolutionCtrl'
 		}).
 		when('/vigenere/decrypt', {
 			templateUrl: 'partials/Vigenere/vigenere-decrypt.html',
-	   controller: 'VigenereCtrl'
+	   controller: 'VigenereInitialCtrl'
 		}).
 		when('/vigenere/decrypt/step-by-step', {
 			templateUrl: 'partials/Vigenere/vigenere-decrypt-step-by-step.html',
-	   controller: 'VigenereCtrl2'
+	   controller: 'VigenereResolutionCtrl'
 		}).
 		when('/permutacion', {
 			templateUrl: 'partials/Permutation/permutation-home.html',

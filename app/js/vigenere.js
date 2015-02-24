@@ -5,7 +5,7 @@ define(['angular', 'angular-route'], function(angular) {
 		return {};
 	});
 	
-	app.controller('VigenereCtrl', function($scope, $location) {
+	app.controller('VigenereInitialCtrl', function($scope, $location) {
 		$scope.vigenere = function() {
 			var vigenere;
 			try {
@@ -54,7 +54,7 @@ define(['angular', 'angular-route'], function(angular) {
 		}
 	});
 	
-	app.controller('VigenereCtrl2', function($scope, $location) {
+	app.controller('VigenereResolutionCtrl', function($scope, $location) {
 		$scope.vigenere = function() {
 			var vigenere;
 			
