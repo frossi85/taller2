@@ -116,12 +116,17 @@ define(['angular', 'angular-route'], function(angular) {
 				permutation = PermutationEnc;
 			}
 			catch(e) {
-				returnHome();
+				$location.url('/permutacion');
 			}
 			return permutation;
 		}();
 		
 		this._hasFinished = false;
+		this._isCorrect = false;
+		this._isIncorrect = false;
+		this.errorMessage = "Hay un error con los datos ingresados";
+		this.successMessage = "Paso Correcto!";
+		
 		
 		this.validateKc = function() {
 			return parseInt($scope.varKc) === parseInt(this.permutationEnc.Kc);
@@ -142,13 +147,23 @@ define(['angular', 'angular-route'], function(angular) {
 			return $scope.ciphertext === this.permutationEnc._ciphertext;
 		};
 		
-		this.informCorrect = function() {
-			alert("CORRECTO");
+		this.isCorrect = function() {
+			return this._isCorrect;
 		};
 		
-		this.informIncorrect = function() {
-			alert("INCORRECTO");
+		this.isIncorrect = function() {
+			return this._isIncorrect;
 		};
+		
+		this.setCorrect = function() {
+			this._isCorrect = true;
+			this._isIncorrect = false;
+		}
+		
+		this.setIncorrect = function () {
+			this._isCorrect = false;
+			this._isIncorrect = true;
+		}
 		
 		this.nextStep = function() {
 			switch(this.permutationEnc._currentStep) {
@@ -159,10 +174,10 @@ define(['angular', 'angular-route'], function(angular) {
 						for (var r = 0; r < this.permutationEnc.Kc; r++) {
 							$scope.matrix[r] = new Array(this.permutationEnc.L);
 						}
-						this.informCorrect();
+						this.setCorrect();
 					}
 					else {
-						this.informIncorrect();
+						this.setIncorrect();
 					}
 					return;
 				}
@@ -170,20 +185,20 @@ define(['angular', 'angular-route'], function(angular) {
 				case 3 : {
 					if(this.validateMatrix()) {
 						this.permutationEnc.nextEncStep();
-						this.informCorrect();
+						this.setCorrect();
 					}
 					else {
-						this.informIncorrect();
+						this.setIncorrect();
 					}
 					return;
 				}
 				case 4: {
 					if(this.validateCiphertext()) {
 						this._hasFinished = true;
-						this.informCorrect();
+						this.setCorrect();
 					}
 					else {
-						this.informIncorrect();
+						this.setIncorrect();
 					}
 					return;
 				}
@@ -259,12 +274,16 @@ define(['angular', 'angular-route'], function(angular) {
 				permutation = PermutationDec;
 			}
 			catch(e) {
-				returnHome();
+				$location.url('/permutacion');
 			}
 			return permutation;
 		}();
 		
 		this._hasFinished = false;
+		this._isCorrect = false;
+		this._isIncorrect = false;
+		this.errorMessage = "Hay un error con los datos ingresados";
+		this.successMessage = "Paso Correcto!";
 		
 		this.validateKd = function() {
 			return parseInt($scope.varKd) === parseInt(this.permutationDec.Kd);
@@ -285,13 +304,23 @@ define(['angular', 'angular-route'], function(angular) {
 			return $scope.plaintext === this.permutationDec._plaintext;
 		};
 		
-		this.informCorrect = function() {
-			alert("CORRECTO");
+		this.isCorrect = function() {
+			return this._isCorrect;
 		};
 		
-		this.informIncorrect = function() {
-			alert("INCORRECTO");
+		this.isIncorrect = function() {
+			return this._isIncorrect;
 		};
+		
+		this.setCorrect = function() {
+			this._isCorrect = true;
+			this._isIncorrect = false;
+		}
+		
+		this.setIncorrect = function () {
+			this._isCorrect = false;
+			this._isIncorrect = true;
+		}
 		
 		this.nextStep = function() {
 			switch(this.permutationDec._currentStep) {
@@ -302,40 +331,40 @@ define(['angular', 'angular-route'], function(angular) {
 						for (var r = 0; r < this.permutationDec.Kd; r++) {
 							$scope.matrix[r] = new Array(this.permutationDec.L);
 						}
-						this.informCorrect();
+						this.setCorrect();
 					}
 					else {
-						this.informIncorrect();
+						this.setIncorrect();
 					}
 					return;
 				}
 				case 2 :
 					if(this.validateMatrix()) {
 						this.permutationDec.nextDecStep();
-						this.informCorrect();
+						this.setCorrect();
 					}
 					else {
-						this.informIncorrect();
+						this.setIncorrect();
 					}
 					return;
 				case 3 :
 				case 4 : {
 					if(this.validateMatrix()) {
 						this.permutationDec.nextDecStep();
-						this.informCorrect();
+						this.setCorrect();
 					}
 					else {
-						this.informIncorrect();
+						this.setIncorrect();
 					}
 					return;
 				}
 				case 5: {
 					if(this.validatePlaintext()) {
 						this._hasFinished = true;
-						this.informCorrect();
+						this.setCorrect();
 					}
 					else {
-						this.informIncorrect();
+						this.setIncorrect();
 					}
 					return;
 				}

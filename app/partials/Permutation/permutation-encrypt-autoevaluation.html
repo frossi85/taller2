@@ -58,6 +58,16 @@
 	
 	<br>
 	
+	<div class="alert alert-success" ng-show="encCtrl.isCorrect()">
+		<label class="lead">{{ encCtrl.successMessage }}</label>
+	</div>
+	
+	<div class="alert alert-danger" ng-show="encCtrl.isIncorrect()" role="alert">
+		<label class="lead">{{ encCtrl.errorMessage }}</label>
+	</div>
+	
+	<br>
+	
 	<!-- Botones -->
 	<div>
 		<button class="btn btn-primary" ng-hide="encCtrl.hasFinished()" ng-click="encCtrl.nextStep()">Siguiente Paso</button>
