@@ -485,6 +485,10 @@ define(['angular', 'angular-route', 'angular-animate'], function(angular) {
         this.next();
       }
     }
+
+    this.ayudaClave = function() {
+      $scope.clave = this.cloneArray(this.clave);
+    }
   });
 });
 

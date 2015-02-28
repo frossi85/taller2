@@ -15,10 +15,10 @@
   <div class="col-md-6">
   <h4>Variables</h4>
     <ul>
-      <li><em>k</em>: cantidad de filas/columnas de la matriz de cifrado (2 ó 3)</li>
+      <li><em>k</em>: cantidad de filas/columnas de la matriz de cifrado (2 ó 3, o más)</li>
       <li><em>K</em>: matriz de cifrado kxk</li>
       <li><em>K-1</em>: matriz de descifrado kxk</li>
-      <li><em>l</em>: longitud del mensaje</li>
+      <li><em>l</em>: longitud del mensaje, multiplo de k</li>
       <li><em>M</em>: cadena de caracteres</li>
       <li><em>C</em>: cadena de caracteres</li>
       <li><em>m</em>: vector de kx1</li>
@@ -146,6 +146,10 @@
           </td>
         </tr>
       </table>
+      <div ng-show="start && evaluacion">
+        <input class="btn btn-default" ng-click="decCtrl.ayudaClave()" value="Ayuda! Rellenar clave"/>
+        <p>&nbsp;</p>
+      </div>
 
     <div class="form-group">
       <label class="control-label">Resultado</label>
