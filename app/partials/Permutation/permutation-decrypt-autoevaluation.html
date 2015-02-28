@@ -57,6 +57,16 @@
 	</div>
 	
 	<br>
+	
+	<div class="alert alert-success" ng-show="decCtrl.isCorrect()">
+		<label class="lead">{{ decCtrl.successMessage }}</label>
+	</div>
+	
+	<div class="alert alert-danger" ng-show="decCtrl.isIncorrect()" role="alert">
+		<label class="lead">{{ decCtrl.errorMessage }}</label>
+	</div>
+	
+	<br>
 
 	<!-- Botones -->
 	<div>

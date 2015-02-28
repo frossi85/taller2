@@ -71,8 +71,8 @@
 			<label>Modo Autoevaluación</label>
 			<div class="input-group">
 				<div id="radioBtn" class="btn-group">
-					<a class="btn btn-primary btn-sm" ng-disabled="encCtrl.start" ng-class="{ 'active' : encCtrl._withAutoEvaluation, 'notActive' : !encCtrl._withAutoEvaluation }" ng-click="encCtrl.auto(true)" ng-confirm-click="Al cambiar el modo, será necesario inresar los valores nuevamente. ¿Desea continuar?">Si</a>
-					<a class="btn btn-primary btn-sm" ng-disabled="encCtrl.start" ng-class="{ 'active' : !encCtrl._withAutoEvaluation, 'notActive' : encCtrl._withAutoEvaluation }" ng-click="encCtrl.auto(false)" ng-confirm-click="Al cambiar el modo, será necesario inresar los valores nuevamente. ¿Desea continuar?">No</a>
+					<a class="btn btn-primary btn-sm" ng-disabled="encCtrl.start" ng-class="{ 'active' : encCtrl._withAutoEvaluation, 'notActive' : !encCtrl._withAutoEvaluation }" ng-click="encCtrl.auto(true)">Si</a>
+					<a class="btn btn-primary btn-sm" ng-disabled="encCtrl.start" ng-class="{ 'active' : !encCtrl._withAutoEvaluation, 'notActive' : encCtrl._withAutoEvaluation }" ng-click="encCtrl.auto(false)">No</a>
 				</div>
 			</div>
 		</div>
